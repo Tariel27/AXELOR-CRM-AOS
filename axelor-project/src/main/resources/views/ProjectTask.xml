@@ -88,22 +88,22 @@
 						]]>
             </viewer>
             <editor>
-              <field name="name" title="Subject" colSpan="12" css="label-bold bold large"
+              <field name="name" title="Name" colSpan="12" css="label-bold bold large"
                 required="true"/>
             </editor>
           </field>
+          <field name="description" colSpan="12" widget="html"/>
+
           <field name="ticketNumber"
             if="__config__.app.getApp('project')?.isEnablePerProjectTaskSequence"/>
+          <field name="assignedTo" readonlyIf="project == null" colSpan="6" canNew="false" canView="false" canEdit="false" onChange="action-project-task-group-assigned-to-on-change" onSelect="action-project-task-attrs-project-assigned-to-configurations" required="true" form-view="user-form" grid-view="user-grid"/>
+
           <field name="project" colSpan="6"
             onChange="action-project-task-group-project-onchange"
             domain="self.projectStatus.isCompleted = false" required="true"/>
           <field name="parentTask" readonlyIf="project == null" colSpan="6"
-            onSelect="action-project-task-attrs-project-parent-task-configurations"/>
-          <field name="assignedTo" readonlyIf="project == null" colSpan="6" canNew="false"
-            canView="false" canEdit="false"
-            onSelect="action-project-task-attrs-project-assigned-to-configurations" required="true"
-            form-view="user-form" grid-view="user-grid"
-            onChange="action-project-task-attrs-hide-time-spent-button"/>
+            onSelect="action-project-task-attrs-project-parent-task-configurations" hidden="true"/>
+
           <field name="site" onSelect="action-project-task-attrs-set-site-domain"
             form-view="site-form" grid-view="site-grid"
             if="__config__.app.getApp('base')?.enableSiteManagementForProject"/>
@@ -170,7 +170,6 @@
         <spacer colSpan="8" showIf="project.isShowProgress &amp;&amp; $readonly()"/>
         <field name="invoicingProgress" readonly="true" colSpan="6"
           showIf="invoicingType == 4"/>
-        <field name="description" colSpan="12" widget="html"/>
         <field name="project.isShowProgress" hidden="true"/>
         <field name="project.isShowSection" hidden="true"/>
         <field name="project.isShowStatus" hidden="true"/>

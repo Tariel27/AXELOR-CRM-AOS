@@ -119,7 +119,7 @@
       </panel>
     </panel>
     <panel name="detailsPanel">
-      <panel name="generalInfoPanel" colSpan="12">
+      <panel name="generalInfoPanel" colSpan="12" hidden="true">
         <field name="company" form-view="company-form" grid-view="company-grid" colSpan="3"
           canEdit="false" if-module="axelor-business-project"/>
         <field name="clientPartner"
@@ -537,7 +537,7 @@
       <field name="projectStatus.isCompleted" hidden="true"/>
     </panel>
     <panel name="characteristicsPanel" title="Characteristics" colSpan="12" sidebar="true"
-      canCollapse="true">
+      canCollapse="false" collapseIf="true">
       <panel name="configPanel" colSpan="12">
         <field if="__config__.app.isApp('business-project')"
           if-module="axelor-business-project" name="isBusinessProject" colSpan="6"
@@ -556,12 +556,12 @@
       </panel>
     </panel>
     <panel name="followUpPanel" colSpan="12" title="Follow-up" sidebar="true"
-      canCollapse="true">
+      canCollapse="false" collapseIf="true">
       <field name="assignedTo" title="Assigned to" canNew="false" canView="false"
         canEdit="false" onChange="action-attrs-project-add-member" form-view="user-form"
         grid-view="user-grid"/>
     </panel>
-    <panel name="datePanel" title="Dates" colSpan="12" sidebar="true" canCollapse="true">
+    <panel name="datePanel" title="Dates" colSpan="12" sidebar="true" canCollapse="false" collapseIf="true">
       <field name="fromDate" colSpan="6"/>
       <field name="toDate" colSpan="6"/>
     </panel>
