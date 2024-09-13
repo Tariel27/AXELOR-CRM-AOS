@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
+
+    <menuitem name="pbp.user-change-password.menu-item" title="Change password"
+              action="pbp.user-change-password.action-view" order="100"/>
+
+    <action-view name="pbp.user-change-password.action-view" title="Change password" model="com.axelor.auth.db.User">
+        <view type="form" name="pbp.user-change-password.form"/>
+        <view-param name="show-toolbar" value="false"/>
+        <view-param name="show-confirm" value="false"/>
+        <view-param name="forceEdit" value="true"/>
+        <context name="_showRecord" expr="eval: __user__.id"/>
+        <context name="_showSingle" expr="true"/>
+    </action-view>
+
+    <form title="Change password" name="pbp.user-change-password.form" model="com.axelor.auth.db.User">
+        <panel showIf="id != null">
+            <field name="passwordUpdatedOn" readonly="true" title="Last password update date"/>
+            <field name="password" required="false" hidden="true" colSpan="12"/>
+            <field name="transientPassword" title="Password" x-dirty="false"/>
+            <button title="Change password" name="changePasswordAndSave"
+                    onClick="pbp.user-change-password.change-password.action-method"/>
+        </panel>
+    </form>
+
+    <action-method name="pbp.user-change-password.change-password.action-method">
+        <call class="com.axelor.apps.pbproject.web.UserController" method="setPassword"/>
+    </action-method>
+
+</object-views>
