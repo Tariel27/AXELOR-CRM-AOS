@@ -108,7 +108,8 @@ public class ProjectMenuServiceImpl implements ProjectMenuService {
             .add("form", "project-task-form")
             .domain("self.typeSelect = :_typeSelect")
             .context("_typeSelect", ProjectTaskRepository.TYPE_TASK)
-            .param("search-filters", "project-task-filters");
+            .param("search-filters", "project-task-filters")
+            .param("auto-reload", "20");
 
     return builder.map();
   }
