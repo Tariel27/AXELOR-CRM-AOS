@@ -3,23 +3,23 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
-  <menuitem name="menu-project-root" order="-1400" title="Project" icon="fa-tasks"
+  <menuitem name="menu-project-root" order="-1400" title="Project" icon="fa-briefcase"
     if="__config__.app.isApp('project')" icon-background="#3f6bb9"/>
 
   <menuitem name="project-all" parent="menu-project-root" order="100" title="Projects"
-    action="project.all"/>
+    action="project.all" icon="fa-list" icon-background="#3f6bb9"/>
   <action-method name="project.all">
     <call class="com.axelor.apps.project.web.ProjectMenuController" method="allProjects"/>
   </action-method>
 
   <menuitem name="project-task-all" parent="menu-project-root" order="300" title="Tasks"
-    action="project.task.all"/>
+    action="project.task.all" icon="fa-tasks" icon-background="#3f6bb9"/>
   <action-method name="project.task.all">
     <call class="com.axelor.apps.project.web.ProjectMenuController" method="allProjectTasks"/>
   </action-method>
 
   <menuitem name="project-template" parent="menu-project-root" order="500"
-    title="Templates"/>
+    title="Templates" icon="fa-clone" icon-background="#3f6bb9"/>
 
   <menuitem name="project-task-template" parent="project-template" title="Task templates"
     action="project.task.template" order="100"/>
