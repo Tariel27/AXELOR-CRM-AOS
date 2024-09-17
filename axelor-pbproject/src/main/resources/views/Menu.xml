@@ -19,11 +19,10 @@
 
     <action-view name="pbp.project-all-my-tasks" title="My all tasks" model="com.axelor.apps.project.db.ProjectTask">
         <view type="kanban" name="project-task-kanban"/>
-        <view type="grid" name="project-task-grid"/>
         <view type="form" name="project-task-form"/>
         <view-param name="search-filters" value="project-task-filters"/>
         <view-param name="auto-reload" value="20"/>
-        <domain>self.typeSelect = :_typeSelect</domain>
+        <domain>self.assignedTo = :__user__</domain>
         <context name="_typeSelect" expr="eval: 'task'"/>
     </action-view>
 
