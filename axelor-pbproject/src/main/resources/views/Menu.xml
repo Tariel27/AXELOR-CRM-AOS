@@ -23,7 +23,6 @@
         <view-param name="search-filters" value="project-task-filters"/>
         <view-param name="auto-reload" value="20"/>
         <domain>self.assignedTo = :__user__</domain>
-        <context name="_typeSelect" expr="eval: 'task'"/>
     </action-view>
 
 
