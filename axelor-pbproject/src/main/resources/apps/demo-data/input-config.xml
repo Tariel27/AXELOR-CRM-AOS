@@ -6,4 +6,9 @@
     <input file="auth_user.csv" separator=";" search="self.code = :code"
            type="com.axelor.auth.db.User" call="com.axelor.csv.script.ImportUser:importUser"/>
 
+    <input file="meta_metaTranslation.csv" separator=";" type="com.axelor.meta.db.MetaTranslation">
+        <bind to="language" eval="'ru'"/>
+    </input>
+
+
 </csv-inputs>
