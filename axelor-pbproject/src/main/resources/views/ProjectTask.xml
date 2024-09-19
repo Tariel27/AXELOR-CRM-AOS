@@ -151,6 +151,7 @@
                        grid-view="project-task-tag-grid" x-color-field="colorSelect"/>
                 <field name="progress" showIf="project.isShowProgress &amp;&amp; !$readonly()" colSpan="4"
                        onChange="action-project-task-group-progress-onchange" min="0"/>
+                <field name="spentTime" colSpan="4"/>
                 <spacer showIf="project.isShowProgress &amp;&amp; !$readonly()" colSpan="8"/>
                 <field name="progress" showIf="project.isShowProgress &amp;&amp; $readonly()" colSpan="4"
                        widget="SelectProgress"/>
