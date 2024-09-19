@@ -151,6 +151,7 @@
                        grid-view="project-task-tag-grid" x-color-field="colorSelect"/>
                 <field name="progress" showIf="project.isShowProgress &amp;&amp; !$readonly()" colSpan="4"
                        onChange="action-project-task-group-progress-onchange" min="0"/>
+                <field name="spentTime" colSpan="4"/>
                 <spacer showIf="project.isShowProgress &amp;&amp; !$readonly()" colSpan="8"/>
                 <field name="progress" showIf="project.isShowProgress &amp;&amp; $readonly()" colSpan="4"
                        widget="SelectProgress"/>
@@ -416,6 +417,52 @@
                     onClick="action-project-task-open-task"/>
         </node>
     </tree>
+    <!--Канбан, где тикеты работают с Date-Time, показывают также время начала-->
+    <kanban name="pbp.project-task-kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask" columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
+        <field name="name"/>
+        <field name="project"/>
+        <field name="assignedTo"/>
+        <field name="priority.name"/>
+        <field name="priority.technicalTypeSelect"/>
+        <field name="progress"/>
+        <field name="project.isShowProgress"/>
+        <field name="startDateTime"/>
+        <field name="deadlineDateTime"/>
+        <template><![CDATA[
+<>
+	<strong>{name}</strong>
+	<Box>{project.fullName}</Box>
+	<Box d="flex" justifyContent="space-between">
+		<Box>
+			<Icon icon="calendar" fontSize="15px"/>
+		        {!deadlineDateTime && <span> {_t('Not specified')} </span>}
+		        {deadlineDateTime && <span>{_t('Deadline')}: {$moment(deadlineDateTime).format('YYYY-MM-DD HH:mm')}</span>}
+		</Box>
+		<Box>
+			{priority.technicalTypeSelect == 1 && <Badge bg="success">{priority.name}</Badge>}
+			{priority.technicalTypeSelect == 2 && <Badge bg="info">{priority.name}</Badge>}
+			{priority.technicalTypeSelect == 3 && <Badge bg="warning">{priority.name}</Badge>}
+			{priority.technicalTypeSelect == 4 && <Badge bg="danger">{priority.name}</Badge>}
+		</Box>
+	</Box>
+	{project.isShowProgress &&
+		<Box mt={1}>
+			{progress == 0 ? <span>{progress}%</span> : <LinearProgress value={progress} striped animated/>}
+		</Box>
+	}
+    <Box d="grid" gridTemplateColumns="auto auto" style={{ fontSize: "0.85rem", color: "grey" }} mt={2}>
+        <Box d="flex" g={2}>
+        	<Icon icon="clock" fontSize="15px"/>
+             {startDateTime ? <span>{_t('Task start')}: {$moment(startDateTime).format('YYYY-MM-DD HH:mm')}</span> : <span>{_t('Not started')}</span>}
+        </Box>
+        <Box d="flex" justifyContent="flex-end">
+        	{assignedTo && <Image src={$image('assignedTo', 'image')} style={{ width: "1.5rem", height: "1.5rem", borderRadius: "100%" }}></Image>}
+        </Box>
+    </Box>
+</>
+ ]]></template>
+    </kanban>
+
 
     <!--Экшн который автоподставляет даты для системы xelor, hidden=true-->
     <action-attrs name="update-date-fields">

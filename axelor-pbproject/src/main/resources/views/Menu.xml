@@ -3,10 +3,10 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
-    <menuitem name="pbp.project-task-all.m-i" order="300" title="Tasks" action="pbp.project-all.a-v"/>
+    <menuitem name="pbp.project-task-all.m-i" title="Tasks" action="pbp.project-all.a-v" icon="fa-briefcase" icon-background="#3f6bb9"  order="500"/>
 
     <action-view name="pbp.project-all.a-v" title="Tasks" model="com.axelor.apps.project.db.ProjectTask">
-        <view type="kanban" name="project-task-kanban"/>
+        <view type="kanban" name="pbp.project-task-kanban"/>
         <view type="grid" name="project-task-grid"/>
         <view type="form" name="project-task-form"/>
         <view-param name="search-filters" value="project-task-filters"/>
@@ -15,10 +15,10 @@
         <context name="_typeSelect" expr="eval: 'task'"/>
     </action-view>
 
-    <menuitem name="my-connected-all-projects" tag-count="true" title="My tasks" action="pbp.project-all-my-tasks"/>
+    <menuitem  name="pbp.my-connected-all-projects-tasks" tag-count="true" title="My tasks" action="pbp.project-all-my-tasks" order="600" icon="fa-user-circle-o" icon-background="#3f6bb9"/>
 
     <action-view name="pbp.project-all-my-tasks" title="My tasks" model="com.axelor.apps.project.db.ProjectTask">
-        <view type="kanban" name="project-task-kanban"/>
+        <view type="kanban" name="pbp.project-task-kanban"/>
         <view type="form" name="project-task-form"/>
         <view-param name="search-filters" value="project-task-filters"/>
         <view-param name="auto-reload" value="20"/>
@@ -31,6 +31,7 @@
     <action-view name="pbp.project-working-hours-action" title="Employee hours" model="com.axelor.apps.project.db.ProjectTask">
         <view type="form" name="pbp-employee-hours-management-form"/>
     </action-view>
+
 
 
 </object-views>
