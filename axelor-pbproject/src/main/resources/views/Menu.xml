@@ -26,9 +26,9 @@
         <context name="_typeSelect" expr="eval: 'task'"/>
     </action-view>
     
-    <menuitem name="pbp-employee-working-hours" title="Workers hours" action=""/>
+    <menuitem name="pbp-employee-working-hours" title="Workers hours" action="pbp.project-working-hours-action" order="700" icon="fa-clock-o" icon-background="#3f6bb9"/>
 
-    <action-view name="pbp.project-working-hours-action" title="Employee hours" model="com.axelor.apps.project.db.ProjectTask">
+    <action-view name="pbp.project-working-hours-action" title="Employee hours" model="com.axelor.apps.pbproject.db.UserHoursManagement">
         <view type="form" name="pbp-employee-hours-management-form"/>
     </action-view>
 

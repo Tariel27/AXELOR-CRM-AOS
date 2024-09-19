@@ -6,16 +6,22 @@
     <module name="project" package="com.axelor.apps.pbproject.db"/>
 
     <entity name="UserHoursManagement">
+<!--        <many-to-one name="project" ref="com.axelor.apps.project.db.Project" title="Project" required="true"/>-->
+<!--        <many-to-one name="user" ref="com.axelor.auth.db.User" title="User" required="true"/>-->
+
         <!--Связь с проектами-->
-        <one-to-many name="project" ref="com.axelor.apps.project.db.Project" title="Project"/>
+        <many-to-many name="project" ref="com.axelor.apps.project.db.Project" title="Project"/>
         <!--Связь со всем сотрудниками-->
         <many-to-many name="membersUserSet" ref="com.axelor.auth.db.User" title="Membres"/>
         <!--Дата начала задачи-->
-        <datetime name="fromDate" title="From Date"/>
+        <date name="fromDate" title="From Date"/>
         <!--Дата окончания задачи-->
-        <datetime name="toDate" title="To Date"/>
-        <!--Минимум часов отработанного сотрудником-->
-        <integer name="minimumHours" title="Minimum hours"/>
+        <date name="toDate" title="To Date"/>
+        <!--Фактическое количество отработанных часов-->
+        <decimal name="workedHours" title="Worked Hours" precision="10" scale="2"/>
+        <!--Cвязь для импорта сразу состава команды-->
+<!--        <many-to-one name="team" ref="com.axelor.team.db.Team" title="Team"/>-->
+
     </entity>
 
 </domain-models>

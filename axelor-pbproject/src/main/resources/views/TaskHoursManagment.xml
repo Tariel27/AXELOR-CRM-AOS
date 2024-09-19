@@ -2,32 +2,18 @@
 <object-views xmlns="http://axelor.com/xml/ns/object-views"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
-    <form title="Hours Management" name="pbp-employee-hours-management-form" model="com.axelor.apps.project.db.ProjectTask">
+    <form name="pbp-employee-hours-management-form" title="Hours Management" model="com.axelor.apps.pbproject.db.UserHoursManagement">
+        <panel title="Search panel by date range" colSpan="4">
+            <field name="fromDate" colSpan="4"/>
+            <field name="toDate" colSpan="4"/>
+            <button name="customBtn" title="Confirm" colSpan="4" icon="fa-check-square-o" prompt="This is a confirmation message." onClick="actions"/>
 
-        <!-- Панель фильтрации по диапазону дат -->
-        <panel colSpan="12" title="Search panel by date range">
-            <field name="taskDate" colSpan="4"/>
-            <field name="taskEndDate" colSpan="4"/>
-            <button name="customBtn" title="Confirm" onClick="actions"
-                    prompt="This is a confirmation message."
-                    icon="fa-check-square-o" colSpan="4"/>
-        </panel>
+            <field name="project" colSpan="6" widget="TagSelect" title="Projects" form-view="project-form" grid-view="project-grid" placeholder="Select projects" canNew="false" canEdit="false"/>
+            <field name="membersUserSet" colSpan="6" widget="TagSelect" canNew="false" form-view="user-form" grid-view="user-grid"/>
 
-        <!-- Панель фильтрации по проекту, сотруднику и времени Работы -->
-        <panel colSpan="12" title="Filter by project, employee, and spent hours">
-<!--            <field name="проект" colSpan="4" />-->
-<!--            <field name="выбор работника или работников" colSpan="4" />-->
-<!--            <field name="минимальное общее количество часоы" colSpan="4" />-->
-<!--            <button name="searchBtn" title="Search" onClick="searchActions"-->
-<!--                    prompt="Search with applied filters."-->
-<!--                    icon="fa-search" />-->
-        </panel>
 
-        <!-- Панель отображения имени сотрудника и потраченного времени раьоты -->
-        <panel colSpan="12" title="Employee and total hours spent">
-<!--            <field name="работник" colSpan="6" readOnly="true" />-->
-<!--            <field name="часы работы" colSpan="6" readOnly="true" />-->
         </panel>
+        <panel title="Employee and total hours spent" colSpan="8"/>
 
     </form>
 </object-views>
