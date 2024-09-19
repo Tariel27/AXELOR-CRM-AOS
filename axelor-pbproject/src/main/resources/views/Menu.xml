@@ -25,6 +25,12 @@
         <domain>self.assignedTo = :__user__ AND self.typeSelect = :_typeSelect</domain>
         <context name="_typeSelect" expr="eval: 'task'"/>
     </action-view>
+    
+    <menuitem name="pbp-employee-working-hours" title="Workers hours" action=""/>
+
+    <action-view name="pbp.project-working-hours-action" title="Employee hours" model="com.axelor.apps.project.db.ProjectTask">
+        <view type="form" name="pbp-employee-hours-management-form"/>
+    </action-view>
 
 
 </object-views>

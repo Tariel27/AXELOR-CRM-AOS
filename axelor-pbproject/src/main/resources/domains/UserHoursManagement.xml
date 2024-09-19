@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_7.1.xsd">
+
+    <module name="project" package="com.axelor.apps.pbproject.db"/>
+
+    <entity name="UserHoursManagement">
+        <!--Связь с проектами-->
+        <one-to-many name="project" ref="com.axelor.apps.project.db.Project" title="Project"/>
+        <!--Связь со всем сотрудниками-->
+        <many-to-many name="membersUserSet" ref="com.axelor.auth.db.User" title="Membres"/>
+        <!--Дата начала задачи-->
+        <datetime name="fromDate" title="From Date"/>
+        <!--Дата окончания задачи-->
+        <datetime name="toDate" title="To Date"/>
+        <!--Минимум часов отработанного сотрудником-->
+        <integer name="minimumHours" title="Minimum hours"/>
+    </entity>
+
+</domain-models>
