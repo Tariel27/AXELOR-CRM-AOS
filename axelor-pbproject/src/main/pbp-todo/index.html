@@ -46,7 +46,6 @@
             text-decoration: line-through;
         }
 
-
         ul li.checked::before {
             content: '';
             position: absolute;
@@ -89,15 +88,15 @@
             margin: 0;
             border: none;
             border-radius: 0;
-            width: 75%;
+            width: 65%;
             padding: 10px;
             float: left;
             font-size: 16px;
         }
 
-        .addBtn {
+        .addBtn, .loadBtn {
             padding: 10px;
-            width: 25%;
+            width: 17.5%;
             background: #d9d9d9;
             color: #555;
             float: left;
@@ -108,19 +107,20 @@
             border-radius: 0;
         }
 
-        .addBtn:hover {
+        .addBtn:hover, .loadBtn:hover {
             background-color: #bbb;
         }
     </style>
-
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 </head>
 
 <body>
 
 <div id="myDIV" class="header">
     <h2 style="margin:5px">My To Do List</h2>
-    <input type="text" id="myInput" placeholder="Title...">
+    <input type="text" id="myInput" placeholder="Title..." onkeypress="handleKeyPress(event)">
     <span onclick="newElement()" class="addBtn">Add</span>
+    <span onclick="loadTodos()" class="loadBtn">Reload</span>
 </div>
 
 <ul id="myUL"></ul>
@@ -137,7 +137,14 @@
             }, {});
     }
 
-    // Загрузка существующих задач с сервера при загрузке страницы
+    // Обработчик для клавиши Enter
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            newElement();
+        }
+    }
+
+    // Загрузка задач с сервера
     function loadTodos() {
         fetch(apiUrl)
             .then(response => {
@@ -150,22 +157,16 @@
                 const ul = document.getElementById('myUL');
                 ul.innerHTML = ''; // Очищаем список
 
-                data.data.forEach(todo => {
+                // Сортируем задачи по полю "taskOrder"
+                data.data.sort((a, b) => a.taskOrder - b.taskOrder).forEach(todo => {
                     const li = document.createElement('li');
                     li.textContent = todo.title;
                     li.dataset.id = todo.id;
                     li.dataset.version = todo.version;
+                    li.dataset.taskOrder = todo.taskOrder; // Сохраняем порядок
 
                     if (todo.completedDate) {
-                        const completedDate = new Date(todo.completedDate);
-                        const today = new Date();
-
-                        // Сравниваем год, месяц и день
-                        if (completedDate.getDate() === today.getDate() &&
-                            completedDate.getMonth() === today.getMonth() &&
-                            completedDate.getFullYear() === today.getFullYear()) {
-                            li.classList.add('checked');
-                        }
+                        li.classList.add('checked');
                     }
 
                     const span = document.createElement("SPAN");
@@ -176,15 +177,24 @@
 
                     ul.appendChild(li);
 
-                    // Удаление задачи
+                    // Привязываем событие для удаления задачи
                     span.onclick = function () {
                         deleteTodo(todo.id);
                     };
 
-                    // Изменение состояния задачи (выполнена/не выполнена)
+                    // Привязываем событие для выделения задачи как выполненной
                     li.onclick = function () {
-                        toggleComplete(todo.id, li); // Передаем ID задачи, элемент li и версию
+                        toggleComplete(todo.id, li);
                     };
+                });
+
+                // Делаем задачи перетаскиваемыми
+                const sortable = new Sortable(ul, {
+                    animation: 150,
+                    onEnd: function () {
+                        updateTaskOrder();  // Пересчет порядка задач после перетаскивания
+                        rebindTaskEvents();  // Перепривязка событий
+                    }
                 });
             })
             .catch(error => {
@@ -192,43 +202,60 @@
             });
     }
 
+    // Привязка событий для всех задач
+    function rebindTaskEvents() {
+        const items = document.querySelectorAll('#myUL li');
+        items.forEach((li) => {
+            const taskId = li.dataset.id;
+            li.onclick = function () {
+                toggleComplete(taskId, li);
+            };
+        });
+    }
+
+
+
+    // Функция выделения задачи как выполненной
     function toggleComplete(id, li) {
         const isCompleted = li.classList.contains('checked');
-        // Отправляем на сервер обновлённое состояние задачи с версией
+
+        // Собираем данные для запроса
+        const requestData = {
+            data: {
+                completedDate: isCompleted ? null : new Date().toISOString(),  // Убираем дату если снимаем выделение
+                version: Number(li.dataset.version)  // Отправляем актуальную версию
+            }
+        };
+
+        // Отправляем запрос на сервер для обновления статуса задачи
         fetch(`${apiUrl}/${id}`, {
-            method: 'POST',  // Используем POST для обновления задачи
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': getCookies()['CSRF-TOKEN']
             },
-            body: JSON.stringify({
-                data: {
-                    completedDate: isCompleted ? null : new Date().toISOString(), // Если задача выполнена, добавляем дату
-                    version: Number(li.dataset.version)  // Передаем версию объекта для обновления
-                }
-            })
+            body: JSON.stringify(requestData)  // Преобразуем данные в JSON
         })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 0) {
-                    // Если запрос успешен, меняем состояние на клиенте
+                    // Если запрос успешен, обновляем состояние задачи на клиенте
                     if (isCompleted) {
                         li.classList.remove('checked');
                     } else {
-                        li.classList.toggle('checked');
+                        li.classList.add('checked');
                     }
-                    console.log('Задача с id:', id, 'успешно обновлена на сервере');
-                    li.dataset.version = data.data[0].version;
+                    li.dataset.version = data.data[0].version;  // Обновляем версию на клиенте
                 } else {
                     throw new Error('Ошибка обновления на сервере');
                 }
             })
             .catch(error => {
                 console.error('Ошибка обновления задачи:', error);
+                console.log(`Ошибка при обновлении задачи с ID ${id}. Ответ сервера:`, error);
             });
     }
 
-    // Удаление задачи
     function deleteTodo(id) {
         fetch(`${apiUrl}/${id}`, {
             method: 'DELETE',
@@ -241,21 +268,65 @@
                 if (!response.ok) {
                     throw new Error('Ошибка сети при удалении: ' + response.status);
                 }
-                loadTodos(); // Перезагружаем список после удаления
+                loadTodos();
             })
             .catch(error => {
                 console.error('Ошибка удаления задачи:', error);
             });
     }
 
+    // Функция для обновления порядка задач на сервере
+    function updateTaskOrder() {
+        const items = document.querySelectorAll('#myUL li');
+
+        items.forEach((item, index) => {
+            const taskId = item.dataset.id;
+
+            // Убедитесь, что версия объекта и порядковый номер обновляются корректно
+            fetch(`${apiUrl}/${taskId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': getCookies()['CSRF-TOKEN']
+                },
+                body: JSON.stringify({
+                    data: {
+                        taskOrder: index,  // Присваиваем уникальный порядковый индекс
+                        version: Number(item.dataset.version)  // Отправляем актуальную версию объекта
+                    }
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка обновления очередности задач');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 0) {
+                        console.log('Очередность задачи обновлена:', taskId);
+                        item.dataset.version = data.data[0].version;  // Обновляем версию на клиенте
+                        item.dataset.taskOrder = index;  // Обновляем порядковый номер на клиенте
+                    } else {
+                        throw new Error('Ошибка обновления на сервере');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка обновления задачи:', error);
+                    console.log(`Ошибка при обновлении задачи с ID ${taskId}. Ответ сервера:`, error);
+                });
+        });
+    }
+
+
+
     // Добавление новой задачи
     function newElement() {
         const inputValue = document.getElementById("myInput").value;
-        console.log("Input value:", inputValue);
-
         if (inputValue === '') {
             alert("You must write something!");
         } else {
+            const lastOrder = document.querySelectorAll('#myUL li').length; // Вычисляем текущий последний порядковый номер
             fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -265,7 +336,8 @@
                 body: JSON.stringify({
                     data: {
                         title: inputValue,
-                        responsible: {id: 1} // ID ответственного
+                        responsible: {id: 1},
+                        taskOrder: lastOrder // Присваиваем порядковый номер новой задаче
                     }
                 })
             })
@@ -276,18 +348,16 @@
                     return response.json();
                 })
                 .then(() => {
-                    console.log("Task added successfully");
-                    loadTodos(); // Перезагружаем список
+                    loadTodos();
                 })
                 .catch(error => {
                     console.error('Ошибка добавления задачи:', error);
                 });
 
-            document.getElementById("myInput").value = ""; // Очищаем поле ввода
+            document.getElementById("myInput").value = "";
         }
     }
 
-    // Инициализация: загрузка задач при загрузке страницы
     document.addEventListener('DOMContentLoaded', loadTodos);
 </script>
 

@@ -10,9 +10,7 @@
         <string name="title" large="true"/>
         <date name="completedDate"/>
         <many-to-one name="responsible" title="Responsible" ref="com.axelor.auth.db.User"/>
+        <integer name="taskOrder" default="0"/>
     </entity>
 
 </domain-models>
-
-
-
