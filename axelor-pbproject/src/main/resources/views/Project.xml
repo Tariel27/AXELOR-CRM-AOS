@@ -4,7 +4,7 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <form name="project-form" title="Project" model="com.axelor.apps.project.db.Project"
-          onLoad="action-project-on-load-group" onNew="action-project-group-on-new-project"
+          onLoad="action-project-on-load-group" onNew="action-project-group-on-new-project,pbp.project.o-n.set-default-value.a-a"
           onSave="action-project-method-check-resource-availibility" id="pbp.project.form">
         <menubar>
             <menu name="taskMenu" title="Tasks" showTitle="true" icon="fa-tasks">
@@ -436,14 +436,18 @@
                 <panel name="fieldsToDisplay" title="Fields to display" colSpan="12">
                     <field name="isShowStatus" widget="inline-checkbox"
                            onChange="action-project-record-status-reset-values"/>
+                    <!--Completed task status-->
                     <field name="completedTaskStatus" grid-view="task-status-grid"
                            form-view="task-status-form" showIf="isShowStatus" requiredIf="isShowStatus"
                            onSelect="action-project-attrs-set-completed-task-status-domain"/>
+                    <!--Type of authorized status-->
                     <field name="projectTaskStatusSet" widget="TagSelect" colSpan="12"
                            showIf="isShowStatus" requiredIf="isShowStatus"
                            onChange="action-project-record-reset-completed-task-status"/>
+
                     <field name="isShowPriority" colSpan="4" widget="inline-checkbox"
                            onChange="action-project-record-priority-reset-values"/>
+                    <!--Type of authorized priorities-->
                     <field name="projectTaskPrioritySet" widget="TagSelect" colSpan="12"
                            showIf="isShowPriority" requiredIf="isShowPriority"/>
                     <spacer colSpan="12" showIf="isShowPriority"/>
@@ -542,5 +546,14 @@
             <mail-followers/>
         </panel-mail>
     </form>
+
+    <action-attrs name="pbp.project.o-n.set-default-value.a-a">
+        <attribute for="completedTaskStatus" name="value" expr="eval: __repo__(TaskStatus).find(3)" />
+        <attribute for="projectTaskStatusSet" name="value" expr="eval: __repo__(TaskStatus).all().fetch()" />
+        <attribute for="projectTaskPrioritySet" name="value" expr="eval: __repo__(ProjectPriority).all().fetch()" />
+    </action-attrs>
+
+
+
 
 </object-views>

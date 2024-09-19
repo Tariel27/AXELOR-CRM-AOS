@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+
+    <menuitem name="pbp.project-task-all.m-i" order="300" title="Tasks" action="pbp.project-all.a-v"/>
+
+    <action-view name="pbp.project-all.a-v" title="Tasks" model="com.axelor.apps.project.db.ProjectTask">
+        <view type="kanban" name="project-task-kanban"/>
+        <view type="grid" name="project-task-grid"/>
+        <view type="form" name="project-task-form"/>
+        <view-param name="search-filters" value="project-task-filters"/>
+        <view-param name="auto-reload" value="20"/>
+        <domain>self.typeSelect = :_typeSelect</domain>
+        <context name="_typeSelect" expr="eval: 'task'"/>
+    </action-view>
+
+    <menuitem name="my-connected-all-projects" tag-count="true" title="My tasks" action="pbp.project-all-my-tasks"/>
+
+    <action-view name="pbp.project-all-my-tasks" title="My tasks" model="com.axelor.apps.project.db.ProjectTask">
+        <view type="kanban" name="project-task-kanban"/>
+        <view type="form" name="project-task-form"/>
+        <view-param name="search-filters" value="project-task-filters"/>
+        <view-param name="auto-reload" value="20"/>
+        <domain>self.assignedTo = :__user__ AND self.typeSelect = :_typeSelect</domain>
+        <context name="_typeSelect" expr="eval: 'task'"/>
+    </action-view>
+
+
+</object-views>
