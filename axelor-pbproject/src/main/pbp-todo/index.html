@@ -25,7 +25,6 @@
             background: #eee;
             font-size: 18px;
             transition: 0.2s;
-
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -41,7 +40,7 @@
         }
 
         ul li.checked {
-            background: #888;
+            background: #00c000;
             color: #fff;
             text-decoration: line-through;
         }
@@ -67,12 +66,12 @@
         }
 
         .close:hover {
-            background-color: #f44336;
+            background-color: #2b2d30;
             color: white;
         }
 
         .header {
-            background-color: #f44336;
+            background-color: #313c4c;
             padding: 30px 40px;
             color: white;
             text-align: center;
@@ -110,21 +109,31 @@
         .addBtn:hover, .loadBtn:hover {
             background-color: #bbb;
         }
+
+        /* Новый стиль для черной жирной рамки */
+        .container {
+            border: 20px solid rgba(41, 41, 41, 0.87);
+            border-radius: 15px;
+            padding: 0px;
+            width: 90%;
+            margin: 20px auto;
+        }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 </head>
 
 <body>
+<div class="container">
+    <div id="myDIV" class="header">
+        <h2 style="margin:5px">Список задач</h2>
+        <input type="text" id="myInput" placeholder="" onkeypress="handleKeyPress(event)">
+        <span onclick="newElement()" class="addBtn">Добавить</span>
+        <span onclick="loadTodos()" class="loadBtn">Обновить</span>
+    </div>
 
-<div id="myDIV" class="header">
-    <h2 style="margin:5px">My To Do List</h2>
-    <input type="text" id="myInput" placeholder="Title..." onkeypress="handleKeyPress(event)">
-    <span onclick="newElement()" class="addBtn">Add</span>
-    <span onclick="loadTodos()" class="loadBtn">Reload</span>
+    <ul id="myUL"></ul>
 </div>
-
-<ul id="myUL"></ul>
-
 <script>
     const apiUrl = 'http://localhost:8080/axelor-erp/ws/rest/com.axelor.apps.pbproject.db.DailyTask';
 
