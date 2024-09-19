@@ -22,4 +22,30 @@ axelor {
 dependencies {
 	api project(":modules:axelor-base")
 	api project(":modules:axelor-project")
+
+
 }
+
+task copyStaticWebapp(type: Copy) {
+	group = 'axelor'
+	description = 'Copy static HTML files to the build directory'
+
+	destinationDir = file(rootProject.buildDir)
+	into("webapp/pbp-todo") {
+		from "src/main/pbp-todo"
+	}
+}
+
+clean {
+	delete "src/main/resources/static/build"
+}
+
+jar {
+	dependsOn 'copyStaticWebapp'
+	into('webapp/hr/timesheet') {
+		from "src/main/resources/static"
+		duplicatesStrategy 'exclude'
+	}
+}
+build.dependsOn copyStaticWebapp
+rootProject.tasks.war.dependsOn copyStaticWebapp

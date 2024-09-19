@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            min-width: 250px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li {
+            cursor: pointer;
+            position: relative;
+            padding: 12px 8px 12px 40px;
+            list-style-type: none;
+            background: #eee;
+            font-size: 18px;
+            transition: 0.2s;
+
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        ul li:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+        ul li:hover {
+            background: #ddd;
+        }
+
+        ul li.checked {
+            background: #888;
+            color: #fff;
+            text-decoration: line-through;
+        }
+
+
+        ul li.checked::before {
+            content: '';
+            position: absolute;
+            border-color: #fff;
+            border-style: solid;
+            border-width: 0 2px 2px 0;
+            top: 10px;
+            left: 16px;
+            transform: rotate(45deg);
+            height: 15px;
+            width: 7px;
+        }
+
+        .close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 12px 16px 12px 16px;
+        }
+
+        .close:hover {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .header {
+            background-color: #f44336;
+            padding: 30px 40px;
+            color: white;
+            text-align: center;
+        }
+
+        .header:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        input {
+            margin: 0;
+            border: none;
+            border-radius: 0;
+            width: 75%;
+            padding: 10px;
+            float: left;
+            font-size: 16px;
+        }
+
+        .addBtn {
+            padding: 10px;
+            width: 25%;
+            background: #d9d9d9;
+            color: #555;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 0;
+        }
+
+        .addBtn:hover {
+            background-color: #bbb;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div id="myDIV" class="header">
+    <h2 style="margin:5px">My To Do List</h2>
+    <input type="text" id="myInput" placeholder="Title...">
+    <span onclick="newElement()" class="addBtn">Add</span>
+</div>
+
+<ul id="myUL"></ul>
+
+<script>
+    const apiUrl = 'http://localhost:8080/axelor-erp/ws/rest/com.axelor.apps.pbproject.db.DailyTask';
+
+    function getCookies() {
+        return decodeURIComponent(document.cookie)
+            .split('; ')
+            .reduce((acc, cur) => {
+                const [k, v] = cur.split('=');
+                return {...acc, [k]: v};
+            }, {});
+    }
+
+    // Загрузка существующих задач с сервера при загрузке страницы
+    function loadTodos() {
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка сети: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const ul = document.getElementById('myUL');
+                ul.innerHTML = ''; // Очищаем список
+
+                data.data.forEach(todo => {
+                    const li = document.createElement('li');
+                    li.textContent = todo.title;
+                    li.dataset.id = todo.id;
+                    li.dataset.version = todo.version;
+
+                    if (todo.completedDate) {
+                        const completedDate = new Date(todo.completedDate);
+                        const today = new Date();
+
+                        // Сравниваем год, месяц и день
+                        if (completedDate.getDate() === today.getDate() &&
+                            completedDate.getMonth() === today.getMonth() &&
+                            completedDate.getFullYear() === today.getFullYear()) {
+                            li.classList.add('checked');
+                        }
+                    }
+
+                    const span = document.createElement("SPAN");
+                    const txt = document.createTextNode("\u00D7");
+                    span.className = "close";
+                    span.appendChild(txt);
+                    li.appendChild(span);
+
+                    ul.appendChild(li);
+
+                    // Удаление задачи
+                    span.onclick = function () {
+                        deleteTodo(todo.id);
+                    };
+
+                    // Изменение состояния задачи (выполнена/не выполнена)
+                    li.onclick = function () {
+                        toggleComplete(todo.id, li); // Передаем ID задачи, элемент li и версию
+                    };
+                });
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки задач:', error);
+            });
+    }
+
+    function toggleComplete(id, li) {
+        const isCompleted = li.classList.contains('checked');
+        // Отправляем на сервер обновлённое состояние задачи с версией
+        fetch(`${apiUrl}/${id}`, {
+            method: 'POST',  // Используем POST для обновления задачи
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': getCookies()['CSRF-TOKEN']
+            },
+            body: JSON.stringify({
+                data: {
+                    completedDate: isCompleted ? null : new Date().toISOString(), // Если задача выполнена, добавляем дату
+                    version: Number(li.dataset.version)  // Передаем версию объекта для обновления
+                }
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 0) {
+                    // Если запрос успешен, меняем состояние на клиенте
+                    if (isCompleted) {
+                        li.classList.remove('checked');
+                    } else {
+                        li.classList.toggle('checked');
+                    }
+                    console.log('Задача с id:', id, 'успешно обновлена на сервере');
+                    li.dataset.version = data.data[0].version;
+                } else {
+                    throw new Error('Ошибка обновления на сервере');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка обновления задачи:', error);
+            });
+    }
+
+    // Удаление задачи
+    function deleteTodo(id) {
+        fetch(`${apiUrl}/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': getCookies()['CSRF-TOKEN']
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка сети при удалении: ' + response.status);
+                }
+                loadTodos(); // Перезагружаем список после удаления
+            })
+            .catch(error => {
+                console.error('Ошибка удаления задачи:', error);
+            });
+    }
+
+    // Добавление новой задачи
+    function newElement() {
+        const inputValue = document.getElementById("myInput").value;
+        console.log("Input value:", inputValue);
+
+        if (inputValue === '') {
+            alert("You must write something!");
+        } else {
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': getCookies()['CSRF-TOKEN']
+                },
+                body: JSON.stringify({
+                    data: {
+                        title: inputValue,
+                        responsible: {id: 1} // ID ответственного
+                    }
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка сети: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    console.log("Task added successfully");
+                    loadTodos(); // Перезагружаем список
+                })
+                .catch(error => {
+                    console.error('Ошибка добавления задачи:', error);
+                });
+
+            document.getElementById("myInput").value = ""; // Очищаем поле ввода
+        }
+    }
+
+    // Инициализация: загрузка задач при загрузке страницы
+    document.addEventListener('DOMContentLoaded', loadTodos);
+</script>
+
+</body>
+</html>
