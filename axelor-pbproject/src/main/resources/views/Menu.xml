@@ -6,7 +6,7 @@
     <menuitem name="pbp.project-task-all.m-i" order="300" title="Tasks" action="pbp.project-all.a-v"/>
 
     <action-view name="pbp.project-all.a-v" title="Tasks" model="com.axelor.apps.project.db.ProjectTask">
-        <view type="kanban" name="project-task-kanban"/>
+        <view type="kanban" name="pbp.project-task-kanban"/>
         <view type="grid" name="project-task-grid"/>
         <view type="form" name="project-task-form"/>
         <view-param name="search-filters" value="project-task-filters"/>
@@ -18,7 +18,7 @@
     <menuitem name="my-connected-all-projects" tag-count="true" title="My tasks" action="pbp.project-all-my-tasks"/>
 
     <action-view name="pbp.project-all-my-tasks" title="My tasks" model="com.axelor.apps.project.db.ProjectTask">
-        <view type="kanban" name="project-task-kanban"/>
+        <view type="kanban" name="pbp.project-task-kanban"/>
         <view type="form" name="project-task-form"/>
         <view-param name="search-filters" value="project-task-filters"/>
         <view-param name="auto-reload" value="20"/>
