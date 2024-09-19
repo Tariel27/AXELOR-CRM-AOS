@@ -2,12 +2,17 @@
 <object-views xmlns="http://axelor.com/xml/ns/object-views"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+
+    <action-method name="pbp.action-method-for-work-time-controller">
+        <call class="com.axelor.apps.pbproject.web.WorkTimeController"
+              method="calculateWorkHours"/>
+    </action-method>
+
     <form name="pbp-employee-hours-management-form" title="Hours Management" model="com.axelor.apps.pbproject.db.UserHoursManagement">
         <panel title="Search panel by date range" colSpan="4">
             <field name="fromDate" colSpan="4"/>
             <field name="toDate" colSpan="4"/>
-            <button name="customBtn" title="Confirm" colSpan="4" icon="fa-check-square-o" prompt="This is a confirmation message." onClick="actions"/>
-
+            <button name="customBtn" title="Confirm" colSpan="4" icon="fa-check-square-o" prompt="This is a confirmation message." onClick="pbp.action-method-for-work-time-controller"/>
             <field name="project" colSpan="6" widget="TagSelect" title="Projects" form-view="project-form" grid-view="project-grid" placeholder="Select projects" canNew="false" canEdit="false"/>
             <field name="membersUserSet" colSpan="6" widget="TagSelect" canNew="false" form-view="user-form" grid-view="user-grid"/>
 
