@@ -431,7 +431,9 @@
         <template><![CDATA[
 <>
 	<strong>{name}</strong>
-	<Box>{project.fullName}</Box>
+        <Box style={{ fontWeight: "bold", fontSize: "1.1rem", color: "#1890ff", marginTop: "5px" }}>
+    		{project.fullName}
+		</Box>
 	<Box d="flex" justifyContent="space-between">
 		<Box>
 			<Icon icon="calendar" fontSize="15px"/>
