@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+                http://axelor.com/xml/ns/domain-models/domain-models_7.1.xsd">
+
+    <module name="pbp" package="com.axelor.apps.pbproject.db"/>
+
+    <entity name="WorkHoursDto">
+        <!--Имя пользователя-->
+        <string name="userName" title="User Name" transient="true" />
+        <!--Наименование проекта-->
+        <string name="projectName" title="Project Name" transient="true"/>
+        <!--Поле для калькуляции читаемого времени-->
+        <decimal name="totalWorkedHours" title="Total Worked Hours" precision="10" scale="2" transient="true"/>
+        <!--Количество задач  проекте-->
+        <long name="taskCount" title="Task Count" default="0" transient="true"/>
+        <!--Количество часов в формате TT:MM-->
+        <string name="readableTime" title="Spent Hours" transient="true"/>
+    </entity>
+
+</domain-models>
