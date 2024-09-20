@@ -224,7 +224,10 @@
     <ul id="myUL"></ul>
 </div>
 <script>
-    const apiUrl = 'http://localhost:8080/axelor-erp/ws/rest/com.axelor.apps.pbproject.db.DailyTask';
+    const apiInfo = '/crm/ws/public/app/info';
+    const apiGeneral = '/crm/ws/rest/com.axelor.apps.pbproject.db.DailyTask';
+    const apiSearch = '/crm/ws/rest/com.axelor.apps.pbproject.db.DailyTask/search';
+    let userId = null;
 
     function getCookies() {
         return decodeURIComponent(document.cookie)
@@ -235,6 +238,26 @@
             }, {});
     }
 
+    const cookies = getCookies();
+
+    fetch(apiInfo)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка сети: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            userId = data.user?.id; // Используем опциональную цепочку для безопасного доступа
+            loadTodos();
+            if (userId == null) {
+                alert('User id is null!');
+            }
+        })
+        .catch(error => {
+            console.error('Произошла ошибка:', error);
+        });
+
     // Обработчик для клавиши Enter
     function handleKeyPress(event) {
         if (event.key === 'Enter') {
@@ -244,7 +267,18 @@
 
     // Загрузка задач с сервера
     function loadTodos() {
-        fetch(apiUrl)
+        fetch(apiSearch, {
+                method: 'POST', // Метод запроса
+                headers: {
+                    'Content-Type': 'application/json', // Указываем тип содержимого
+                    'X-CSRF-Token': cookies['CSRF-TOKEN']
+                },
+                body: JSON.stringify({
+                    data: {
+                        _domain: `self.responsible = ${userId}`
+                    }
+                }) // Преобразуем объект в JSON
+            })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Ошибка сети: ' + response.status);
@@ -254,7 +288,7 @@
             .then(data => {
                 const ul = document.getElementById('myUL');
                 ul.innerHTML = ''; // Очищаем список
-
+                if (data.data == null) return;
                 // Сортируем задачи по полю "taskOrder"
                 data.data.sort((a, b) => a.taskOrder - b.taskOrder).forEach(todo => {
                     const li = document.createElement('li');
@@ -326,11 +360,11 @@
         };
 
         // Отправляем запрос на сервер для обновления статуса задачи
-        fetch(`${apiUrl}/${id}`, {
+        fetch(`${apiGeneral}/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-Token': getCookies()['CSRF-TOKEN']
+                'X-CSRF-Token': cookies['CSRF-TOKEN']
             },
             body: JSON.stringify(requestData)  // Преобразуем данные в JSON
         })
@@ -358,11 +392,11 @@
         const userConfirmed = confirm("Вы уверены, что хотите удалить эту задачу?");
 
         if (userConfirmed) {
-            fetch(`${apiUrl}/${id}`, {
+            fetch(`${apiGeneral}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-Token': getCookies()['CSRF-TOKEN']
+                    'X-CSRF-Token': cookies['CSRF-TOKEN']
                 }
             })
                 .then(response => {
@@ -387,11 +421,11 @@
             const taskId = item.dataset.id;
 
             // Убедитесь, что версия объекта и порядковый номер обновляются корректно
-            fetch(`${apiUrl}/${taskId}`, {
+            fetch(`${apiGeneral}/${taskId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-Token': getCookies()['CSRF-TOKEN']
+                    'X-CSRF-Token': cookies['CSRF-TOKEN']
                 },
                 body: JSON.stringify({
                     data: {
@@ -431,16 +465,16 @@
             alert("You must write something!");
         } else {
             const lastOrder = document.querySelectorAll('#myUL li').length; // Вычисляем текущий последний порядковый номер
-            fetch(apiUrl, {
+            fetch(apiGeneral, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-Token': getCookies()['CSRF-TOKEN']
+                    'X-CSRF-Token': cookies['CSRF-TOKEN']
                 },
                 body: JSON.stringify({
                     data: {
                         title: inputValue,
-                        responsible: {id: 1},
+                        responsible: {id: userId},
                         taskOrder: lastOrder // Присваиваем порядковый номер новой задаче
                     }
                 })
