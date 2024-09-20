@@ -8,17 +8,25 @@
               method="calculateWorkHours"/>
     </action-method>
 
-    <form name="pbp-employee-hours-management-form" title="Hours Management" model="com.axelor.apps.pbproject.db.UserHoursManagement">
-        <panel title="Search panel by date range" colSpan="4">
-            <field name="fromDate" colSpan="4"/>
-            <field name="toDate" colSpan="4"/>
-            <button name="customBtn" title="Confirm" colSpan="4" icon="fa-check-square-o" prompt="This is a confirmation message." onClick="pbp.action-method-for-work-time-controller"/>
-            <field name="project" colSpan="6" widget="TagSelect" title="Projects" form-view="project-form" grid-view="project-grid" placeholder="Select projects" canNew="false" canEdit="false"/>
-            <field name="membersUserSet" colSpan="6" widget="TagSelect" canNew="false" form-view="user-form" grid-view="user-grid"/>
-
-
+    <form name="pbp-employee-hours-management-form" title="Hours Management" model="com.axelor.apps.pbproject.db.UserHoursManagement" width="large">
+        <panel colSpan="4">
+            <field name="fromDate" colSpan="4" required="true" x-dirty="false"/>
+            <field name="toDate" colSpan="4" required="true" x-dirty="false"/>
+            <button name="customBtn" title="Get data" colSpan="4" icon="fa-search" onClick="pbp.action-method-for-work-time-controller" x-dirty="false"/>
+            <field name="project" title="Projects" colSpan="12" placeholder="Select projects" widget="TagSelect" canNew="false" canEdit="false" form-view="project-form" grid-view="project-grid" x-dirty="false"/>
+            <field name="membersUserSet" title="Users" colSpan="12" widget="TagSelect" canNew="false" form-view="user-form" grid-view="user-grid"/>
         </panel>
-        <panel title="Employee and total hours spent" colSpan="8"/>
-
+        <panel  readonly="true" colSpan="12">
+            <field name="workHours" showTitle="false" grid-view="pbp.data-users-hours-spent-grid" x-dirty="false" colSpan="12" canView="false"/>
+        </panel>
     </form>
+
+    <grid name="pbp.data-users-hours-spent-grid" title="Total hours spent" model="com.axelor.apps.pbproject.db.UserHoursManagement" edit-icon="false" x-selector="none">
+        <field name="userName" title="User name"/>
+        <field name="projectName" title="Project name"/>
+        <field name="readableTime" title="Spent time"/>
+        <field name="totalWorkedHours" title="Total worked hours" hidden="true"/>
+        <field name="taskCount" title="Task Count"/>
+    </grid>
+
 </object-views>
