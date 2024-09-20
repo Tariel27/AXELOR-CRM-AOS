@@ -21,8 +21,8 @@ public class WorkTimeController {
 
         UserHoursManagement userHoursManagement = actionRequest.getContext().asType(UserHoursManagement.class);
 
-        List<WorkHoursDto> workHours = workTimeService.getWorkHours(userHoursManagement);
+        List<WorkHoursDto> lines = workTimeService.getWorkHours(userHoursManagement);
 
-        actionResponse.setValue("workHours", workHours);
+        actionResponse.setValue("lines", lines);
     }
 }

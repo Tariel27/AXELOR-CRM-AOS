@@ -7,11 +7,16 @@
     <module name="pbp" package="com.axelor.apps.pbproject.db"/>
 
     <entity name="WorkHoursDto">
-        <string name="userName" title="User Name" large="true"/>
-        <string name="projectName" title="Project Name" large="true"/>
-        <decimal name="totalWorkedHours" title="Total Worked Hours" precision="10" scale="2"/>
-        <long name="taskCount" title="Task Count" default="0"/>
-        <string name="readableTime" title="Spent Hours"/>
+        <!--Имя пользователя-->
+        <string name="userName" title="User Name" transient="true" />
+        <!--Наименование проекта-->
+        <string name="projectName" title="Project Name" transient="true"/>
+        <!--Поле для калькуляции читаемого времени-->
+        <decimal name="totalWorkedHours" title="Total Worked Hours" precision="10" scale="2" transient="true"/>
+        <!--Количество задач  проекте-->
+        <long name="taskCount" title="Task Count" default="0" transient="true"/>
+        <!--Количество часов в формате TT:MM-->
+        <string name="readableTime" title="Spent Hours" transient="true"/>
     </entity>
 
 </domain-models>

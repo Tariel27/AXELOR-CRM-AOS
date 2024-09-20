@@ -8,15 +8,15 @@
     <entity name="UserHoursManagement">
 
         <!--Связь с проектами-->
-        <many-to-many name="project" ref="com.axelor.apps.project.db.Project" title="Project"/>
+        <many-to-many name="project" ref="com.axelor.apps.project.db.Project" title="Project" transient="true"/>
         <!--Связь со всем сотрудниками-->
-        <many-to-many name="membersUserSet" ref="com.axelor.auth.db.User" title="Membres"/>
+        <many-to-many name="users" ref="com.axelor.auth.db.User" title="Users" transient="true"/>
         <!--Связь с ДТО чтобы отображать грид-->
-        <one-to-many name="workHours" ref="com.axelor.apps.pbproject.db.WorkHoursDto" title="Work hours"/>
+        <one-to-many name="lines" ref="com.axelor.apps.pbproject.db.WorkHoursDto" title="Work hours" transient="true"/>
         <!--Дата начала задачи-->
-        <date name="fromDate" title="From Date"/>
+        <date name="fromDate" title="From Date" transient="true"/>
         <!--Дата окончания задачи-->
-        <date name="toDate" title="To Date"/>
+        <date name="toDate" title="To Date" transient="true"/>
      </entity>
 
 </domain-models>

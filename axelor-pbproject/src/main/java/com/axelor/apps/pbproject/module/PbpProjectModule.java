@@ -19,8 +19,10 @@
 package com.axelor.apps.pbproject.module;
 
 import com.axelor.app.AxelorModule;
+import com.axelor.apps.pbproject.service.ReadableTimeService;
 import com.axelor.apps.pbproject.service.UserPbpProjectService;
 import com.axelor.apps.pbproject.service.WorkTimeService;
+import com.axelor.apps.pbproject.service.impl.ReadableTimeServiceImpl;
 import com.axelor.apps.pbproject.service.impl.UserPbpProjectServiceImpl;
 import com.axelor.apps.pbproject.service.impl.WorkTimeServiceImpl;
 
@@ -30,5 +32,6 @@ public class PbpProjectModule extends AxelorModule {
   protected void configure() {
     bind(UserPbpProjectService.class).to(UserPbpProjectServiceImpl.class);
     bind(WorkTimeService.class).to(WorkTimeServiceImpl.class);
+    bind(ReadableTimeService.class).to(ReadableTimeServiceImpl.class);
   }
 }

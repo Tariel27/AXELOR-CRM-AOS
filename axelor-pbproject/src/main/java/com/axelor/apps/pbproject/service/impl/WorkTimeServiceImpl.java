@@ -2,6 +2,7 @@ package com.axelor.apps.pbproject.service.impl;
 
 import com.axelor.apps.pbproject.db.UserHoursManagement;
 import com.axelor.apps.pbproject.db.WorkHoursDto;
+import com.axelor.apps.pbproject.service.ReadableTimeService;
 import com.axelor.apps.pbproject.service.WorkTimeService;
 import com.axelor.apps.project.db.Project;
 import com.axelor.auth.db.User;
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 
 public class WorkTimeServiceImpl implements WorkTimeService {
     private final EntityManager entityManager;
+    private final ReadableTimeService readableTimeService;
 
     @Inject
-    public WorkTimeServiceImpl(EntityManager entityManager) {
+    public WorkTimeServiceImpl(EntityManager entityManager, ReadableTimeService readableTimeService) {
         this.entityManager = entityManager;
+        this.readableTimeService = readableTimeService;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class WorkTimeServiceImpl implements WorkTimeService {
                 "AND pt.taskEndDate BETWEEN :fromDate AND :toDate ");
 
         if (hasMembers(userHoursManagement)) {
-            jpql.append("AND u.id IN :members ");
+            jpql.append("AND u.id IN :users ");
         }
 
         if (hasProjects(userHoursManagement)) {
@@ -60,10 +63,10 @@ public class WorkTimeServiceImpl implements WorkTimeService {
         query.setParameter("toDate", userHoursManagement.getToDate());
 
         if (hasMembers(userHoursManagement)) {
-            Set<Long> memberIds = userHoursManagement.getMembersUserSet().stream()
+            Set<Long> users = userHoursManagement.getUsers().stream()
                     .map(User::getId)
                     .collect(Collectors.toSet());
-            query.setParameter("members", memberIds);
+            query.setParameter("users", users);
         }
 
         if (hasProjects(userHoursManagement)) {
@@ -75,8 +78,8 @@ public class WorkTimeServiceImpl implements WorkTimeService {
     }
 
     private boolean hasMembers(UserHoursManagement userHoursManagement) {
-        return userHoursManagement.getMembersUserSet() != null &&
-                !userHoursManagement.getMembersUserSet().isEmpty();
+        return userHoursManagement.getUsers() != null &&
+                !userHoursManagement.getUsers().isEmpty();
     }
 
     private boolean hasProjects(UserHoursManagement userHoursManagement) {
@@ -92,22 +95,10 @@ public class WorkTimeServiceImpl implements WorkTimeService {
                     dto.setProjectName((String) result[1]);
                     dto.setTotalWorkedHours((BigDecimal) result[2]);
                     dto.setTaskCount((Long) result[3]);
-                    dto.setReadableTime(calculateReadableTime(dto.getTotalWorkedHours()));
+                    dto.setReadableTime(readableTimeService.calculateReadableTime(dto.getTotalWorkedHours()));
                     return dto;
                 })
                 .collect(Collectors.toList());
-    }
-
-    private String calculateReadableTime(BigDecimal totalWorkedHours) {
-        if (totalWorkedHours == null) {
-            return "00:00";
-        }
-
-        int totalMinutes = totalWorkedHours.multiply(BigDecimal.valueOf(60)).intValue();
-        int hours = totalMinutes / 60;
-        int minutes = totalMinutes % 60;
-
-        return String.format("%02d:%02d", hours, minutes);
     }
 
 }
