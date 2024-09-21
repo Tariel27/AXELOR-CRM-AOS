@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+}
+
+#background {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#background::before {
+  content: '';
+  width: 100%;
+  top: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.1);
+}

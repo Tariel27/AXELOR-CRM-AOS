@@ -120,11 +120,13 @@
                 <panel name="categoryPanel" showIf="project.isShowTaskCategory" colSpan="4">
                     <field name="projectTaskCategory" colSpan="12"
                            onChange="action-project-task-group-project-category-onchange"
-                           onSelect="action-project-task-attrs-project-task-category-configurations"/>
+                           onSelect="action-project-task-attrs-project-task-category-configurations"
+                           help="This field indicates the task type or category, which helps categorize tasks in the project."/>
                 </panel>
                 <panel name="sectionPanel" showIf="project.isShowSection" colSpan="4">
                     <field name="projectTaskSection" colSpan="12" form-view="project-task-section-form"
-                           grid-view="project-task-section-grid"/>
+                           grid-view="project-task-section-grid"
+                           help="This field indicates the section or stage of the project to which the issue relates."/>
                 </panel>
                 <panel name="priorityPanel" showIf="project.isShowPriority" colSpan="4">
                     <field name="priority" colSpan="12" canView="false"
@@ -144,7 +146,8 @@
                 <field name="taskDate" colSpan="4"
                        onChange="action-project-task-attrs-set-task-duration,action-project-task-record-set-date-or-frequency-changed"
                        required="true" hidden="true"/>
-                <field name="taskEndDate" colSpan="4" onChange="action-project-task-attrs-set-task-duration" hidden="true"/>
+                <field name="taskEndDate" colSpan="4" onChange="action-project-task-attrs-set-task-duration"
+                       hidden="true"/>
                 <field name="taskDeadline" title="Task deadline" colSpan="4" hidden="true"/>
 
                 <field name="projectTaskTagSet" colSpan="4" widget="TagSelect" form-view="project-task-tag-form"
@@ -373,10 +376,10 @@
     <tree id="project-project-task-tree2" name="project-project-task-tree2" title="Task">
         <column name="name" type="string"/>
         <column name="taskDate" type="date"/>
-<!--        <column name="initial" type="decimal"/>-->
-<!--        <column name="forecast" type="decimal"/>-->
-<!--        <column name="real" type="decimal"/>-->
-<!--        <column name="landing" type="decimal"/>-->
+        <!--        <column name="initial" type="decimal"/>-->
+        <!--        <column name="forecast" type="decimal"/>-->
+        <!--        <column name="real" type="decimal"/>-->
+        <!--        <column name="landing" type="decimal"/>-->
         <column name="assignedTo" type="reference"/>
         <column name="createSubtaskBtn" type="button"/>
         <column name="generatePurchaseOrderBtn" type="button"/>
@@ -418,7 +421,8 @@
         </node>
     </tree>
     <!--Канбан, где тикеты работают с Date-Time, показывают также время начала-->
-    <kanban name="pbp.project-task-kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask" columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
+    <kanban name="pbp.project-task-kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
+            columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
         <field name="name"/>
         <field name="project"/>
         <field name="assignedTo"/>
@@ -431,7 +435,9 @@
         <template><![CDATA[
 <>
 	<strong>{name}</strong>
-	<Box>{project.fullName}</Box>
+        <Box style={{ fontWeight: "bold", fontSize: "1.1rem", color: "#1890ff", marginTop: "5px" }}>
+    		{project.fullName}
+		</Box>
 	<Box d="flex" justifyContent="space-between">
 		<Box>
 			<Icon icon="calendar" fontSize="15px"/>
@@ -466,9 +472,12 @@
 
     <!--Экшн который автоподставляет даты для системы xelor, hidden=true-->
     <action-attrs name="update-date-fields">
-        <attribute for="taskDate" name="value" expr="eval: __this__.startDateTime != null ? __this__.startDateTime.toLocalDate() : null" />
-        <attribute for="taskEndDate" name="value" expr="eval: __this__.endDateTime != null ? __this__.endDateTime.toLocalDate() : null" />
-        <attribute for="taskDeadline" name="value" expr="eval: __this__.deadlineDateTime != null ? __this__.deadlineDateTime.toLocalDate() : null" />
+        <attribute for="taskDate" name="value"
+                   expr="eval: __this__.startDateTime != null ? __this__.startDateTime.toLocalDate() : null"/>
+        <attribute for="taskEndDate" name="value"
+                   expr="eval: __this__.endDateTime != null ? __this__.endDateTime.toLocalDate() : null"/>
+        <attribute for="taskDeadline" name="value"
+                   expr="eval: __this__.deadlineDateTime != null ? __this__.deadlineDateTime.toLocalDate() : null"/>
     </action-attrs>
 
 </object-views>

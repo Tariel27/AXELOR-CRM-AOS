@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="./style/background.css">
+    <link rel="stylesheet" href="./style/time.css">
+</head>
+<body>
+    <div id="background">
+        <div class="info-container">
+            <div class="time-container">
+              <p id="hour">00</p>
+              <p id="colon">:</p>
+              <p id="minute">00</p>
+            </div>
+      
+            <div class="date-container">
+              <p id="date-alpha-day"></p><span id="comma">,</span>
+              <!--"Sunday,"-->
+              <p id="date-alpha-month"></p><span id="space"></span>
+              <!--"January"-->
+              <p id="date-num-day"></p><span id="comma">,</span>
+              <!--"1,"-->
+              <p id="date-num-year"></p>
+              <!--"2023"-->
+            </div>
+          </div>
+    </div>
+    <script src="./js/background.js"></script>
+    <script src="./js/time.js"></script>
+</body>
+</html>
