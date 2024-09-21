@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+
+    <action-method name="pbp.action-method-for-work-time-controller">
+        <call class="com.axelor.apps.pbproject.web.WorkTimeController"
+              method="calculateWorkHours"/>
+    </action-method>
+
+    <form name="pbp-employee-hours-management-form" title="Hours Management" model="com.axelor.apps.pbproject.db.UserHoursManagement" width="large">
+        <panel>
+            <field name="fromDate" colSpan="4" required="true" x-dirty="false"/>
+            <field name="toDate" colSpan="4" required="true" x-dirty="false"/>
+            <button name="customBtn" title="Get data" colSpan="4" icon="fa-search" onClick="pbp.action-method-for-work-time-controller" x-dirty="false"/>
+            <field name="project" title="Projects" colSpan="12" placeholder="Select projects" widget="TagSelect" canNew="false" canEdit="false" form-view="project-form" grid-view="project-grid" x-dirty="false"/>
+            <field name="users" title="Users" colSpan="12" widget="TagSelect" canNew="false" form-view="user-form" grid-view="user-grid"/>
+        </panel>
+        <panel  readonly="true">
+            <field name="lines" showTitle="false" grid-view="pbp.data-users-hours-spent-grid" x-dirty="false" colSpan="12" canView="false"/>
+        </panel>
+    </form>
+
+    <grid name="pbp.data-users-hours-spent-grid" title="Total hours spent" model="com.axelor.apps.pbproject.db.UserHoursManagement" edit-icon="false" x-selector="none">
+        <field name="userName" title="User name"/>
+        <field name="projectName" title="Project name"/>
+        <field name="readableTime" title="Spent time"/>
+        <field name="totalWorkedHours" title="Total worked hours" hidden="true"/>
+        <field name="taskCount" title="Task Count"/>
+    </grid>
+
+</object-views>
