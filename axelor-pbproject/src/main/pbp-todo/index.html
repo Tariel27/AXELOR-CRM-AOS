@@ -242,8 +242,37 @@
         }
     }
 
-    // Загрузка задач с сервера
+
+    //вывод id текущего пользователя
+    function getCurrentUser() {
+        fetch('http://localhost:8080/axelor-erp/ws/public/app/info', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': getCookies()['CSRF-TOKEN']
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка сети: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                userId = data.user.id;
+                console.log('Текущий пользователь, ID:', userId);
+            })
+            .catch(error => {
+                console.error('Ошибка при получении информации о пользователе:', error);
+            });
+    }
+
+    getCurrentUser();
+    let userId;
+    // Загрузка всех задач с сервера и фильтрация на клиенте
     function loadTodos() {
+        const apiUrl = 'http://localhost:8080/axelor-erp/ws/rest/com.axelor.apps.pbproject.db.DailyTask';
+
         fetch(apiUrl)
             .then(response => {
                 if (!response.ok) {
@@ -255,8 +284,11 @@
                 const ul = document.getElementById('myUL');
                 ul.innerHTML = ''; // Очищаем список
 
+                // Фильтруем задачи, созданные только текущим пользователем по полю createdBy.id
+                const filteredTasks = data.data.filter(task => task.createdBy.id == userId);
+
                 // Сортируем задачи по полю "taskOrder"
-                data.data.sort((a, b) => a.taskOrder - b.taskOrder).forEach(todo => {
+                filteredTasks.sort((a, b) => a.taskOrder - b.taskOrder).forEach(todo => {
                     const li = document.createElement('li');
                     li.textContent = todo.title;
                     li.dataset.id = todo.id;
@@ -299,6 +331,7 @@
                 console.error('Ошибка загрузки задач:', error);
             });
     }
+
 
     // Привязка событий для всех задач
     function rebindTaskEvents() {
