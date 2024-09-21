@@ -39,6 +39,6 @@
     <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#3f6bb9" action="pbp.peta-calendar-open-action"/>
 
     <action-view name="pbp.peta-calendar-open-action" title="Event calendar" model="com.axelor.apps.base.db.ICalendarEvent">
-
+        <view type="calendar" name="pbp.calendar-event-all"/>
     </action-view>
 </object-views>
