@@ -1,0 +1,62 @@
+:root {
+    --time-font-size: 45px;
+}
+  
+.info-container {
+    width: 100%;
+    max-width: fit-content;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateX(-50);
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    padding: 15px;
+    backdrop-filter: blur(5px);
+    margin: auto;
+    margin-bottom: 50px;
+  }
+  
+  p,
+  span {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .time-container {
+    display: flex;
+    justify-content: center;
+    font-size: var(--time-font-size);
+  }
+  
+  #colon {
+    animation: blink 2s infinite;
+  }
+  
+  @keyframes blink {
+    0% {
+      opacity: 0;
+    }
+  
+    50% {
+      opacity: 1;
+    }
+  
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  .date-container {
+    display: flex;
+    font-size: 25px;
+  }
+  
+  /* Takes font size of #time and divides it by value */
+  #comma,
+  #space {
+    margin-right: 5px;
+  }
