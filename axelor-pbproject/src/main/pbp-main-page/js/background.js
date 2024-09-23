@@ -98,8 +98,13 @@ const setBackground = () => {
 };
 
 window.addEventListener("load", () => {
-  setBackground();
-
-  const everyHour = 1000 * 60 * 60;
-  setInterval(setBackground, everyHour);
+    const now = new Date();
+    const nextHour = new Date(now.getTime() + (60 - now.getMinutes()) * 60000 - now.getSeconds() * 1000 - now.getMilliseconds());
+    const timeout = nextHour.getTime() - now.getTime();
+    console.log(timeout)
+    setTimeout(() => {
+        setBackground();
+        setInterval(setBackground, 60 * 60 * 1000);
+    }, timeout);
+    setBackground();
 });
