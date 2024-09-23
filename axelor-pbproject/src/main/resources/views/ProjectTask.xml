@@ -151,7 +151,12 @@
                        grid-view="project-task-tag-grid" x-color-field="colorSelect"/>
                 <field name="progress" showIf="project.isShowProgress &amp;&amp; !$readonly()" colSpan="4"
                        onChange="action-project-task-group-progress-onchange" min="0"/>
-                <field name="spentTime" colSpan="4"/>
+
+
+                <field name="spentTime" colSpan="2" onChange="action-readable-time-convert"/>
+                <field name="readableSpentTime" colSpan="2" widget="String"/>
+
+
                 <spacer showIf="project.isShowProgress &amp;&amp; !$readonly()" colSpan="8"/>
                 <field name="progress" showIf="project.isShowProgress &amp;&amp; $readonly()" colSpan="4"
                        widget="SelectProgress"/>
@@ -470,5 +475,10 @@
         <attribute for="taskEndDate" name="value" expr="eval: __this__.endDateTime != null ? __this__.endDateTime.toLocalDate() : null" />
         <attribute for="taskDeadline" name="value" expr="eval: __this__.deadlineDateTime != null ? __this__.deadlineDateTime.toLocalDate() : null" />
     </action-attrs>
+
+    <!--  Метод который меняет биг децимал на TT:MM  -->
+    <action-method name="action-readable-time-convert">
+        <call class="com.axelor.apps.pbproject.web.ReadableTimeController" method="convertToReadable"/>
+    </action-method>
 
 </object-views>
