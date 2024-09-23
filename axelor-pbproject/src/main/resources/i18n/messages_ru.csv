@@ -132,6 +132,8 @@
 "Tasks","Задачи",,
 "Tasks created by me","Задачи, созданные мной",,
 "Team","Команда",,
+"This field indicates the section or stage of the project to which the issue relates.","Это поле указывает на раздел или стадию проекта, к которой относится задача.",,
+"This field indicates the task type or category, which helps categorize tasks in the project.","Это поле указывает на тип или категорию задачи, что помогает классифицировать задачи в проекте.",,
 "Time Spent","Затраченное время",,
 "Time follow-up",,,
 "Timer","Таймер",,

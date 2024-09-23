@@ -132,6 +132,8 @@
 "Tasks",,,
 "Tasks created by me",,,
 "Team",,,
+"This field indicates the section or stage of the project to which the issue relates.",,,
+"This field indicates the task type or category, which helps categorize tasks in the project.",,,
 "Time Spent",,,
 "Time follow-up",,,
 "Timer",,,

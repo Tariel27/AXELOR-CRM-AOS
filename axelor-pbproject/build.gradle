@@ -34,5 +34,9 @@ task copyStaticWebapp(type: Copy) {
 	into("webapp/pbp-todo") {
 		from "src/main/pbp-todo"
 	}
+
+	into("webapp/pbp-main-page") {
+		from "src/main/pbp-main-page"
+	}
 }
 rootProject.tasks.war.dependsOn copyStaticWebapp

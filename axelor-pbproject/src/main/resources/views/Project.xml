@@ -551,9 +551,7 @@
         <attribute for="completedTaskStatus" name="value" expr="eval: __repo__(TaskStatus).find(3)" />
         <attribute for="projectTaskStatusSet" name="value" expr="eval: __repo__(TaskStatus).all().fetch()" />
         <attribute for="projectTaskPrioritySet" name="value" expr="eval: __repo__(ProjectPriority).all().fetch()" />
+        <attribute for="projectTaskCategorySet" name="value" expr="eval: __repo__(ProjectTaskCategory).all().fetch()" />
     </action-attrs>
-
-
-
 
 </object-views>
