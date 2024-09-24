@@ -22,7 +22,7 @@
         </panel>
         <panel name="mainPanel" colSpan="12">
             <panel name="statusPanel" colSpan="6" stacked="true">
-                <field name="status" showTitle="false" showIf="project.isShowStatus" widget="NavSelect"
+                <field name="status" onChange="update-progress-on-status-change,save" showTitle="false" showIf="project.isShowStatus" widget="NavSelect"
                        x-order="sequence"/>
                 <field name="typeSelect" hidden="true"/>
             </panel>
@@ -489,5 +489,16 @@
     <action-method name="action-readable-time-convert">
         <call class="com.axelor.apps.pbproject.web.ReadableTimeController" method="convertToReadable"/>
     </action-method>
+
+    <!--action который меняет progress при сменен статуса задачи-->
+    <action-attrs name="update-progress-on-status-change">
+        <attribute for="progress" name="value" expr="0" if="status?.name == 'New'"/>
+        <attribute for="progress" name="value" expr="40" if="status?.name == 'In progress'"/>
+        <attribute for="progress" name="value" expr="70" if="status?.name == 'In testing'"/>
+        <attribute for="progress" name="value" expr="100" if="status?.name == 'Done'"/>
+        <attribute for="progress" name="value" expr="0" if="status?.name == 'Canceled'"/>
+    </action-attrs>
+
+
 
 </object-views>
