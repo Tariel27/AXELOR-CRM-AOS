@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
+    <!-- Метод который получается дежурных -->
+    <action-method name="pbp.action-method-for-duty-controller">
+        <call class="com.axelor.apps.pbproject.web.DutyController"
+              method="getDutyUsers"/>
+    </action-method>
+
+
+
+    <form title="Duty" name="pbp.duty-humans-form" model="com.axelor.apps.pbproject.db.Duty">
+        <panel>
+            <field name="dateStart"/>
+            <field name="dateEnd"/>
+<!--            <field name="users"/>-->
+            <button name="customBtn" title="Get Duty Users" colSpan="4" icon="fa-search" onClick="pbp.action-method-for-duty-controller" x-dirty="false"/>
+        </panel>
+
+        <panel readonly="true">
+            <field name="users" title="Duty users" colSpan="12"  grid-view="pbp.duty-humans-grid"/>
+        </panel>
+
+    </form>
+
+    <grid name="pbp.duty-humans-grid" title="Duty List" model="com.axelor.auth.db.User">
+        <field name="name" title="User Name"/>
+        <field name="email" title="Email"/>
+        <field name="isActiveDuty" title="Active Duty"/>
+    </grid>
+
+
+</object-views>

@@ -36,9 +36,16 @@
     </action-view>
 
     <!--  Меню которое открывает ивент календарь  -->
-    <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#3f6bb9" action="pbp.peta-calendar-open-action"/>
+    <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#3f6bb9" action="pbp.peta-calendar-open-action" order="800"/>
 
     <action-view name="pbp.peta-calendar-open-action" title="Event calendar" model="com.axelor.apps.base.db.ICalendarEvent">
         <view type="calendar" name="pbp.calendar-event-all"/>
+    </action-view>
+
+    <!-- Меню которое открывает дежурных -->
+    <menuitem name="pbp.show-peoples-for-duty-m-i" title="Duty humans" icon="fa-users" icon-background="#3f6bb9" order="750" action=""/>
+
+    <action-view name="pbp.duty-humans-action" title="Duty" model="com.axelor.apps.pbproject.db.Duty">
+        <view type="form" name="pbp.duty-humans-form"/>
     </action-view>
 </object-views>
