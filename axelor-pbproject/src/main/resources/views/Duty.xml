@@ -12,23 +12,30 @@
 
     <form title="Duty" name="pbp.duty-humans-form" model="com.axelor.apps.pbproject.db.Duty">
         <panel>
+            <field name="users"/>
             <field name="dateStart"/>
             <field name="dateEnd"/>
 <!--            <field name="users"/>-->
-            <button name="customBtn" title="Get Duty Users" colSpan="4" icon="fa-search" onClick="pbp.action-method-for-duty-controller" x-dirty="false"/>
+<!--            <button name="customBtn" title="Get Duty Users" colSpan="4" icon="fa-search" onClick="pbp.action-method-for-duty-controller" x-dirty="false"/>-->
         </panel>
-
-        <panel readonly="true">
-            <field name="users" title="Duty users" colSpan="12"  grid-view="pbp.duty-humans-grid"/>
-        </panel>
+<!--        <panel readonly="true">-->
+<!--            <field name="users" title="Duty users" colSpan="12"  grid-view="pbp.duty-humans-grid"/>-->
+<!--        </panel>-->
 
     </form>
 
-    <grid name="pbp.duty-humans-grid" title="Duty List" model="com.axelor.auth.db.User">
-        <field name="name" title="User Name"/>
-        <field name="email" title="Email"/>
-        <field name="isActiveDuty" title="Active Duty"/>
+    <grid name="pbp.duty-humans-grid" title="Duty List" model="com.axelor.apps.pbproject.db.Duty">
+        <field name="users"/>
+        <field name="dateStart"/>
+        <field name="dateEnd"/>
     </grid>
+
+
+
+
+
+
+<!--  ДАШБОРДЫ  -->
 
 
 </object-views>

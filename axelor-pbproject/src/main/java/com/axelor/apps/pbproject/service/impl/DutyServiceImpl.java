@@ -10,9 +10,9 @@ import com.google.inject.persist.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class DutyServiceImpl implements DutyService {
     private final DutyRepository dutyRepository;
@@ -27,6 +27,7 @@ public class DutyServiceImpl implements DutyService {
 
 
     @Override
+    @Transactional
     public Duty getCurrentDuty(LocalDate date) {
         Duty currentDuty = dutyRepository.all()
                 .filter("self.dateStart <= :date AND self.dateEnd >= :date")
@@ -36,7 +37,6 @@ public class DutyServiceImpl implements DutyService {
         if (currentDuty == null) {
             currentDuty = createDutyForCurrentWeek(date);
         }
-        System.out.println("currentDuty = " + currentDuty);
         return currentDuty;
     }
 
@@ -49,17 +49,18 @@ public class DutyServiceImpl implements DutyService {
                 .filter("self.isActiveDuty = true AND self.alreadyInDuty = false")
                 .fetch(2);
 
-//        if (availableUsers.size() > 2) {
-//            availableUsers = availableUsers.subList(0, 2);
-//        }
+        availableUsers.forEach(user -> {
+            user.setAlreadyInDuty(true);
+            userRepository.save(user);
+        });
 
         Duty newDuty = new Duty();
         newDuty.setDateStart(startOfWeek);
         newDuty.setDateEnd(endOfWeek);
-        newDuty.setUsers(new HashSet<>(availableUsers));
-        availableUsers.forEach(user -> user.setAlreadyInDuty(true));
+        newDuty.setUsers(Set.copyOf(availableUsers));
 
-        return dutyRepository.save(newDuty);
+        dutyRepository.save(newDuty);
 
+        return newDuty;
     }
 }
