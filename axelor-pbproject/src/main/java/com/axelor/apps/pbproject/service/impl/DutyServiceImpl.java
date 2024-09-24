@@ -45,6 +45,23 @@ public class DutyServiceImpl implements DutyService {
         LocalDate startOfWeek = date.with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1);
         LocalDate endOfWeek = date.with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 7);
 
+        //сюда огика сброса если все люди отдежурили
+        List<User> activeUsers = userRepository.all()
+                .filter("self.isActiveDuty = true")
+                .fetch();
+
+        boolean allInDuty = activeUsers.stream().allMatch(User::getAlreadyInDuty);
+        if (allInDuty) {
+            activeUsers.forEach(user -> {
+                user.setAlreadyInDuty(false);
+                userRepository.save(user);
+            });
+        }
+
+        //еще будет условие на изменение мб
+
+
+
         List<User> availableUsers = userRepository.all()
                 .filter("self.isActiveDuty = true AND self.alreadyInDuty = false")
                 .fetch(2);
@@ -63,4 +80,5 @@ public class DutyServiceImpl implements DutyService {
 
         return newDuty;
     }
+
 }
