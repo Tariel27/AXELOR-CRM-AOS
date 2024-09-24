@@ -1,14 +1,16 @@
 package com.axelor.apps.pbproject.job;
 
+import com.axelor.apps.base.job.ThreadedBaseJob;
+import com.axelor.apps.base.job.ThreadedBaseJob;
 import com.axelor.apps.pbproject.service.DutyService;
 import com.google.inject.Inject;
-import org.quartz.Job;
+import groovy.util.logging.Slf4j;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 
 import java.time.LocalDate;
 
-public class DutySchedulerJob implements Job {
+@Slf4j
+public class DutySchedulerJob extends ThreadedBaseJob {
 
     private final DutyService dutyService;
 
@@ -18,12 +20,15 @@ public class DutySchedulerJob implements Job {
     }
 
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
-        LocalDate today = LocalDate.now();
+    public void executeInThread(JobExecutionContext context) {
+        try {
+            LocalDate today = LocalDate.now();
 
-        //1-7 с понед до воскрес, надо крч настроить через UI крон шедулера или через код, спросить кэпа Тариеля
-        if (today.getDayOfWeek().getValue() == 1) {
-            dutyService.getCurrentDuty(today);
+            if (today.getDayOfWeek().getValue() == 1) {
+                dutyService.getCurrentDuty(today);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -49,17 +49,7 @@ public class DutyServiceImpl implements DutyService {
         List<User> activeUsers = userRepository.all()
                 .filter("self.isActiveDuty = true")
                 .fetch();
-
-        boolean allInDuty = activeUsers.stream().allMatch(User::getAlreadyInDuty);
-        if (allInDuty) {
-            activeUsers.forEach(user -> {
-                user.setAlreadyInDuty(false);
-                userRepository.save(user);
-            });
-        }
-
-        //еще будет условие на изменение мб
-
+        resetDutyFlagsIfAllInDuty(activeUsers);
 
 
         List<User> availableUsers = userRepository.all()
@@ -79,6 +69,16 @@ public class DutyServiceImpl implements DutyService {
         dutyRepository.save(newDuty);
 
         return newDuty;
+    }
+
+    @Transactional
+    private void resetDutyFlagsIfAllInDuty(List<User> activeUsers) {
+        if (activeUsers.stream().allMatch(User::getAlreadyInDuty)) {
+            activeUsers.forEach(user -> {
+                user.setAlreadyInDuty(false);
+                userRepository.save(user);
+            });
+        }
     }
 
 }
