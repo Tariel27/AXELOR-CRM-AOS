@@ -3,6 +3,7 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
+    <!--  Меню которое открывает все мои таски  -->
     <menuitem name="pbp.project-task-all.m-i" title="Tasks" action="pbp.project-all.a-v" icon="fa-briefcase" icon-background="#3f6bb9"  order="500"/>
 
     <action-view name="pbp.project-all.a-v" title="Tasks" model="com.axelor.apps.project.db.ProjectTask">
@@ -15,6 +16,7 @@
         <context name="_typeSelect" expr="eval: 'task'"/>
     </action-view>
 
+    <!--  Меню которое открывает все "мои" задачи  -->
     <menuitem  name="pbp.my-connected-all-projects-tasks" tag-count="true" title="My tasks" action="pbp.project-all-my-tasks" order="600" icon="fa-user-circle-o" icon-background="#3f6bb9"/>
 
     <action-view name="pbp.project-all-my-tasks" title="My tasks" model="com.axelor.apps.project.db.ProjectTask">
@@ -25,14 +27,18 @@
         <domain>self.assignedTo = :__user__ AND self.typeSelect = :_typeSelect</domain>
         <context name="_typeSelect" expr="eval: 'task'"/>
     </action-view>
-    
+
+    <!--  Меню которое открывает часовой менеджер  -->
     <menuitem name="pbp-employee-working-hours" title="Workers hours" action="pbp.project-working-hours-action" order="700" icon="fa-clock-o" icon-background="#3f6bb9"/>
 
     <action-view name="pbp.project-working-hours-action" title="Employee hours" model="com.axelor.apps.pbproject.db.UserHoursManagement">
         <view type="form" name="pbp-employee-hours-management-form"/>
     </action-view>
 
+    <!--  Меню которое открывает ивент календарь  -->
+    <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#3f6bb9" action="pbp.peta-calendar-open-action"/>
 
-
-
+    <action-view name="pbp.peta-calendar-open-action" title="Event calendar" model="com.axelor.apps.base.db.ICalendarEvent">
+        <view type="calendar" name="pbp.calendar-event-all"/>
+    </action-view>
 </object-views>
