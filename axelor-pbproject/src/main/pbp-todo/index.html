@@ -268,17 +268,17 @@
     // Загрузка задач с сервера
     function loadTodos() {
         fetch(apiSearch, {
-                method: 'POST', // Метод запроса
-                headers: {
-                    'Content-Type': 'application/json', // Указываем тип содержимого
-                    'X-CSRF-Token': cookies['CSRF-TOKEN']
-                },
-                body: JSON.stringify({
-                    data: {
-                        _domain: `self.responsible = ${userId}`
-                    }
-                }) // Преобразуем объект в JSON
-            })
+            method: 'POST', // Метод запроса
+            headers: {
+                'Content-Type': 'application/json', // Указываем тип содержимого
+                'X-CSRF-Token': cookies['CSRF-TOKEN']
+            },
+            body: JSON.stringify({
+                data: {
+                    _domain: `self.responsible = ${userId}`
+                }
+            }) // Преобразуем объект в JSON
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Ошибка сети: ' + response.status);
