@@ -47,11 +47,11 @@ public class DutyServiceImpl implements DutyService {
 
         List<User> availableUsers = userRepository.all()
                 .filter("self.isActiveDuty = true AND self.alreadyInDuty = false")
-                .fetch();
+                .fetch(2);
 
-        if (availableUsers.size() > 2) {
-            availableUsers = availableUsers.subList(0, 2);
-        }
+//        if (availableUsers.size() > 2) {
+//            availableUsers = availableUsers.subList(0, 2);
+//        }
 
         Duty newDuty = new Duty();
         newDuty.setDateStart(startOfWeek);
