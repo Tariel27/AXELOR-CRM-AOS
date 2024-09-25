@@ -8,7 +8,6 @@ import org.quartz.JobExecutionContext;
 
 import java.time.LocalDate;
 
-@Slf4j
 public class DutySchedulerJob extends ThreadedBaseJob {
 
     @Override
