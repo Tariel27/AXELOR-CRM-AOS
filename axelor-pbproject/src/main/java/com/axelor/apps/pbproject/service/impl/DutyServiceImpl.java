@@ -8,8 +8,10 @@ import com.axelor.auth.db.repo.UserRepository;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -41,11 +43,11 @@ public class DutyServiceImpl implements DutyService {
     }
 
     private LocalDate getStartOfWeek() {
-        return LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1);
+        return LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), DayOfWeek.MONDAY.getValue());
     }
 
     private LocalDate getEndOfWeek(LocalDate startOfWeek) {
-        return startOfWeek.plusDays(6);
+        return startOfWeek.with(WeekFields.of(Locale.getDefault()).dayOfWeek(), DayOfWeek.SUNDAY.getValue());
     }
 
     private List<User> getActiveUsers() {
@@ -55,18 +57,27 @@ public class DutyServiceImpl implements DutyService {
     }
 
     private List<User> getAvailableUsersForDuty() {
+        List<User> returnUsers = new ArrayList<>();
+
         List<User> availableUsers = userRepository.all()
                 .filter("self.isActiveDuty = true AND self.alreadyInDuty = false")
                 .fetch(2);
-
+        
+        
         if (availableUsers.size() < 2) {
+            User lastUserFromAll = availableUsers.get(0);
+            returnUsers.add(lastUserFromAll);
+
             resetAllDutyFlags();
-            availableUsers = userRepository.all()
-                    .filter("self.isActiveDuty = true AND self.alreadyInDuty = false")
-                    .fetch(2);
+
+            User secondUserForAdd = userRepository.all()
+                    .filter("self.isActiveDuty = true AND self.alreadyInDuty = false AND self.id != :id")
+                    .bind("id", lastUserFromAll.getId())
+                    .fetchOne();
+            returnUsers.add(secondUserForAdd);
         }
 
-        return availableUsers;
+        return returnUsers;
     }
     private void resetDutyFlagsIfAllInDuty(List<User> activeUsers) {
         if (allUsersAlreadyInDuty(activeUsers)) {
