@@ -1,0 +1,2 @@
+"importId";"active";"name";"job";"cron"
+"1";"true";"Duty";"com.axelor.apps.pbproject.job.DutySchedulerJob";"0 0 0 ? * 2/1 *"

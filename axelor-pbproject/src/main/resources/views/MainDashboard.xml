@@ -19,6 +19,7 @@
     <action-view name="pbp.dashlet-card-duty-users" title="Duty users"
                  model="com.axelor.apps.pbproject.db.Duty">
         <view type="cards" name="pbp.duty-users-cards"/>
+        <domain>dateStart = (select max(d.dateStart) from Duty d)</domain>
     </action-view>
 
 
