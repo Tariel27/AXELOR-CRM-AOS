@@ -18,67 +18,97 @@ public class DutyServiceImpl implements DutyService {
     private final DutyRepository dutyRepository;
     private final UserRepository userRepository;
 
-
     @Inject
     public DutyServiceImpl(DutyRepository dutyRepository, UserRepository userRepository) {
         this.dutyRepository = dutyRepository;
         this.userRepository = userRepository;
     }
 
-
     @Override
     @Transactional
-    public Duty getCurrentDuty(LocalDate date) {
-        Duty currentDuty = dutyRepository.all()
-                .filter("self.dateStart <= :date AND self.dateEnd >= :date")
-                .bind("date", date)
-                .fetchOne();
+    public void createDutyForCurrentWeek() {
+        LocalDate currentMonday = getStartOfWeek();
+        LocalDate currentSunday = getEndOfWeek(currentMonday);
 
-        if (currentDuty == null) {
-            currentDuty = createDutyForCurrentWeek(date);
-        }
-        return currentDuty;
+        List<User> activeUsersForDuty = getActiveUsers();
+        resetDutyFlagsIfAllInDuty(activeUsersForDuty);
+
+        List<User> availableUsers = getAvailableUsersForDuty();
+
+        assignDutyToUsers(availableUsers);
+
+        createNewDuty(currentMonday, currentSunday, availableUsers);
     }
 
-    @Transactional
-    private Duty createDutyForCurrentWeek(LocalDate date) {
-        LocalDate startOfWeek = date.with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1);
-        LocalDate endOfWeek = date.with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 7);
+    private LocalDate getStartOfWeek() {
+        return LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1);
+    }
 
-        //сюда огика сброса если все люди отдежурили
-        List<User> activeUsers = userRepository.all()
+    private LocalDate getEndOfWeek(LocalDate startOfWeek) {
+        return startOfWeek.plusDays(6);
+    }
+
+    private List<User> getActiveUsers() {
+        return userRepository.all()
                 .filter("self.isActiveDuty = true")
                 .fetch();
-        resetDutyFlagsIfAllInDuty(activeUsers);
+    }
 
-
+    private List<User> getAvailableUsersForDuty() {
         List<User> availableUsers = userRepository.all()
                 .filter("self.isActiveDuty = true AND self.alreadyInDuty = false")
                 .fetch(2);
 
-        availableUsers.forEach(user -> {
+        if (availableUsers.size() < 2) {
+            resetAllDutyFlags();
+            availableUsers = userRepository.all()
+                    .filter("self.isActiveDuty = true AND self.alreadyInDuty = false")
+                    .fetch(2);
+        }
+
+        return availableUsers;
+    }
+    private void resetDutyFlagsIfAllInDuty(List<User> activeUsers) {
+        if (allUsersAlreadyInDuty(activeUsers)) {
+            resetAllDutyFlags(activeUsers);
+        }
+    }
+
+    private boolean allUsersAlreadyInDuty(List<User> activeUsers) {
+        return activeUsers.stream().allMatch(User::getAlreadyInDuty);
+    }
+
+    private void resetAllDutyFlags(List<User> users) {
+        users.forEach(user -> {
+            user.setAlreadyInDuty(false);
+            userRepository.save(user);
+        });
+    }
+    private void resetAllDutyFlags() {
+        List<User> activeUsers = userRepository.all()
+                .filter("self.isActiveDuty = true")
+                .fetch();
+
+        activeUsers.forEach(user -> {
+            user.setAlreadyInDuty(false);
+            userRepository.save(user);
+        });
+    }
+
+    private void assignDutyToUsers(List<User> users) {
+        users.forEach(user -> {
             user.setAlreadyInDuty(true);
             userRepository.save(user);
         });
+    }
 
+    private void createNewDuty(LocalDate startOfWeek, LocalDate endOfWeek, List<User> users) {
         Duty newDuty = new Duty();
         newDuty.setDateStart(startOfWeek);
         newDuty.setDateEnd(endOfWeek);
-        newDuty.setUsers(Set.copyOf(availableUsers));
+        newDuty.setUsers(Set.copyOf(users));
 
         dutyRepository.save(newDuty);
-
-        return newDuty;
-    }
-
-    @Transactional
-    private void resetDutyFlagsIfAllInDuty(List<User> activeUsers) {
-        if (activeUsers.stream().allMatch(User::getAlreadyInDuty)) {
-            activeUsers.forEach(user -> {
-                user.setAlreadyInDuty(false);
-                userRepository.save(user);
-            });
-        }
     }
 
 }

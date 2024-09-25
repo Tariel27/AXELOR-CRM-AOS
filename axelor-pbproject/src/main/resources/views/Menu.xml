@@ -42,13 +42,6 @@
         <view type="calendar" name="pbp.calendar-event-all"/>
     </action-view>
 
-    <!-- Меню которое открывает дежурных -->
-    <menuitem name="pbp.show-peoples-for-duty-m-i" title="Duty humans" icon="fa-users" icon-background="#3f6bb9" order="750" action=""/>
-
-    <action-view name="pbp.duty-humans-action" title="Duty" model="com.axelor.apps.pbproject.db.Duty">
-        <view type="grid" name="pbp.duty-humans-grid"/>
-        <view type="form" name="pbp.duty-humans-form"/>
-    </action-view>
 
     <!--  Меню который открывает главный дашборд  -->
     <menuitem name="pbp.peta-dashboard-m-i" title="Main" icon="fa-users" icon-background="#3f6bb9" action="pbp.duty-users-action-view"/>

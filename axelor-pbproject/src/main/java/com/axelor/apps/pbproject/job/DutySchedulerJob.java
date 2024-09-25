@@ -1,7 +1,6 @@
 package com.axelor.apps.pbproject.job;
 
 import com.axelor.apps.base.job.ThreadedBaseJob;
-import com.axelor.apps.base.job.ThreadedBaseJob;
 import com.axelor.apps.pbproject.service.DutyService;
 import com.google.inject.Inject;
 import groovy.util.logging.Slf4j;
@@ -11,7 +10,6 @@ import java.time.LocalDate;
 
 @Slf4j
 public class DutySchedulerJob extends ThreadedBaseJob {
-
     private final DutyService dutyService;
 
     @Inject
@@ -22,10 +20,8 @@ public class DutySchedulerJob extends ThreadedBaseJob {
     @Override
     public void executeInThread(JobExecutionContext context) {
         try {
-            LocalDate today = LocalDate.now();
-
-            if (today.getDayOfWeek().getValue() == 1) {
-                dutyService.getCurrentDuty(today);
+            if (LocalDate.now().getDayOfWeek().getValue() == 1) {
+                dutyService.createDutyForCurrentWeek();
             }
         } catch (Exception e) {
             e.printStackTrace();
