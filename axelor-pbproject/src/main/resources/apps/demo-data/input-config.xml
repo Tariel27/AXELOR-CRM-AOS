@@ -10,5 +10,7 @@
         <bind to="language" eval="'ru'"/>
     </input>
 
+    <input file="meta_schedule.csv" separator=";" type="com.axelor.meta.db.MetaSchedule"
+           search="self.importId = :importId"/>
 
 </csv-inputs>
