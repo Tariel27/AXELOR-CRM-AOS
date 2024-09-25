@@ -34,8 +34,8 @@
         <template><![CDATA[
             <div class="card" style="width: 400px; padding: 10px;">
             <div class="card-content" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-            <strong>This week:</strong> {{dateStart}} - {{dateEnd}}<br />
-            <strong>Duties:</strong> {{users.map(user => user.fullName).join(', ') || 'No duty users'}}
+            <strong>На этой неделе:</strong> {{dateStart}} - {{dateEnd}}<br />
+            <strong>Дежурные:</strong> {{users.map(user => user.fullName).join(', ') || 'No duty users'}}
             </div>
             </div>
     ]]></template>
