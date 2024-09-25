@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
+
+    <!--  Дашборд страница, где будут дашлеты разные в будущем...  -->
+    <dashboard name="pbp.main-pp-dashboard" title="Petaboard" >
+        <dashlet height="250" width="300" action="pbp.dashlet-card-duty-users"/>
+    </dashboard>
+
+
+    <!-- Экшены для дашборда -->
+<!--    <action-view name="pbp.dashlet-duty-users" title="Duty users"-->
+<!--                 model="com.axelor.apps.pbproject.db.Duty">-->
+<!--        <view type="grid" name="pbp.duty-humans-grid"/>-->
+<!--    </action-view>-->
+
+
+    <!-- Экшн для карточек с дежурными -->
+    <action-view name="pbp.dashlet-card-duty-users" title="Duty users"
+                 model="com.axelor.apps.pbproject.db.Duty">
+        <view type="cards" name="pbp.duty-users-cards"/>
+        <domain>dateStart = (select max(d.dateStart) from Duty d)</domain>
+    </action-view>
+
+
+    <!--  Формы для дашборда  -->
+
+    <!-- Карточка с дежурными -->
+    <cards name="pbp.duty-users-cards" title="Duty Users" model="com.axelor.apps.pbproject.db.Duty" orderBy="dateStart" >
+        <field name="users"/>
+        <field name="dateStart"/>
+        <field name="dateEnd"/>
+        <template><![CDATA[
+            <div class="card" style="width: 400px; padding: 10px;">
+            <div class="card-content" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            <strong>На этой неделе:</strong> {{dateStart}} - {{dateEnd}}<br />
+            <strong>Дежурные:</strong> {{users.map(user => user.fullName).join(', ') || 'No duty users'}}
+            </div>
+            </div>
+    ]]></template>
+    </cards>
+
+</object-views>

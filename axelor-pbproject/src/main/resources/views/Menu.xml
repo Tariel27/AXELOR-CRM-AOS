@@ -36,9 +36,18 @@
     </action-view>
 
     <!--  Меню которое открывает ивент календарь  -->
-    <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#3f6bb9" action="pbp.peta-calendar-open-action"/>
+    <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#3f6bb9" action="pbp.peta-calendar-open-action" order="800"/>
 
     <action-view name="pbp.peta-calendar-open-action" title="Event calendar" model="com.axelor.apps.base.db.ICalendarEvent">
         <view type="calendar" name="pbp.calendar-event-all"/>
     </action-view>
+
+
+    <!--  Меню который открывает главный дашборд  -->
+    <menuitem name="pbp.peta-dashboard-m-i" title="Main" icon="fa-users" icon-background="#3f6bb9" action="pbp.duty-users-action-view"/>
+
+    <action-view name="pbp.duty-users-action-view" title="Main" >
+        <view type="dashboard" name="pbp.main-pp-dashboard"/>
+    </action-view>
+
 </object-views>

@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_7.1.xsd">
+
+    <module name="auth" package="com.axelor.auth.db"/>
+
+    <entity name="User">
+        <!--   Активен ли юзера для дежурств   -->
+        <boolean name="isActiveDuty" title="Active for duty" default="true"/>
+        <!-- Дежурил ли человек в последнем цикле -->
+        <boolean name="alreadyInDuty" title="Already duty" default="false"/>
+    </entity>
+
+</domain-models>
