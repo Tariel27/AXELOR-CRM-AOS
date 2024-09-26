@@ -10,6 +10,8 @@
         <boolean name="isActiveDuty" title="Active for duty" default="true"/>
         <!-- Дежурил ли человек в последнем цикле -->
         <boolean name="alreadyInDuty" title="Already duty" default="false"/>
+        <!-- Дата последнего входа -->
+        <datetime name="lastLoginDateTime" title="Last online"/>
     </entity>
 
 </domain-models>
