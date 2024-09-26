@@ -1,29 +1,22 @@
 package com.axelor.apps.pbproject.observer;
 
 import com.axelor.auth.AuthUtils;
-import com.axelor.event.Observes;
-import com.axelor.events.PostAction;
 import com.axelor.auth.db.User;
 import com.axelor.auth.db.repo.UserRepository;
-import com.google.inject.Inject;
-import com.google.inject.persist.Transactional;
-
-import javax.inject.Named;
+import com.axelor.event.Observes;
+import com.axelor.events.PostAction;
+import com.axelor.events.RequestEvent;
+import com.axelor.inject.Beans;
 import java.time.LocalDateTime;
+import javax.inject.Named;
 
 public class ActivityObserver {
 
-    private final UserRepository userRepository;
-
-    @Inject
-    public ActivityObserver(UserRepository userRepository) {
-        this.userRepository = userRepository;
+  void onUserAction(@Observes @Named(RequestEvent.SAVE) PostAction event) {
+    User user = AuthUtils.getUser(); // Получаем текущего пользователя
+    if (user != null) {
+      user.setLastLoginDateTime(LocalDateTime.now());
+      Beans.get(UserRepository.class).save(user);
     }
-
-    @Transactional
-    public void onLoginSuccess(@Observes @Named("mail.root.messages") PostAction event) {
-        User user = AuthUtils.getUser();
-            user.setLastLoginDateTime(LocalDateTime.now());
-            userRepository.save(user);
-    }
+  }
 }
