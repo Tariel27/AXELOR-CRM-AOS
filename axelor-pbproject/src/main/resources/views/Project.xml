@@ -547,8 +547,8 @@
         </panel-mail>
     </form>
 
-    <grid name="project-grid" title="Projects" model="com.axelor.apps.project.db.Project"
-          orderBy="projectStatus, name" id="pbp.project-grid">
+    <grid name="pbp.project-grid" title="Projects" model="com.axelor.apps.project.db.Project"
+          orderBy="projectStatus, name">
         <menubar>
             <menu name="projectToolsMenu" title="Tools" icon="fa-wrench" showTitle="true">
                 <item name="ganttWithUserItem" title="Gantt with user"

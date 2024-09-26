@@ -9,6 +9,7 @@
     <datetime name="startDateTime" title="Start date-time"/>
     <datetime name="endDateTime" title="End date-time"/>
     <datetime name="deadlineDateTime" title="Deadline date-time"/>
+    <many-to-one name="assignedBy" title="Assigned by" ref="com.axelor.auth.db.User" />
 
     <track replace="true">
       <field name="startDateTime"/>
