@@ -54,7 +54,7 @@
     <menuitem name="project-grid" title="Projects" icon="fa-outdent"  icon-background="#3f6bb9" action="pbp.projects-action-view"/>
 
     <action-view name="pbp.projects-action-view" title="All projects" model="com.axelor.apps.project.db.Project">
-        <view type="grid" name="project-grid"/>
+        <view type="grid" name="pbp.project-grid"/>
         <view type="form" name="project-form"/>
     </action-view>
 
