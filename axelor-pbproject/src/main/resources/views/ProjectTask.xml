@@ -5,7 +5,7 @@
 
     <form name="project-task-form" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large"
           onLoad="action-business-project-project-task-group-on-load"
-          onNew="action-business-project-project-task-group-on-new" id="pbp.project-task.form">
+          onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method" id="pbp.project-task.form">
         <toolbar>
             <button name="grabEventBtn" help="Take charge" icon="fa-suitcase"
                     onClick="action-project-task-record-assigned-yourself,save"/>
@@ -70,10 +70,13 @@
                     <field if="__config__.app.getApp('project')?.isEnablePerProjectTaskSequence" name="ticketNumber"/>
                     <field name="project" colSpan="12" onChange="action-project-task-group-project-onchange"
                            domain="self.projectStatus.isCompleted = false" required="true"/>
-                    <field name="assignedTo" readonlyIf="project == null" colSpan="12" canNew="false" canView="false"
-                           canEdit="false" onChange="action-project-task-group-assigned-to-on-change"
+                    <field name="assignedTo" readonlyIf="project == null" colSpan="6" canNew="false" canView="false"
+                           canEdit="false" onChange="action-project-task-group-assigned-to-on-change,pbp.auto-set-assigned-by-action.method"
                            onSelect="action-project-task-attrs-project-assigned-to-configurations" required="true"
                            form-view="user-form" grid-view="user-grid"/>
+
+                    <field name="assignedBy" colSpan="6" form-view="user-form" grid-view="user-grid"/>
+
                     <field name="parentTask" readonlyIf="project == null" colSpan="12"
                            onChange="action-project-task-record-get-parent-timeunit"
                            onSelect="action-project-task-attrs-project-parent-task-configurations"/>
@@ -488,6 +491,11 @@
     <!--  Метод который меняет биг децимал на TT:MM  -->
     <action-method name="action-readable-time-convert">
         <call class="com.axelor.apps.pbproject.web.ReadableTimeController" method="convertToReadable"/>
+    </action-method>
+
+    <!-- Метод который авто подставляет юзера -->
+    <action-method name="pbp.auto-set-assigned-by-action.method">
+        <call class="com.axelor.apps.pbproject.web.UserController" method="autoSetAssigner"/>
     </action-method>
 
     <!--action который меняет progress при сменен статуса задачи-->

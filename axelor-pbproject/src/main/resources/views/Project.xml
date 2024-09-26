@@ -547,6 +547,29 @@
         </panel-mail>
     </form>
 
+    <grid name="pbp.project-grid" title="Projects" model="com.axelor.apps.project.db.Project"
+          orderBy="projectStatus, name">
+        <menubar>
+            <menu name="projectToolsMenu" title="Tools" icon="fa-wrench" showTitle="true">
+                <item name="ganttWithUserItem" title="Gantt with user"
+                      action="action-project-open-popup-select-users"/>
+                <item name="ganttWithProjectItem" title="Gantt with project"
+                      action="action-project-open-popup-select-projects"/>
+            </menu>
+        </menubar>
+        <field name="name"/>
+        <field name="projectTaskList" title="Tasks Count"/>
+        <field name="assignedTo"/>
+        <field name="fromDate"/>
+        <field name="toDate"/>
+        <field name="imputable" width="90"/>
+        <field name="parentProject"/>
+        <button name="openGanttBtn" title="Gantt" icon="fa-tasks"
+                onClick="action-project-open-gantt"/>
+        <field name="projectStatus"/>
+    </grid>
+
+
     <action-attrs name="pbp.project.o-n.set-default-value.a-a">
         <attribute for="completedTaskStatus" name="value" expr="eval: __repo__(TaskStatus).find(3)" />
         <attribute for="projectTaskStatusSet" name="value" expr="eval: __repo__(TaskStatus).all().fetch()" />
