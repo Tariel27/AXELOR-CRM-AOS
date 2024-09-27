@@ -31,7 +31,7 @@ public class UserActivityServiceImpl implements UserActivityService {
             processActiveSession(session, userMap);
         }
 
-        return (List<User>) userMap.values();
+        return new ArrayList<>(userMap.values());
     }
 
     private void processActiveSession(HttpSession session, Map<String, User> userMap) {
@@ -45,11 +45,12 @@ public class UserActivityServiceImpl implements UserActivityService {
     private String extractUserCodeFromSession(HttpSession session) {
         Object principalCollectionObj = session.getAttribute("org.apache.shiro.subject.support.DefaultSubjectContext_PRINCIPALS_SESSION_KEY");
         SimplePrincipalCollection principalCollection = (SimplePrincipalCollection) principalCollectionObj;
+        if (Objects.isNull(principalCollection)) return null;
         return (String) principalCollection.getPrimaryPrincipal();
     }
 
     private LocalDateTime formatLastAccessTime(long lastAccessedTime) {
-        long adjustedTime = lastAccessedTime + 3600000;
+        long adjustedTime = lastAccessedTime;
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(adjustedTime), TimeZone.getDefault().toZoneId());
     }
 

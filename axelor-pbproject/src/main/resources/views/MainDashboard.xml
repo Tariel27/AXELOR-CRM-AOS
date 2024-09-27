@@ -52,7 +52,26 @@
             <![CDATA[
               <>
                   {data && data.length ? (
-                    <report-table data='data' columns='name,lastActiveDateTime'></report-table>
+                    <Table>
+                  <thead>
+                      <tr>
+                          <th style={{ textAlign: "left" }}>Полное имя</th>
+                          <th style={{ textAlign: "left" }}>Активность</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {data.map(user => (
+                          <tr key={user.name}>
+                              <td>
+                                  <Box as="span">{user.name || "Неизвестный пользователь"}</Box>
+                              </td>
+                              <td>
+                                  <Box as="span">{user.lastActiveDateTime || "Нет данных о последней активности"}</Box>
+                              </td>
+                          </tr>
+                      ))}
+                  </tbody>
+              </Table>
                   ) : (
                     <Box style={{ marginTop: "1rem" }}>Активные пользователи не найдены.</Box>
                   )}
