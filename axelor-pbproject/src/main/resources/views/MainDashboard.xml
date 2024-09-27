@@ -4,7 +4,7 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
 
     <!--  Дашборд страница, где будут дашлеты разные в будущем...  -->
-    <dashboard name="pbp.main-pp-dashboard" title="Petaboard" >
+    <dashboard name="pbp.main-pp-dashboard" title="Petaboard">
         <dashlet height="250" width="300" action="pbp.dashlet-card-duty-users"/>
         <dashlet height="250" width="300" action="pbp.list-activity-custom"/>
     </dashboard>
@@ -29,7 +29,7 @@
     <!--  Формы для дашборда  -->
 
     <!-- Карточка с дежурными -->
-    <cards name="pbp.duty-users-cards" title="Duty Users" model="com.axelor.apps.pbproject.db.Duty" orderBy="dateStart" >
+    <cards name="pbp.duty-users-cards" title="Duty Users" model="com.axelor.apps.pbproject.db.Duty" orderBy="dateStart">
         <field name="users"/>
         <field name="dateStart"/>
         <field name="dateEnd"/>
@@ -44,36 +44,20 @@
     </cards>
 
     <custom name="pbp.users-activity-list-custom" title="Users activity">
-        <field name="fullName" type="string"/>
-        <field name="lastActivityTime" type="string"/>
-        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.UserActivityController:getListActivityUser]]></dataset>
-        <template><![CDATA[
-      <>
-          {data && data.length ? (
-              <Table>
-                  <thead>
-                      <tr>
-                          <th style={{ textAlign: "left" }}>Полное имя</th>
-                          <th style={{ textAlign: "left" }}>Активность</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      {data.map(user => (
-                          <tr key={user.fullName}>
-                              <td>
-                                  <Box as="span">{user.fullName || "Неизвестный пользователь"}</Box>
-                              </td>
-                              <td>
-                                  <Box as="span">{user.lastActivityTime || "Нет данных о последней активности"}</Box>
-                              </td>
-                          </tr>
-                      ))}
-                  </tbody>
-              </Table>
-          ) : (
-              <Box style={{ marginTop: "1rem" }}>Активные пользователи не найдены.</Box>
-          )}
-      </>
-  ]]></template>
+        <field name="name" type="string"/>
+        <field name="lastActiveDateTime" type="datetime"/>
+        <dataset type="rpc">
+            <![CDATA[com.axelor.apps.pbproject.web.UserActivityController:getListActivityUser]]></dataset>
+        <template>
+            <![CDATA[
+              <>
+                  {data && data.length ? (
+                    <report-table data='data' columns='name,lastActiveDateTime'></report-table>
+                  ) : (
+                    <Box style={{ marginTop: "1rem" }}>Активные пользователи не найдены.</Box>
+                  )}
+              </>
+            ]]>
+        </template>
     </custom>
 </object-views>

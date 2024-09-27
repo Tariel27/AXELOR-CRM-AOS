@@ -7,12 +7,15 @@ import com.google.inject.Inject;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class UserActivityServiceImpl implements UserActivityService {
+
     private final UserRepository userRepository;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Inject
     public UserActivityServiceImpl(UserRepository userRepository) {
@@ -20,36 +23,23 @@ public class UserActivityServiceImpl implements UserActivityService {
     }
 
     @Override
-    public List<Map<String, String>> getListActivityUser(Set<HttpSession> httpSessions) {
-        List<Map<String, String>> userList = new ArrayList<>();
-
+    public List<User> getListActivityUser(Set<HttpSession> httpSessions) {
         List<User> allUsers = userRepository.all().fetch();
-        Set<String> activeUserCodes = new HashSet<>();
-
-        Map<String, User> activeUsersMap = new HashMap<>();
-        for (User user : allUsers) {
-            activeUsersMap.put(user.getCode(), user);
-        }
+        Map<String, User> userMap = allUsers.stream().collect(Collectors.toMap(User::getCode, Function.identity()));
 
         for (HttpSession session : httpSessions) {
-            processActiveSession(session, userList, activeUserCodes, activeUsersMap);
+            processActiveSession(session, userMap);
         }
 
-        addInactiveUsers(userList, allUsers, activeUserCodes);
-
-        return userList;
+        return (List<User>) userMap.values();
     }
 
-    private void processActiveSession(HttpSession session, List<Map<String, String>> userList, Set<String> activeUserCodes, Map<String, User> userMapForGetActive) {
+    private void processActiveSession(HttpSession session, Map<String, User> userMap) {
         String userCode = extractUserCodeFromSession(session);
-
-        if (userCode != null) {
-            User user = userMapForGetActive.get(userCode);
-            if (user != null) {
-                addUserToList(userList, user, formatLastAccessTime(session.getLastAccessedTime()));
-                activeUserCodes.add(userCode);
-            }
-        }
+        if (Objects.isNull(userCode)) return;
+        User user = userMap.get(userCode);
+        if (Objects.isNull(user)) return;
+        user.setLastActiveDateTime(formatLastAccessTime(session.getLastAccessedTime()));
     }
 
     private String extractUserCodeFromSession(HttpSession session) {
@@ -58,23 +48,9 @@ public class UserActivityServiceImpl implements UserActivityService {
         return (String) principalCollection.getPrimaryPrincipal();
     }
 
-    private void addUserToList(List<Map<String, String>> userList, User user, String lastActivityTime) {
-        Map<String, String> userMap = new HashMap<>();
-        userMap.put("fullName", user.getFullName());
-        userMap.put("lastActivityTime", lastActivityTime);
-        userList.add(userMap);
-    }
-
-    private String formatLastAccessTime(long lastAccessedTime) {
+    private LocalDateTime formatLastAccessTime(long lastAccessedTime) {
         long adjustedTime = lastAccessedTime + 3600000;
-        return dateFormat.format(new Date(adjustedTime));
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(adjustedTime), TimeZone.getDefault().toZoneId());
     }
 
-    private void addInactiveUsers(List<Map<String, String>> userList, List<User> allUsers, Set<String> activeUserCodes) {
-        for (User user : allUsers) {
-            if (!activeUserCodes.contains(user.getCode())) {
-                addUserToList(userList, user, "offline");
-            }
-        }
-    }
 }
