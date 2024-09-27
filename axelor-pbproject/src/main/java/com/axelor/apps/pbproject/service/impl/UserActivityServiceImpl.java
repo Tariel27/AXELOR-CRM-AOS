@@ -12,7 +12,7 @@ import java.util.*;
 
 public class UserActivityServiceImpl implements UserActivityService {
     private final UserRepository userRepository;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Inject
     public UserActivityServiceImpl(UserRepository userRepository) {
@@ -23,23 +23,28 @@ public class UserActivityServiceImpl implements UserActivityService {
     public List<Map<String, String>> getListActivityUser(Set<HttpSession> httpSessions) {
         List<Map<String, String>> userList = new ArrayList<>();
 
-        List<User> allUsersForOfline = userRepository.all().fetch();
+        List<User> allUsers = userRepository.all().fetch();
         Set<String> activeUserCodes = new HashSet<>();
 
-        for (HttpSession session : httpSessions) {
-            processActiveSession(session, userList, activeUserCodes);
+        Map<String, User> activeUsersMap = new HashMap<>();
+        for (User user : allUsers) {
+            activeUsersMap.put(user.getCode(), user);
         }
 
-        addInactiveUsers(userList, allUsersForOfline, activeUserCodes);
+        for (HttpSession session : httpSessions) {
+            processActiveSession(session, userList, activeUserCodes, activeUsersMap);
+        }
+
+        addInactiveUsers(userList, allUsers, activeUserCodes);
 
         return userList;
     }
 
-    private void processActiveSession(HttpSession session, List<Map<String, String>> userList, Set<String> activeUserCodes) {
+    private void processActiveSession(HttpSession session, List<Map<String, String>> userList, Set<String> activeUserCodes, Map<String, User> userMapForGetActive) {
         String userCode = extractUserCodeFromSession(session);
 
         if (userCode != null) {
-            User user = getUserByCode(userCode);
+            User user = userMapForGetActive.get(userCode);
             if (user != null) {
                 addUserToList(userList, user, formatLastAccessTime(session.getLastAccessedTime()));
                 activeUserCodes.add(userCode);
@@ -48,16 +53,9 @@ public class UserActivityServiceImpl implements UserActivityService {
     }
 
     private String extractUserCodeFromSession(HttpSession session) {
-        //тут как раз таки используется shiro для получения кода, а не pac4j
         Object principalCollectionObj = session.getAttribute("org.apache.shiro.subject.support.DefaultSubjectContext_PRINCIPALS_SESSION_KEY");
         SimplePrincipalCollection principalCollection = (SimplePrincipalCollection) principalCollectionObj;
         return (String) principalCollection.getPrimaryPrincipal();
-    }
-
-    private User getUserByCode(String userCode) {
-        return userRepository.all()
-                .filter("code = ?", userCode)
-                .fetchOne();
     }
 
     private void addUserToList(List<Map<String, String>> userList, User user, String lastActivityTime) {
@@ -68,7 +66,7 @@ public class UserActivityServiceImpl implements UserActivityService {
     }
 
     private String formatLastAccessTime(long lastAccessedTime) {
-        long adjustedTime = lastAccessedTime + 3600000; //в бэке время отстает на 1 час ровно
+        long adjustedTime = lastAccessedTime + 3600000;
         return dateFormat.format(new Date(adjustedTime));
     }
 

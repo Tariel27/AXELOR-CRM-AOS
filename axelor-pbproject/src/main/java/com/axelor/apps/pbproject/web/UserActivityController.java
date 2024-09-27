@@ -19,8 +19,8 @@ public class UserActivityController {
     public void getListActivityUser(ActionRequest actionRequest, ActionResponse actionResponse) {
         Set<HttpSession> httpSessions = AppSessionListener.getSessions();
 
-       List<Map<String, String>> userList = userActivityService.getListActivityUser(httpSessions);
+        List<Map<String, String>> userList = userActivityService.getListActivityUser(httpSessions);
 
-       actionResponse.setData(userList);
+        actionResponse.setData(userList);
     }
 }
