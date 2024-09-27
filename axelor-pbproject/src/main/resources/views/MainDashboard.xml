@@ -6,16 +6,11 @@
     <!--  Дашборд страница, где будут дашлеты разные в будущем...  -->
     <dashboard name="pbp.main-pp-dashboard" title="Petaboard" >
         <dashlet height="250" width="300" action="pbp.dashlet-card-duty-users"/>
-        <dashlet height="250" width="300" action="pbp.dashlet-grid-last-visit"/>
+        <dashlet height="250" width="300" action="pbp.list-activity-custom"/>
     </dashboard>
 
 
     <!-- Экшены для дашборда -->
-<!--    <action-view name="pbp.dashlet-duty-users" title="Duty users"-->
-<!--                 model="com.axelor.apps.pbproject.db.Duty">-->
-<!--        <view type="grid" name="pbp.duty-humans-grid"/>-->
-<!--    </action-view>-->
-
 
     <!-- Экшн для карточек с дежурными -->
     <action-view name="pbp.dashlet-card-duty-users" title="Duty users"
@@ -24,10 +19,12 @@
         <domain>dateStart = (select max(d.dateStart) from Duty d)</domain>
     </action-view>
 
-    <action-view name="pbp.dashlet-grid-last-visit" title="Last visit" model="com.axelor.auth.db.User">
-        <view type="grid" name="pbp.last-visit-user-grid"/>
-    </action-view>
 
+    <!-- Экшн для получения custom пользователей онлайн или нет -->
+
+    <action-view name="pbp.list-activity-custom" title="Users activity">
+        <view type="custom" name="pbp.users-activity-list-custom"/>
+    </action-view>
 
     <!--  Формы для дашборда  -->
 
@@ -46,9 +43,37 @@
     ]]></template>
     </cards>
 
-    <grid title="Last visits" name="pbp.last-visit-user-grid" model="com.axelor.auth.db.User">
-        <field name="fullName"/>
-        <field name="lastLoginDateTime"/>
-    </grid>
-
+    <custom name="pbp.users-activity-list-custom" title="Users activity">
+        <field name="fullName" type="string"/>
+        <field name="lastActivityTime" type="string"/>
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.UserActivityController:getListActivityUser]]></dataset>
+        <template><![CDATA[
+      <>
+          {data && data.length ? (
+              <Table>
+                  <thead>
+                      <tr>
+                          <th style={{ textAlign: "left" }}>Полное имя</th>
+                          <th style={{ textAlign: "left" }}>Активность</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {data.map(user => (
+                          <tr key={user.fullName}>
+                              <td>
+                                  <Box as="span">{user.fullName || "Неизвестный пользователь"}</Box>
+                              </td>
+                              <td>
+                                  <Box as="span">{user.lastActivityTime || "Нет данных о последней активности"}</Box>
+                              </td>
+                          </tr>
+                      ))}
+                  </tbody>
+              </Table>
+          ) : (
+              <Box style={{ marginTop: "1rem" }}>Активные пользователи не найдены.</Box>
+          )}
+      </>
+  ]]></template>
+    </custom>
 </object-views>
