@@ -11,10 +11,8 @@ import com.google.inject.persist.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DutyServiceImpl implements DutyService {
     private final DutyRepository dutyRepository;
@@ -41,6 +39,49 @@ public class DutyServiceImpl implements DutyService {
 
         createNewDuty(currentMonday, currentSunday, availableUsers);
     }
+
+    @Override
+    @Transactional
+    public void updateDutyUsers() {
+        LocalDate currentMonday = getStartOfWeek();
+        LocalDate currentSunday = getEndOfWeek(currentMonday);
+
+        Duty currentDuty = getCurrentDuty(currentMonday, currentSunday);
+
+        if (currentDuty != null) {
+            Set<User> existingUsers = currentDuty.getUsers();
+
+            List<User> newDutyUsers = getAvailableUsersForDuty(existingUsers);
+
+            updateCurrentDutyUsers(currentDuty, newDutyUsers);
+
+            resetAlreadyInDutyFlag(existingUsers);
+        } else {
+            List<User> availableUsers = getAvailableUsersForDuty();
+            createNewDuty(currentMonday, currentSunday, availableUsers);
+        }
+    }
+
+    private Duty getCurrentDuty(LocalDate start, LocalDate end) {
+        return dutyRepository.all()
+                .filter("self.dateStart >= :start AND self.dateEnd <= :end")
+                .bind("start", start)
+                .bind("end", end)
+                .fetchOne();
+    }
+
+    private void updateCurrentDutyUsers(Duty duty, List<User> newUsers) {
+        duty.setUsers(new HashSet<>(newUsers));
+        dutyRepository.save(duty);
+    }
+
+    private void resetAlreadyInDutyFlag(Set<User> users) {
+        users.forEach(user -> {
+            user.setAlreadyInDuty(false);
+            userRepository.save(user);
+        });
+    }
+
 
     private LocalDate getStartOfWeek() {
         return LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), DayOfWeek.MONDAY.getValue());
@@ -75,11 +116,24 @@ public class DutyServiceImpl implements DutyService {
                     .bind("id", lastUserFromAll.getId())
                     .fetchOne();
             returnUsers.add(secondUserForAdd);
+        } else {
+            returnUsers.addAll(availableUsers.subList(0, 2));
         }
 
         return returnUsers;
     }
-    private void resetDutyFlagsIfAllInDuty(List<User> activeUsers) {
+    private List<User> getAvailableUsersForDuty(Set<User> usersNot) {
+        Set<Long> excludedUserIds = usersNot.stream()
+                .map(User::getId)
+                .collect(Collectors.toSet());
+
+        return userRepository.all()
+                .filter("self.isActiveDuty = true AND self.alreadyInDuty = false AND self.id NOT IN :excludedUserIds")
+                .bind("excludedUserIds", excludedUserIds)
+                .fetch(2);
+    }
+
+        private void resetDutyFlagsIfAllInDuty(List<User> activeUsers) {
         if (allUsersAlreadyInDuty(activeUsers)) {
             resetAllDutyFlags(activeUsers);
         }
@@ -121,5 +175,7 @@ public class DutyServiceImpl implements DutyService {
 
         dutyRepository.save(newDuty);
     }
+
+
 
 }
