@@ -505,8 +505,7 @@
         <attribute for="progress" name="value" expr="70" if="status?.name == 'In testing'"/>
         <attribute for="progress" name="value" expr="100" if="status?.name == 'Done'"/>
         <attribute for="progress" name="value" expr="0" if="status?.name == 'Canceled'"/>
+        <attribute if="status?.name == 'Done'" for="endDateTime" name="value" expr="eval: java.time.LocalDateTime.now()" />
     </action-attrs>
-
-
 
 </object-views>
