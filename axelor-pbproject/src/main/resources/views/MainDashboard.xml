@@ -47,36 +47,48 @@
         <field name="name" type="string"/>
         <field name="lastActiveDateTime" type="datetime"/>
         <dataset type="rpc">
-            <![CDATA[com.axelor.apps.pbproject.web.UserActivityController:getListActivityUser]]></dataset>
+            <![CDATA[com.axelor.apps.pbproject.web.UserActivityController:getListActivityUser]]>
+        </dataset>
         <template>
             <![CDATA[
-              <>
-                  {data && data.length ? (
+            <>
+                {data && data.length ? (
                     <Table>
-                  <thead>
-                      <tr>
-                          <th style={{ textAlign: "left" }}>Полное имя</th>
-                          <th style={{ textAlign: "left" }}>Активность</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      {data.map(user => (
-                          <tr key={user.name}>
-                              <td>
-                                  <Box as="span">{user.name || "Неизвестный пользователь"}</Box>
-                              </td>
-                              <td>
-                                  <Box as="span">{user.lastActiveDateTime || "Нет данных о последней активности"}</Box>
-                              </td>
-                          </tr>
-                      ))}
-                  </tbody>
-              </Table>
-                  ) : (
+                        <thead>
+                            <tr>
+                                <th style={{ textAlign: "left" }}>Полное имя</th>
+                                <th style={{ textAlign: "left" }}>Активность</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map(user => (
+                                <tr key={user.name}>
+                                    <td>
+                                        <Box as="span">{user.name || "Неизвестный пользователь"}</Box>
+                                    </td>
+                                    <td>
+                                        <Box as="span">
+                                            {user.lastActiveDateTime
+                                                ? new Date(user.lastActiveDateTime).toLocaleString('ru-RU', {
+                                                    year: 'numeric',
+                                                    month: 'numeric',
+                                                    day: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: false
+                                                }).replace(',', '') // Убираем запятую
+                                                : "offline"}
+                                        </Box>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                ) : (
                     <Box style={{ marginTop: "1rem" }}>Активные пользователи не найдены.</Box>
-                  )}
-              </>
-            ]]>
+                )}
+            </>
+        ]]>
         </template>
     </custom>
 </object-views>
