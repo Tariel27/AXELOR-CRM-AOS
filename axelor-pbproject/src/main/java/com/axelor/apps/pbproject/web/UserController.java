@@ -1,6 +1,7 @@
 package com.axelor.apps.pbproject.web;
 
 import com.axelor.apps.pbproject.service.UserPbpProjectService;
+import com.axelor.auth.AuthUtils;
 import com.axelor.auth.db.User;
 import com.axelor.i18n.I18n;
 import com.axelor.rpc.ActionRequest;
@@ -31,5 +32,9 @@ public class UserController {
         actionResponse.setValue("transientPassword", null);
         actionResponse.setNotify(I18n.get("Password changed!"));
         actionResponse.setCanClose(true);
+    }
+
+    public void autoSetAssigner(ActionRequest actionRequest, ActionResponse actionResponse){
+        actionResponse.setValue("assignedBy",  AuthUtils.getUser());
     }
 }
