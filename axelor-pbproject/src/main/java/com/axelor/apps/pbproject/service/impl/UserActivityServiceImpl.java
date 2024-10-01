@@ -28,6 +28,7 @@ public class UserActivityServiceImpl implements UserActivityService {
         Map<String, User> userMap = allUsers.stream().collect(Collectors.toMap(User::getCode, Function.identity()));
 
         for (HttpSession session : httpSessions) {
+            session.setMaxInactiveInterval(2880);
             processActiveSession(session, userMap);
         }
 
