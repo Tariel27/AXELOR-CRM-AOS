@@ -10,12 +10,22 @@
     <datetime name="endDateTime" title="End date-time"/>
     <datetime name="deadlineDateTime" title="Deadline date-time"/>
     <many-to-one name="assignedBy" title="Assigned by" ref="com.axelor.auth.db.User" />
+    <extra-code>
+      <![CDATA[
+	   			public static final String NEW = "New";
+	   			public static final String IN_PROGRESS = "In progress";
+	   			public static final String DONE = "Done";
+	   			public static final String CANCELED = "Сanceled";
+
+	   		]]>
+    </extra-code>
 
     <track replace="true">
       <field name="startDateTime"/>
       <field name="endDateTime"/>
       <field name="deadlineDateTime"/>
     </track>
+
 
 
   </entity>

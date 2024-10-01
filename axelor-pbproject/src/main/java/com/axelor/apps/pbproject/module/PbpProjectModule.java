@@ -19,6 +19,8 @@
 package com.axelor.apps.pbproject.module;
 
 import com.axelor.app.AxelorModule;
+import com.axelor.apps.businesssupport.db.repo.ProjectTaskBusinessSupportRepository;
+import com.axelor.apps.pbproject.db.repo.PetaProjectTaskProjectRepository;
 import com.axelor.apps.pbproject.service.*;
 import com.axelor.apps.pbproject.service.impl.*;
 
@@ -31,5 +33,6 @@ public class PbpProjectModule extends AxelorModule {
     bind(ReadableTimeService.class).to(ReadableTimeServiceImpl.class);
     bind(DutyService.class).to(DutyServiceImpl.class);
     bind(UserActivityService.class).to(UserActivityServiceImpl.class);
+    bind(ProjectTaskBusinessSupportRepository.class).to(PetaProjectTaskProjectRepository.class);
   }
 }
