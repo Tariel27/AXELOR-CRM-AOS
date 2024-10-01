@@ -22,7 +22,7 @@ axelor {
 dependencies {
 	api project(":modules:axelor-base")
 	api project(":modules:axelor-project")
-
+	api project(":modules:axelor-business-support")
 
 }
 
