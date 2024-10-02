@@ -1,5 +1,6 @@
 package com.axelor.apps.pbproject.web;
 
+import com.axelor.apps.pbproject.service.FaceIdService;
 import com.axelor.apps.pbproject.service.UserPbpProjectService;
 import com.axelor.auth.AuthUtils;
 import com.axelor.auth.db.User;
@@ -14,10 +15,12 @@ import java.util.Objects;
 public class UserController {
 
     private final UserPbpProjectService userPbpProjectService;
+    private final FaceIdService faceIdService;
 
     @Inject
-    public UserController(UserPbpProjectService userPbpProjectService) {
+    public UserController(UserPbpProjectService userPbpProjectService, FaceIdService faceIdService) {
         this.userPbpProjectService = userPbpProjectService;
+        this.faceIdService = faceIdService;
     }
 
     @Transactional(rollbackOn = Exception.class)
@@ -36,5 +39,14 @@ public class UserController {
 
     public void autoSetAssigner(ActionRequest actionRequest, ActionResponse actionResponse){
         actionResponse.setValue("assignedBy",  AuthUtils.getUser());
+    }
+
+    public void uploadUserForFaceId(ActionRequest actionRequest, ActionResponse actionResponse){
+        try {
+            faceIdService.uploadUserToFaceId(actionRequest);
+            actionResponse.setAlert("Succesful registration.");
+        } catch (RuntimeException e) {
+            actionResponse.setError(e.getMessage());
+        }
     }
 }

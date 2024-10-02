@@ -34,5 +34,6 @@ public class PbpProjectModule extends AxelorModule {
     bind(DutyService.class).to(DutyServiceImpl.class);
     bind(UserActivityService.class).to(UserActivityServiceImpl.class);
     bind(ProjectTaskBusinessSupportRepository.class).to(PetaProjectTaskProjectRepository.class);
+    bind(FaceIdService.class).to(FaceIdServiceImpl.class);
   }
 }
