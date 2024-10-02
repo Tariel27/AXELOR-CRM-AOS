@@ -297,8 +297,16 @@
                     li.dataset.version = todo.version;
                     li.dataset.taskOrder = todo.taskOrder; // Сохраняем порядок
 
-                    if (todo.completedDate) {
-                        li.classList.add('checked');
+                    if (todo.completedDate != null) {
+                        const date = new Date(todo.completedDate);
+                        const today = new Date();
+
+                        // Сравниваем только даты (без учета времени)
+                        if (date.getFullYear() === today.getFullYear() &&
+                            date.getMonth() === today.getMonth() &&
+                            date.getDate() === today.getDate()) {
+                            li.classList.add('checked');
+                        }
                     }
 
                     const span = document.createElement("SPAN");
