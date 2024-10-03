@@ -124,12 +124,10 @@
     </form>
 
 
-    <form name="pbp.tags-form" title="Tags" model="com.axelor.apps.pbproject.db.Tag" width="mini" onLoad="" cols="12">
+    <form name="pbp.tags-form" title="Tags" model="com.axelor.apps.pbproject.db.Tag" width="mini" cols="12">
         <panel name="left_panel" colSpan="8">
             <field name="name" title="Tag name" colSpan="8"/>
-
         </panel>
-
     </form>
 
     <!--Просмотры-->
