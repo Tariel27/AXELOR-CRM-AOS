@@ -12,6 +12,8 @@
         <boolean name="alreadyInDuty" title="Already duty" default="false" massUpdate="true"/>
         <!-- Последняя активность -->
         <datetime name="lastActiveDateTime" title="Last active date time" transient="true"/>
+        <!--    UUID для face-id    -->
+        <string name="faceUuid" title="UUID"/>
     </entity>
 
 </domain-models>

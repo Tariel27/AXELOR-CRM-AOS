@@ -4,13 +4,13 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <form name="pbp.project-task-form" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large"
-          onLoad="action-business-project-project-task-group-on-load"
+          onLoad="action-business-project-project-task-group-on-load,action-readable-time-convert"
           onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method">
         <toolbar>
             <button name="grabEventBtn" help="Take charge" icon="fa-suitcase"
                     onClick="action-project-task-record-assigned-yourself,save"/>
-            <button name="doneBtn" showIf="project.isShowStatus" icon="fa-check"
-                    onClick="action-project-task-validate-finish-status,action-project-task-record-change-status,save"/>
+            <button name="doneBtn" help="Make done" showIf="project.isShowStatus" icon="fa-check-circle"
+                    onClick="progress-finish-if-done-button-click,action-project-task-validate-finish-status,action-project-task-record-change-status,save"/>
         </toolbar>
         <menubar>
             <menu if="__config__.app.getApp('project')?.resourceManagement" name="projectTaskMenu" title="Tools">
@@ -160,7 +160,7 @@
 
 
                 <field name="spentTime" colSpan="2" onChange="action-readable-time-convert"/>
-                <field name="readableSpentTime" colSpan="2" widget="String"/>
+                <field name="readableSpentTime" title="Readable time" colSpan="2" widget="String"/>
 
 
                 <spacer showIf="project.isShowProgress &amp;&amp; !$readonly()" colSpan="8"/>
@@ -477,6 +477,10 @@
  ]]></template>
     </kanban>
 
+    <!-- При нажатии в тулбаре меняет прогрес -->
+    <action-attrs name="progress-finish-if-done-button-click">
+        <attribute for="progress" name="value" expr="100"/>
+    </action-attrs>
 
     <!--Экшн который автоподставляет даты для системы xelor, hidden=true-->
     <action-attrs name="update-date-fields">
