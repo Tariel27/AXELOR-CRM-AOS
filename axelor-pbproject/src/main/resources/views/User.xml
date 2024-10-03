@@ -30,9 +30,9 @@
     </action-method>
 
     <!-- Грид с юзерами для управления, в дальнейшем будет расширяться -->
-    <grid id="pbp.user-grid-base" name="user-grid" title="Users list" model="com.axelor.auth.db.User" edit-icon="true">
+    <grid name="pbp.user-grid" title="Users list" model="com.axelor.auth.db.User">
+        <field name="image" widget="Image"/>
         <field name="fullName"/>
-        <field if="__config__.app.getApp('base')?.getEnableTradingNamesManagement()" name="tradingName" form-view="trading-name-form" grid-view="trading-name-grid"/>
         <field name="group" form-view="group-form" grid-view="group-grid"/>
         <field name="blocked"/>
         <field name="activateOn"/>
