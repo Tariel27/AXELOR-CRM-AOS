@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+
+    <!-- Метод который загружает юзера в фейс айди -->
+    <action-method name="pbp.upload-user-to-face-id">
+        <call class="com.axelor.apps.pbproject.web.UserController" method="uploadUserForFaceId"/>
+    </action-method>
+
+    <!-- Форма с юзером -->
+    <form name="pbp.user-face-id-form" title="User info" model="com.axelor.auth.db.User">
+        <!-- Панель для случая, если faceUuid отсутствует -->
+        <panel title="User Info" showIf="!faceUuid">
+            <field name="faceUuid" hidden="true"/>
+            <field name="image" x-accept=".png, .jpg, .jpeg" colSpan="3"/>
+            <field name="fullName" title="Full name" colSpan="3"/>
+            <field name="code" title="Login" colSpan="3"/>
+            <button name="uploadToFaceId" title="Upload user" colSpan="3" onClick="pbp.upload-user-to-face-id"/>
+        </panel>
+
+        <!-- Панель для случая, если faceUuid присутствует -->
+        <panel title="User Info" showIf="faceUuid">
+            <field name="faceUuid" hidden="true"/>
+            <field name="image" x-accept=".png, .jpg, .jpeg" colSpan="3"/>
+            <field name="fullName" title="Full name" colSpan="3"/>
+            <field name="code" title="Login" colSpan="3"/>
+            <button name="updateUser" title="Update user" colSpan="3" onClick="pbp.update-user-to-face-id"/>
+        </panel>
+
+    </form>
+
+
+    <!-- Грид с юзерами с подсветкой -->
+    <grid title="Users info" name="pbp.user-face-id-grid" model="com.axelor.auth.db.User">
+        <hilite color="danger" if="!$get('faceUuid')" />
+        <hilite color="success" if="$get('faceUuid')" />
+        <field name="fullName"/>
+        <field name="code" title="Login"/>
+        <field name="faceUuid" hidden="true"/>
+    </grid>
+
+</object-views>
