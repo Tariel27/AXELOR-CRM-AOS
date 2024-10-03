@@ -160,7 +160,7 @@
 
 
                 <field name="spentTime" colSpan="2" onChange="action-readable-time-convert"/>
-                <field name="readableSpentTime" colSpan="2" widget="String"/>
+                <field name="readableSpentTime" title="Readable time" colSpan="2" widget="String"/>
 
 
                 <spacer showIf="project.isShowProgress &amp;&amp; !$readonly()" colSpan="8"/>
