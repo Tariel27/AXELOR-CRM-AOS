@@ -2,7 +2,9 @@
 <object-views xmlns="http://axelor.com/xml/ns/object-views"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
-    <cards name="pbp.forum-topic-cards" title="Forum Topics" model="com.axelor.apps.pbproject.db.ForumTopic" width="100%" orderBy="createdOn">
+
+    <cards name="pbp.forum-topic-cards" title="Forum Topics" model="com.axelor.apps.pbproject.db.ForumTopic"
+           width="100%" orderBy="createdOn">
         <field name="title"/>
         <field name="description"/>
         <field name="createdBy"/>
@@ -53,7 +55,8 @@
     </cards>
 
 
-    <form name="pbp.forum-topic-form" title="Forum topic" model="com.axelor.apps.pbproject.db.ForumTopic" width="large" onLoad="pbp.hide-button">
+    <form name="pbp.forum-topic-form" title="Forum topic" model="com.axelor.apps.pbproject.db.ForumTopic" width="large"
+          onLoad="pbp.hide-button">
         <panel name="left_panel">
             <field name="title" title="Title" colSpan="12"/>
             <field name="description" title="Description" colSpan="12" widget="html"/>
@@ -70,44 +73,50 @@
             </panel>
             <panel name="LikesAndDislikes" colSpan="12">
                 <field name="upvoteCount" title="Likes" readonly="true" colSpan="6">
-                    <viewer><![CDATA[
-    <div style="text-align: center;">
-      <span style="color: #28a745; font-weight: bold; font-size: 40px;">{{record.upvoteCount}}</span>
-    <div>
-  ]]></viewer>
+                    <viewer>
+                        <![CDATA[
+                            <div style="text-align: center;">
+                              <span style="color: #28a745; font-weight: bold; font-size: 40px;">{{record.upvoteCount}}</span>
+                            <div>
+                        ]]>
+                    </viewer>
                 </field>
-
                 <field name="downvoteCount" title="Dislikes" readonly="true" colSpan="6">
-                    <viewer><![CDATA[
-        <div style="text-align: center;">
-      <span style="color: #dc3545; font-weight: bold; font-size: 40px;">{{record.downvoteCount}}</span>
-    <div>
-  ]]></viewer>
+                    <viewer>
+                        <![CDATA[
+                            <div style="text-align: center;">
+                                <span style="color: #dc3545; font-weight: bold; font-size: 40px;">{{record.downvoteCount}}</span>
+                            <div>
+                        ]]>
+                    </viewer>
                 </field>
             </panel>
             <panel name="btn" colSpan="12">
-
-                <field name="" colSpan="6">
-                    <viewer><![CDATA[
-    <button style="background-color: #28a745; width:150px ; color: white; border-radius: 15px; padding: 10px 20px; border: none; cursor: pointer;"
-    ui-action-click="pbp.action-method-for-btn-vote-up-controller">
-      <i class="fa fa-thumbs-up"></i> Like
-    </button>
-  ]]></viewer>
+                <field name="voteUpBtn" x-dirty="false" showTitle="false" colSpan="6">
+                    <viewer>
+                        <![CDATA[
+                            <button style="background-color: #28a745; width:150px ; color: white; border-radius: 15px; padding: 10px 20px; border: none; cursor: pointer;"
+                            ui-action-click="pbp.action-method-for-btn-vote-up-controller">
+                              <i class="fa fa-thumbs-up"></i> Like
+                            </button>
+                        ]]>
+                    </viewer>
                 </field>
-                <field name="" colSpan="6">
-                    <viewer><![CDATA[
-    <button style="background-color: #FF0000; width:150px ; color: white; border-radius: 15px; padding: 10px 20px; border: none; cursor: pointer;"
-    ui-action-click="pbp.action-method-for-btn-vote-down-controller">
-      <i class="fa fa-thumbs-down"></i> Dislike
-    </button>
-  ]]></viewer>
+                <field name="voteDownBtn" x-dirty="false" showTitle="false" colSpan="6">
+                    <viewer>
+                        <![CDATA[
+                            <button style="background-color: #FF0000; width:150px ; color: white; border-radius: 15px; padding: 10px 20px; border: none; cursor: pointer;"
+                            ui-action-click="pbp.action-method-for-btn-vote-down-controller">
+                              <i class="fa fa-thumbs-down"></i> Dislike
+                            </button>
+                        ]]>
+                    </viewer>
                 </field>
-
             </panel>
             <field name="importantUsers" title="Users Who Marked as Important" widget="TagSelect"/>
-            <button name="importantBtn" title="Important" colSpan="12" width="20" icon="fa-star" onClick="pbp.add-current-user-to-important,save,pbp.hide-button" x-dirty="false"/>
-            <field name="importance" title="Importance"/>
+            <button name="importantBtn" title="Important" colSpan="12" width="20" icon="fa-star"
+                    onClick="pbp.add-current-user-to-important,save,pbp.hide-button" x-dirty="false"/>
+            <field name="importance" title="Importance" widget="SingleSelect"/>
         </panel>
         <panel-mail name="mailPanel">
             <mail-messages filter="comment" limit="10000"/>
@@ -125,16 +134,16 @@
 
     <!--Просмотры-->
     <action-method name="pbp.increment-view-count">
-        <call class="com.axelor.apps.pbproject.web.BtnVote"
+        <call class="com.axelor.apps.pbproject.web.VoteController"
               method="incrementViewCount"/>
     </action-method>
 
     <action-method name="pbp.action-method-for-btn-vote-up-controller">
-        <call class="com.axelor.apps.pbproject.web.BtnVote"
+        <call class="com.axelor.apps.pbproject.web.VoteController"
               method="countVoteUp"/>
     </action-method>
     <action-method name="pbp.action-method-for-btn-vote-down-controller">
-        <call class="com.axelor.apps.pbproject.web.BtnVote"
+        <call class="com.axelor.apps.pbproject.web.VoteController"
               method="countVoteDown"/>
     </action-method>
 

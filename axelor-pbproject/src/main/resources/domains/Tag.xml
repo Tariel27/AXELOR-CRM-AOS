@@ -9,7 +9,6 @@
 
     <entity name="Tag">
         <string name="name" title="Tag name" unique="true"/>
-
     </entity>
 </domain-models>
 

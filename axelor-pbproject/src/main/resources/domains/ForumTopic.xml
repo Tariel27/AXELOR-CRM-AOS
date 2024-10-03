@@ -6,32 +6,28 @@
 
     <module name="pbp" package="com.axelor.apps.pbproject.db"/>
 
-    <entity name="ForumTopic" >
-            <string name="title" title="Title topic"/>
-            <string name="description" title="Description" large="true"/>
-            <datetime name="createdOn"/>
-            <many-to-many name="importantUsers" ref="com.axelor.auth.db.User" title="Important Users"/>
-            <many-to-one name="createdBy" ref="com.axelor.auth.db.User"/>
-            <many-to-many name="tags" title="Tags" ref="com.axelor.apps.pbproject.db.Tag" />
-            <integer name="upvoteCount" title="Upvote Count"/>
-            <integer name="downvoteCount" title="Downvote Count"/>
-            <integer name="voteCount" title="Vote Count"/>
-            <integer name="viewCount" title="View Count"/>
-            <integer name="commentCount" title="Comments Count" formula="true">
-                <![CDATA[
+    <entity name="ForumTopic">
+        <string name="title" title="Title topic"/>
+        <string name="description" title="Description" large="true"/>
+        <datetime name="createdOn"/>
+        <many-to-many name="importantUsers" ref="com.axelor.auth.db.User" title="Important Users"/>
+        <many-to-one name="createdBy" ref="com.axelor.auth.db.User"/>
+        <many-to-many name="tags" title="Tags" ref="com.axelor.apps.pbproject.db.Tag"/>
+        <integer name="upvoteCount" title="Upvote Count"/>
+        <integer name="downvoteCount" title="Downvote Count"/>
+        <integer name="voteCount" title="Vote Count"/>
+        <integer name="viewCount" title="View Count"/>
+        <integer name="commentCount" title="Comments Count" formula="true">
+            <![CDATA[
                     (SELECT COUNT(*) FROM MAIL_MESSAGE WHERE MAIL_MESSAGE.related_model = 'com.axelor.apps.pbproject.db.ForumTopic' AND MAIL_MESSAGE.related_id = id AND MAIL_MESSAGE.type = 'comment')
                 ]]>
-            </integer>
-            <string name="importance" title="Importance"
-                 selection="importance.color.select"/>
-
-
+        </integer>
+        <string name="importance" title="Importance" selection="pbp.forum.color.select"/>
 
         <track>
             <field name="title"/>
             <field name="description"/>
             <field name="createdBy"/>
-
         </track>
     </entity>
 

@@ -7,9 +7,9 @@
     <module name="pbp" package="com.axelor.apps.pbproject.db"/>
 
 
-<entity name="ForumVote">
-    <many-to-one name="forumTopic" ref="com.axelor.apps.pbproject.db.ForumTopic" />
-    <many-to-one name="author" ref="com.axelor.auth.db.User" />
-    <boolean name="isUpvote" title="Is Upvote"/>
-</entity>
+    <entity name="ForumVote">
+        <many-to-one name="forumTopic" ref="com.axelor.apps.pbproject.db.ForumTopic"/>
+        <many-to-one name="author" ref="com.axelor.auth.db.User"/>
+        <boolean name="isUpvote" title="Is Upvote"/>
+    </entity>
 </domain-models>

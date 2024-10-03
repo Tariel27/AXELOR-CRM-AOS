@@ -3,10 +3,16 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
 
-
-
     <selection name="meta.schedule.job.select" id="pbp.meta.schedule.job.select">
         <option value="com.axelor.apps.pbproject.job.DutySchedulerJob">com.axelor.apps.pbproject.job.DutySchedulerJob</option>
+    </selection>
+
+    <selection name="pbp.forum.color.select">
+        <option value="red" color="red">Red</option>
+        <option value="blue" color="blue">Blue</option>
+        <option value="green" color="green">Green</option>
+        <option value="yellow" color="yellow">Yellow</option>
+        <option value="grey" color="grey">Grey</option>
     </selection>
 
 </object-views>

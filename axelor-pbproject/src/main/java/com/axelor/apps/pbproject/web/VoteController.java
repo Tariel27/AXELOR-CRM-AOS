@@ -6,12 +6,12 @@ import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
 
 
-public class BtnVote {
+public class VoteController {
 
     private final VoteService voteService;
 
     @Inject
-    public BtnVote(VoteService voteService) {
+    public VoteController(VoteService voteService) {
         this.voteService = voteService;
     }
 

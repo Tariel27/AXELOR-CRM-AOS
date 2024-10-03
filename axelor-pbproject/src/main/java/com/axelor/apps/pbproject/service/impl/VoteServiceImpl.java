@@ -8,10 +8,9 @@ import com.axelor.auth.db.User;
 import com.axelor.auth.db.repo.UserRepository;
 import com.axelor.apps.pbproject.service.VoteService;
 import com.google.inject.Inject;
-import com.axelor.db.JpaSupport;
 import com.google.inject.persist.Transactional;
 
-public class VoteServiceImpl extends JpaSupport implements VoteService {
+public class VoteServiceImpl implements VoteService {
 
     private final ForumTopicRepository forumTopicRepository;
     private final ForumVoteRepository forumVoteRepository;
