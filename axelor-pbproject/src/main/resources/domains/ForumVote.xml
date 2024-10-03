@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+                http://axelor.com/xml/ns/domain-models/domain-models_7.1.xsd">
+
+    <module name="pbp" package="com.axelor.apps.pbproject.db"/>
+
+
+    <entity name="ForumVote">
+        <many-to-one name="forumTopic" ref="com.axelor.apps.pbproject.db.ForumTopic"/>
+        <many-to-one name="author" ref="com.axelor.auth.db.User"/>
+        <boolean name="isUpvote" title="Is Upvote"/>
+    </entity>
+</domain-models>
