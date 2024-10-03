@@ -58,4 +58,13 @@
         <view type="form" name="project-form"/>
     </action-view>
 
+    <!-- Меню которое отображает форум -->
+    <menuitem name="pbp-menu-forum" title="Forum" action="pbp.project-forum-action" order="800" icon="fa-commenting-o" icon-background="#3f6bb9"/>
+
+    <action-view name="pbp.project-forum-action" title="Forum" model="com.axelor.apps.pbproject.db.ForumTopic">
+        <view type="cards" name="pbp.forum-topic-cards"/>
+        <view type="form" name="pbp.forum-topic-form"/>
+
+    </action-view>
+
 </object-views>
