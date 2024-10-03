@@ -25,9 +25,6 @@
       <field name="endDateTime"/>
       <field name="deadlineDateTime"/>
     </track>
-
-
-
   </entity>
 
 </domain-models>
