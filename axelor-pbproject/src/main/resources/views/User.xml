@@ -29,4 +29,16 @@
         <call class="com.axelor.apps.pbproject.web.UserController" method="setPassword"/>
     </action-method>
 
+    <!-- Грид с юзерами для управления, в дальнейшем будет расширяться -->
+    <grid id="pbp.user-grid-base" name="user-grid" title="Users list" model="com.axelor.auth.db.User" edit-icon="true">
+        <field name="fullName"/>
+        <field if="__config__.app.getApp('base')?.getEnableTradingNamesManagement()" name="tradingName" form-view="trading-name-form" grid-view="trading-name-grid"/>
+        <field name="group" form-view="group-form" grid-view="group-grid"/>
+        <field name="blocked"/>
+        <field name="activateOn"/>
+        <field name="expiresOn"/>
+        <field name="isActiveDuty"/>
+        <field name="alreadyInDuty"/>
+    </grid>
+
 </object-views>

@@ -6,17 +6,16 @@ import com.axelor.apps.project.db.ProjectTask;
 import com.axelor.apps.project.db.repo.ProjectTaskRepository;
 import com.google.inject.Inject;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PetaProjectTaskProjectRepository extends ProjectTaskBusinessSupportRepository {
 
-    private final ProjectTaskRepository projectTaskRepository;
 
     @Inject
-    public PetaProjectTaskProjectRepository(ProjectTaskProgressUpdateService projectTaskProgressUpdateService, ProjectTaskRepository projectTaskRepository) {
+    public PetaProjectTaskProjectRepository(ProjectTaskProgressUpdateService projectTaskProgressUpdateService) {
         super(projectTaskProgressUpdateService);
-        this.projectTaskRepository = projectTaskRepository;
     }
 
     @Override
@@ -28,17 +27,20 @@ public class PetaProjectTaskProjectRepository extends ProjectTaskBusinessSupport
     private void updateProjectTaskDates(ProjectTask projectTask) {
         String statusName = projectTask.getStatus().getName();
 
-        if (projectTaskRepository.DONE.equals(statusName)) {
+        if (ProjectTaskRepository.DONE.equals(statusName)) {
             projectTask.setEndDateTime(LocalDateTime.now());
             projectTask.setTaskEndDate(LocalDate.now());
-        } else if (projectTaskRepository.IN_PROGRESS.equals(statusName)) {
+            projectTask.setProgress(BigDecimal.valueOf(100));
+        } else if (ProjectTaskRepository.IN_PROGRESS.equals(statusName)) {
             projectTask.setStartDateTime(LocalDateTime.now());
             projectTask.setTaskDate(LocalDate.now());
-        } else if (projectTaskRepository.NEW.equals(statusName)) {
+            projectTask.setProgress(BigDecimal.valueOf(50));
+        } else if (ProjectTaskRepository.NEW.equals(statusName)) {
             projectTask.setEndDateTime(null);
             projectTask.setStartDateTime(null);
             projectTask.setTaskDate(null);
             projectTask.setTaskEndDate(null);
+            projectTask.setProgress(BigDecimal.valueOf(10));
         }
     }
 }
