@@ -4,7 +4,6 @@ import com.axelor.apps.pbproject.config.FaceIdConfig;
 import com.axelor.apps.pbproject.service.FaceIdService;
 import com.axelor.auth.db.User;
 import com.axelor.auth.db.repo.UserRepository;
-import com.axelor.rpc.ActionRequest;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import wslite.json.JSONException;
@@ -13,6 +12,7 @@ import wslite.json.JSONObject;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,16 +25,10 @@ public class FaceIdServiceImpl implements FaceIdService {
     }
 
     @Override
-    @Transactional
-    public void uploadUserToFaceId(ActionRequest actionRequest) {
-        User user = actionRequest.getContext().asType(User.class);
-
-        if (user.getImage() == null) {
-            throw new RuntimeException("User image is empty.");
-        }
-
+    @Transactional(rollbackOn = Exception.class)
+    public void uploadUserToFaceId(User user) {
         String uuid = generateUUID();
-        user.setUuid(uuid);
+        user.setFaceUuid(uuid);
 
         String accessToken = getAccessToken();
 
@@ -81,7 +75,7 @@ public class FaceIdServiceImpl implements FaceIdService {
         userJson.put("email", user.getEmail());
         userJson.put("first_name", firstName);
         userJson.put("last_name", lastName);
-        userJson.put("uuid", user.getUuid());
+        userJson.put("uuid", user.getFaceUuid());
         userJson.put("image", user.getImage() != null ? new String(user.getImage(), "UTF-8") : null);
 
         return userJson;
@@ -95,12 +89,14 @@ public class FaceIdServiceImpl implements FaceIdService {
 
     private String getResponse(HttpURLConnection connection) throws IOException {
         int responseCode = connection.getResponseCode();
-        if (responseCode != HttpURLConnection.HTTP_CREATED) {
+        if (responseCode != HttpURLConnection.HTTP_CREATED && responseCode != HttpURLConnection.HTTP_OK) {
             throw new RuntimeException("HTTP error code: " + responseCode);
         }
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
             return br.lines().collect(Collectors.joining());
+        } finally {
+            connection.disconnect();
         }
     }
 

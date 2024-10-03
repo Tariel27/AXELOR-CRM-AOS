@@ -42,8 +42,17 @@ public class UserController {
     }
 
     public void uploadUserForFaceId(ActionRequest actionRequest, ActionResponse actionResponse){
+        User user = actionRequest.getContext().asType(User.class);
+
         try {
-            faceIdService.uploadUserToFaceId(actionRequest);
+            if (Objects.isNull(user)) {
+                throw new RuntimeException("User is null!");
+            }
+            if (Objects.isNull(user.getImage())) {
+                throw new RuntimeException("User image is empty!");
+            }
+
+            faceIdService.uploadUserToFaceId(user);
             actionResponse.setAlert("Succesful registration.");
         } catch (RuntimeException e) {
             actionResponse.setError(e.getMessage());

@@ -9,8 +9,8 @@
         <toolbar>
             <button name="grabEventBtn" help="Take charge" icon="fa-suitcase"
                     onClick="action-project-task-record-assigned-yourself,save"/>
-            <button name="doneBtn" showIf="project.isShowStatus" icon="fa-check"
-                    onClick="action-project-task-validate-finish-status,action-project-task-record-change-status,save"/>
+            <button name="doneBtn" help="Make done" showIf="project.isShowStatus" icon="fa-check-circle"
+                    onClick="progress-finish-if-done-button-click,action-project-task-validate-finish-status,action-project-task-record-change-status,save"/>
         </toolbar>
         <menubar>
             <menu if="__config__.app.getApp('project')?.resourceManagement" name="projectTaskMenu" title="Tools">
@@ -477,6 +477,10 @@
  ]]></template>
     </kanban>
 
+    <!-- При нажатии в тулбаре меняет прогрес -->
+    <action-attrs name="progress-finish-if-done-button-click">
+        <attribute for="progress" name="value" expr="100"/>
+    </action-attrs>
 
     <!--Экшн который автоподставляет даты для системы xelor, hidden=true-->
     <action-attrs name="update-date-fields">

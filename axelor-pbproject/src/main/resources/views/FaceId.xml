@@ -10,19 +10,34 @@
 
     <!-- Форма с юзером -->
     <form name="pbp.user-face-id-form" title="User info" model="com.axelor.auth.db.User">
-        <panel colSpan="6">
+        <!-- Панель для случая, если faceUuid отсутствует -->
+        <panel title="User Info" showIf="!faceUuid">
+            <field name="faceUuid" hidden="true"/>
             <field name="image" x-accept=".png, .jpg, .jpeg" colSpan="3"/>
             <field name="fullName" title="Full name" colSpan="3"/>
             <field name="code" title="Login" colSpan="3"/>
-            <button name="uploadToFaceId" title="Upload to face id" colSpan="3" onClick="pbp.upload-user-to-face-id"/>
+            <button name="uploadToFaceId" title="Upload user" colSpan="3" onClick="pbp.upload-user-to-face-id"/>
         </panel>
+
+        <!-- Панель для случая, если faceUuid присутствует -->
+        <panel title="User Info" showIf="faceUuid">
+            <field name="faceUuid" hidden="true"/>
+            <field name="image" x-accept=".png, .jpg, .jpeg" colSpan="3"/>
+            <field name="fullName" title="Full name" colSpan="3"/>
+            <field name="code" title="Login" colSpan="3"/>
+            <button name="updateUser" title="Update user" colSpan="3" onClick="pbp.update-user-to-face-id"/>
+        </panel>
+
     </form>
 
 
+    <!-- Грид с юзерами с подсветкой -->
     <grid title="Users info" name="pbp.user-face-id-grid" model="com.axelor.auth.db.User">
-        <field name="fullName" />
+        <hilite color="danger" if="!$get('faceUuid')" />
+        <hilite color="success" if="$get('faceUuid')" />
+        <field name="fullName"/>
         <field name="code" title="Login"/>
-        <field name="uuid" hidden="true"/>
+        <field name="faceUuid" hidden="true"/>
     </grid>
 
 </object-views>

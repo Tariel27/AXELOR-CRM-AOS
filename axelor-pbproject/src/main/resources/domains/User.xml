@@ -13,7 +13,7 @@
         <!-- Последняя активность -->
         <datetime name="lastActiveDateTime" title="Last active date time" transient="true"/>
         <!--    UUID для face-id    -->
-        <string name="uuid" title="UUID"/>
+        <string name="faceUuid" title="UUID"/>
     </entity>
 
 </domain-models>
