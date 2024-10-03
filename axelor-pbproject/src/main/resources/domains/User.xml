@@ -7,9 +7,9 @@
 
     <entity name="User">
         <!--   Активен ли юзера для дежурств   -->
-        <boolean name="isActiveDuty" title="Active for duty" default="true"/>
+        <boolean name="isActiveDuty" title="Active for duty" default="true" massUpdate="true"/>
         <!-- Дежурил ли человек в последнем цикле -->
-        <boolean name="alreadyInDuty" title="Already duty" default="false"/>
+        <boolean name="alreadyInDuty" title="Already duty" default="false" massUpdate="true"/>
         <!-- Последняя активность -->
         <datetime name="lastActiveDateTime" title="Last active date time" transient="true"/>
         <!--    UUID для face-id    -->
