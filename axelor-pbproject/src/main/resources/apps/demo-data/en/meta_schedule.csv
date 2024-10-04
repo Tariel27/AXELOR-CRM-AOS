@@ -1,2 +1,5 @@
 "importId";"active";"name";"job";"cron"
 "1";"true";"Duty";"com.axelor.apps.pbproject.job.DutySchedulerJob";"0 0 0 ? * MON"
+"2";"true";"Birthday";"com.axelor.apps.pbproject.job.BirthdaySchedulerJob";"0 */5 * ? * * *"
+
+
