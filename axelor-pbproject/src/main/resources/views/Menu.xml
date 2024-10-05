@@ -98,7 +98,7 @@
 
     <!-- Меню которое отображает Person info -->
     <menuitem name="pbp.menu-partner-form" title="Person info" action="pbp.partner-form-for-self-user-action" order="900"
-              icon="fa-fa-info" icon-background="#3f6bb9"/>
+              icon="fa-info-circle" icon-background="#3f6bb9"/>
 
     <action-view name="pbp.partner-form-for-self-user-action" title="Person info" model="com.axelor.apps.base.db.Partner">
         <view type="form" name="pbp.partner-form-for-self-user"/>
