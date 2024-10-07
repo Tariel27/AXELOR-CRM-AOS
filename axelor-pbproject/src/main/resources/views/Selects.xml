@@ -5,6 +5,8 @@
 
     <selection name="meta.schedule.job.select" id="pbp.meta.schedule.job.select">
         <option value="com.axelor.apps.pbproject.job.DutySchedulerJob">com.axelor.apps.pbproject.job.DutySchedulerJob</option>
+        <option value="com.axelor.apps.pbproject.job.BirthdaySchedulerJob">com.axelor.apps.pbproject.job.BirthdaySchedulerJob</option>
+        <option value="com.axelor.apps.pbproject.job.HolidaySchedulerJob">com.axelor.apps.pbproject.job.HolidaySchedulerJob</option>
     </selection>
 
     <selection name="pbp.forum.color.select">
