@@ -67,7 +67,7 @@
             <field name="tags" title="Tags" widget="TagSelect"/>
             <field name="importance" title="Importance" widget="SingleSelect"/>
             <field name="author" title="Author" colSpan="6" readonly="true"/>
-            <field name="createdDate" readonly="true" title="createdDate"  colSpan="6"/>
+            <field name="createdDate" readonly="true" title="createdDate" colSpan="6"/>
         </panel>
 
 

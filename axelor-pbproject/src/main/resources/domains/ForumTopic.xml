@@ -9,10 +9,8 @@
     <entity name="ForumTopic">
         <string name="title" title="Title topic"/>
         <string name="description" title="Description" large="true"/>
-        <datetime name="createdOn"/>
         <datetime name="createdDate"/>
         <many-to-many name="importantUsers" ref="com.axelor.auth.db.User" title="Important Users"/>
-        <many-to-one name="createdBy" ref="com.axelor.auth.db.User"/>
         <many-to-one name="author" ref="com.axelor.auth.db.User"/>
         <many-to-many name="tags" title="Tags" ref="com.axelor.apps.pbproject.db.Tag"/>
         <integer name="upvoteCount" title="Upvote Count"/>
