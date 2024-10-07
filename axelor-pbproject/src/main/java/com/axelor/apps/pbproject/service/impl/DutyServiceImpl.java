@@ -103,8 +103,8 @@ public class DutyServiceImpl implements DutyService {
         List<User> availableUsers = userRepository.all()
                 .filter("self.isActiveDuty = true AND self.alreadyInDuty = false")
                 .fetch(2);
-        
-        
+
+
         if (availableUsers.size() < 2) {
             User lastUserFromAll = availableUsers.get(0);
             returnUsers.add(lastUserFromAll);
@@ -122,6 +122,7 @@ public class DutyServiceImpl implements DutyService {
 
         return returnUsers;
     }
+
     private List<User> getAvailableUsersForDuty(Set<User> usersNot) {
         Set<Long> excludedUserIds = usersNot.stream()
                 .map(User::getId)
@@ -133,7 +134,7 @@ public class DutyServiceImpl implements DutyService {
                 .fetch(2);
     }
 
-        private void resetDutyFlagsIfAllInDuty(List<User> activeUsers) {
+    private void resetDutyFlagsIfAllInDuty(List<User> activeUsers) {
         if (allUsersAlreadyInDuty(activeUsers)) {
             resetAllDutyFlags(activeUsers);
         }
@@ -149,6 +150,7 @@ public class DutyServiceImpl implements DutyService {
             userRepository.save(user);
         });
     }
+
     private void resetAllDutyFlags() {
         List<User> activeUsers = userRepository.all()
                 .filter("self.isActiveDuty = true")
@@ -175,7 +177,6 @@ public class DutyServiceImpl implements DutyService {
 
         dutyRepository.save(newDuty);
     }
-
 
 
 }
