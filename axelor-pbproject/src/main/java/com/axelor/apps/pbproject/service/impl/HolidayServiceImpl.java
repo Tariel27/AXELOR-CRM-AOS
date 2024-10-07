@@ -51,10 +51,7 @@ public class HolidayServiceImpl implements HolidayService {
                 String dateText = holidayNode.path("date").path("iso").asText();
                 LocalDate holidayDate;
                 try {
-                    if (dateText.length() > 10) holidayDate = LocalDate.parse(dateText.substring(0, 10));
-                    else {
-                        holidayDate = LocalDate.parse(dateText);
-                    }
+                    holidayDate = dateText.length() > 10 ? LocalDate.parse(dateText.substring(0, 10)) : LocalDate.parse(dateText);
                     holiday.setHolidayDate(holidayDate);
                 } catch (DateTimeParseException e) {
                     System.err.println("Не удалось распознать дату: " + dateText);
@@ -75,15 +72,23 @@ public class HolidayServiceImpl implements HolidayService {
         List<Holiday> holidays = holidayRepository.all().fetch();
 
         for (Holiday holiday : holidays) {
-            ICalendarEvent calendarEvent = new ICalendarEvent();
-            calendarEvent.setSubject(holiday.getHolidayName());
+            // Проверка, существует ли событие в календаре
+            boolean eventExists = calendarEventRepository.all()
+                    .filter("self.subject = :subject AND DATE(self.startDateTime) = :holidayDate")
+                    .bind("subject", holiday.getHolidayName())
+                    .bind("holidayDate", holiday.getHolidayDate())
+                    .fetchOne() != null;
 
-            LocalDateTime startDateTime = holiday.getHolidayDate().atStartOfDay();
-            calendarEvent.setStartDateTime(startDateTime);
+            if (!eventExists) {
+                ICalendarEvent calendarEvent = new ICalendarEvent();
+                calendarEvent.setSubject(holiday.getHolidayName());
 
-            calendarEvent.setEndDateTime(startDateTime.plusDays(1));
+                LocalDateTime startDateTime = holiday.getHolidayDate().atStartOfDay();
+                calendarEvent.setStartDateTime(startDateTime);
+                calendarEvent.setEndDateTime(startDateTime.plusDays(1));
 
-            calendarEventRepository.save(calendarEvent);
+                calendarEventRepository.save(calendarEvent);
+            }
         }
     }
 }

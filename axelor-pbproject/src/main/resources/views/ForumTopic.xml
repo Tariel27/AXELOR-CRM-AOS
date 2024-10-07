@@ -63,20 +63,21 @@
         </panel>
 
 
-        <panel title="Author and date" itemSpan="6" sidebar="true" canCollapse="true" collapseIf="false">
+        <panel title="Meta data" sidebar="true" canCollapse="true" collapseIf="false">
             <field name="tags" title="Tags" widget="TagSelect"/>
+            <field name="importance" title="Importance" widget="SingleSelect"/>
             <field name="author" title="Author" colSpan="6" readonly="true"/>
             <field name="createdDate" readonly="true" title="createdDate"  colSpan="6"/>
         </panel>
 
 
-        <panel title="Count views and posts" itemSpan="6" sidebar="true" canCollapse="true" collapseIf="false">
+        <panel title="Count views and posts" sidebar="true" canCollapse="true" collapseIf="false">
             <field name="viewCount" title="Views" readonly="true" colSpan="6"/>
             <field name="commentCount" title="Post" colSpan="6"/>
         </panel>
 
 
-        <panel title="Likes and dislikes" itemSpan="6" sidebar="true" canCollapse="true" collapseIf="false">
+        <panel title="Likes and dislikes" sidebar="true" canCollapse="true" collapseIf="false">
             <field name="upvoteCount" title="Likes" readonly="true" colSpan="6">
                 <viewer>
                     <![CDATA[
@@ -106,7 +107,6 @@
             <field name="importantUsers" title="Users Who Marked as Important" widget="TagSelect"/>
             <button name="importantBtn" title="Important" colSpan="12" width="20" icon="fa-star"
                     onClick="pbp.add-current-user-to-important,save,pbp.hide-button" x-dirty="false" css="btn-info"/>
-            <field name="importance" title="Importance" widget="SingleSelect"/>
         </panel>
 
 

@@ -3,8 +3,9 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
-    <form name="pbp.partner-form-for-self-user" title="Person info" model="com.axelor.apps.base.db.Partner" width="large" onNew="pbp.update-user-on-linkedUser">
-        <panel name="imagePanel"  colSpan="12" sidebar="false" canCollapse="true" collapseIf="true">
+    <form name="pbp.partner-form-for-self-user" title="Person info" model="com.axelor.apps.base.db.Partner"
+          width="large" onNew="pbp.update-user-on-linkedUser">
+        <panel name="imagePanel" colSpan="12" sidebar="false" canCollapse="true" collapseIf="true">
             <field name="picture" showTitle="false" colSpan="12" widget="Image">
                 <viewer><![CDATA[
 
@@ -17,17 +18,15 @@
 </>
      ]]></viewer>
             </field>
-            <field name="name" showTitle="false" colSpan="12" css="highlight" placeholder="Name" onChange="action-group-base-partner-contact-name-onchange"/>
-            <field name="linkedUser.code" title="User" readonly="true" colSpan="12"/>
-            <button name="savePartner" title="Save" onClick="save"/>
-
+            <field name="name" showTitle="false" colSpan="12" css="highlight" placeholder="Name"
+                   onChange="action-group-base-partner-contact-name-onchange"/>
         </panel>
-        <panel name="aboutPanel" title="About" colSpan="12" sidebar="true" canCollapse="true" collapseIf="true">
+        <panel name="aboutPanel" title="About" colSpan="12" canCollapse="true" collapseIf="true">
             <field name="dateOfBirth" title="Date of Birth"/>
             <field name="description" title="Description" large="true"/>
             <field name="localization" colSpan="6" canEdit="false"/>
         </panel>
-        <panel name="contactPanel" title="Contact" colSpan="12" sidebar="true" canCollapse="true" collapseIf="true">
+        <panel name="contactPanel" title="Contact" colSpan="12" canCollapse="true" collapseIf="true">
             <field name="mobilePhone" widget="phone"/>
             <field name="emailAddress">
                 <editor x-viewer="true" x-show-titles="false">
@@ -35,12 +34,17 @@
                 </editor>
             </field>
         </panel>
+        <panel sidebar="true" title="Other">
+            <field name="linkedUser.code" title="User" readonly="true" colSpan="12"/>
+        </panel>
+        <panel sidebar="true" title="Actions">
+            <button name="saveBtn" title="Save" onClick="save"/>
+        </panel>
     </form>
 
     <action-attrs name="pbp.update-user-on-linkedUser">
         <attribute for="linkedUser" name="value" expr="eval: __user__"/>
     </action-attrs>
-
 
 
 </object-views>

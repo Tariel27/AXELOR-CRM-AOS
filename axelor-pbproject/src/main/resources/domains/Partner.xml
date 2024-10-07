@@ -6,15 +6,10 @@
     <module name="base" package="com.axelor.apps.base.db"/>
 
     <entity name="Partner">
-
         <date name="dateOfBirth" title="Date of birth"/>
-
         <track replace="true">
-            <field name="dob"/>
-
+            <field name="dateOfBirth"/>
         </track>
-
-
     </entity>
 
 </domain-models>

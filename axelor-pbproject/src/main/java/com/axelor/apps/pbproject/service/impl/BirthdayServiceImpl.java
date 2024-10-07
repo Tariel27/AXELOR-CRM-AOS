@@ -36,12 +36,21 @@ public class BirthdayServiceImpl implements BirthdayService {
         for (Partner partner : partnersWithBirthdays) {
             LocalDate birthday = partner.getDateOfBirth().withYear(LocalDate.now().getYear());
 
-            ICalendarEvent calendarEvent = new ICalendarEvent();
-            calendarEvent.setSubject("День рождения: " + partner.getFullName());
-            calendarEvent.setStartDateTime(birthday.atStartOfDay());
-            calendarEvent.setEndDateTime(birthday.atStartOfDay().plusHours(24));
+            // Проверяем, существует ли уже событие на тот же день для того же партнера
+            boolean eventExists = calendarEventRepository.all()
+                    .filter("self.subject = :subject AND DATE(self.startDateTime) = :birthday")
+                    .bind("subject", "День рождения: " + partner.getFullName())
+                    .bind("birthday", birthday)
+                    .fetchOne() != null;
 
-            calendarEventRepository.save(calendarEvent);
+            if (!eventExists) {
+                ICalendarEvent calendarEvent = new ICalendarEvent();
+                calendarEvent.setSubject("День рождения: " + partner.getFullName());
+                calendarEvent.setStartDateTime(birthday.atStartOfDay());
+                calendarEvent.setEndDateTime(birthday.atStartOfDay().plusHours(24));
+
+                calendarEventRepository.save(calendarEvent);
+            }
         }
     }
 }
