@@ -28,17 +28,19 @@ public class PetaProjectTaskProjectRepository extends ProjectTaskBusinessSupport
         String statusName = projectTask.getStatus().getName();
 
         if (ProjectTaskRepository.DONE.equals(statusName)) {
-            projectTask.setEndDateTime(LocalDateTime.now());
-            projectTask.setTaskEndDate(LocalDate.now());
+            if (projectTask.getEndDateTime() == null){
+                projectTask.setEndDateTime(LocalDateTime.now());
+                projectTask.setTaskEndDate(LocalDate.now());
+            }
             projectTask.setProgress(BigDecimal.valueOf(100));
         } else if (ProjectTaskRepository.IN_PROGRESS.equals(statusName)) {
-            projectTask.setStartDateTime(LocalDateTime.now());
-            projectTask.setTaskDate(LocalDate.now());
+            if (projectTask.getStartDateTime() == null){
+                projectTask.setStartDateTime(LocalDateTime.now());
+                projectTask.setTaskDate(LocalDate.now());
+            }
             projectTask.setProgress(BigDecimal.valueOf(50));
         } else if (ProjectTaskRepository.NEW.equals(statusName)) {
             projectTask.setEndDateTime(null);
-            projectTask.setStartDateTime(null);
-            projectTask.setTaskDate(null);
             projectTask.setTaskEndDate(null);
             projectTask.setProgress(BigDecimal.valueOf(10));
         }
