@@ -11,7 +11,7 @@
         <field name="createdDate"/>
         <field name="viewCount"/>
         <field name="commentCount"/>
-        <field name="tag"/>
+        <field name="tags"/>
         <field name="upvoteCount"/>
         <field name="downvoteCount"/>
         <field name="importance"/>
@@ -28,6 +28,11 @@
               <strong style="font-size: 2.6em; font-weight: bold;">{{title}}</strong>
               <p style="font-size: 1.6em; margin-top: 1.5em; opacity: 0.9;">
                   {{description.length > 30 ? description.substring(0, 30) + '...' : description}}
+                  <p>
+                  {{tags.map((item) => {
+                    return item.name;
+                  })}}
+                  </p>
               </p>
               <br><br>
               </div>
