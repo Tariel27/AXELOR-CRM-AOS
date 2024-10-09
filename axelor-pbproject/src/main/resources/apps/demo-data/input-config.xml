@@ -13,4 +13,6 @@
     <input file="meta_schedule.csv" separator=";" type="com.axelor.meta.db.MetaSchedule"
            search="self.importId = :importId"/>
 
+    <input file="partner_sequence.csv" separator=";" type="com.axelor.apps.base.db.Sequence"/>
+
 </csv-inputs>

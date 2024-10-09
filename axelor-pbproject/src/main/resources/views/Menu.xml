@@ -4,7 +4,8 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <!--  Меню которое открывает все таски  -->
-    <menuitem name="pbp.project-task-all.m-i" title="Tasks" action="pbp.project-all.a-v" icon="fa-briefcase" icon-background="#3f6bb9"  order="500"/>
+    <menuitem name="pbp.project-task-all.m-i" title="Tasks" action="pbp.project-all.a-v" icon="fa-briefcase"
+              icon-background="#3f6bb9" order="500"/>
 
     <action-view name="pbp.project-all.a-v" title="Tasks" model="com.axelor.apps.project.db.ProjectTask">
         <view type="kanban" name="pbp.project-task-kanban"/>
@@ -17,7 +18,8 @@
     </action-view>
 
     <!--  Меню которое открывает все "мои" задачи  -->
-    <menuitem  name="pbp.my-connected-all-projects-tasks" tag-count="true" title="My tasks" action="pbp.project-all-my-tasks" order="600" icon="fa-user-circle-o" icon-background="#3f6bb9"/>
+    <menuitem name="pbp.my-connected-all-projects-tasks" tag-count="true" title="My tasks"
+              action="pbp.project-all-my-tasks" order="600" icon="fa-user-circle-o" icon-background="#3f6bb9"/>
 
     <action-view name="pbp.project-all-my-tasks" title="My tasks" model="com.axelor.apps.project.db.ProjectTask">
         <view type="kanban" name="pbp.project-task-kanban"/>
@@ -29,37 +31,44 @@
     </action-view>
 
     <!--  Меню которое открывает часовой менеджер  -->
-    <menuitem name="pbp-employee-working-hours" title="Workers hours" action="pbp.project-working-hours-action" order="700" icon="fa-clock-o" icon-background="#3f6bb9"/>
+    <menuitem name="pbp-employee-working-hours" title="Workers hours" action="pbp.project-working-hours-action"
+              order="700" icon="fa-clock-o" icon-background="#3f6bb9"/>
 
-    <action-view name="pbp.project-working-hours-action" title="Employee hours" model="com.axelor.apps.pbproject.db.UserHoursManagement">
+    <action-view name="pbp.project-working-hours-action" title="Employee hours"
+                 model="com.axelor.apps.pbproject.db.UserHoursManagement">
         <view type="form" name="pbp-employee-hours-management-form"/>
     </action-view>
 
     <!--  Меню которое открывает ивент календарь  -->
-    <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#3f6bb9" action="pbp.peta-calendar-open-action" order="800"/>
+    <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#3f6bb9"
+              action="pbp.peta-calendar-open-action" order="800"/>
 
-    <action-view name="pbp.peta-calendar-open-action" title="Event calendar" model="com.axelor.apps.base.db.ICalendarEvent">
+    <action-view name="pbp.peta-calendar-open-action" title="Event calendar"
+                 model="com.axelor.apps.base.db.ICalendarEvent">
         <view type="calendar" name="pbp.calendar-event-all"/>
     </action-view>
 
 
     <!--  Меню который открывает главный дашборд  -->
-    <menuitem name="pbp.peta-dashboard-m-i" title="Main" icon="fa-users" icon-background="#3f6bb9" action="pbp.duty-users-action-view"/>
+    <menuitem name="pbp.peta-dashboard-m-i" title="Main" icon="fa-users" icon-background="#3f6bb9"
+              action="pbp.duty-users-action-view"/>
 
-    <action-view name="pbp.duty-users-action-view" title="Main" >
+    <action-view name="pbp.duty-users-action-view" title="Main">
         <view type="dashboard" name="pbp.main-pp-dashboard"/>
     </action-view>
 
     <!-- Меню который открывает список проектов -->
-    <menuitem name="pbp.project.m-i" title="Projects" icon="fa-outdent"  icon-background="#3f6bb9" action="pbp.projects-action-view"/>
+    <menuitem name="pbp.project.m-i" title="Projects" icon="fa-outdent" icon-background="#3f6bb9"
+              action="pbp.projects-action-view"/>
 
     <action-view name="pbp.projects-action-view" title="All projects" model="com.axelor.apps.project.db.Project">
         <view type="grid" name="pbp.project-grid"/>
-        <view type="form" name="project-form"/>
+        <view type="form" name="pbp.project-form"/>
     </action-view>
 
     <!-- Меню которое отображает форум -->
-    <menuitem name="pbp-menu-forum" title="Forum" action="pbp.project-forum-action" order="800" icon="fa-commenting-o" icon-background="#3f6bb9"/>
+    <menuitem name="pbp-menu-forum" title="Forum" action="pbp.project-forum-action" order="800" icon="fa-commenting-o"
+              icon-background="#3f6bb9"/>
 
     <action-view name="pbp.project-forum-action" title="Forum" model="com.axelor.apps.pbproject.db.ForumTopic">
         <view type="cards" name="pbp.forum-topic-cards"/>
@@ -67,7 +76,8 @@
     </action-view>
 
     <!-- Меню которое открывает всех пользователей для администрирования -->
-    <menuitem name="pbp.all-users-m.i" title="Users" icon="fa-blind" icon-background="#3f6bb9" order="670" action="pbp.action-auth-users"/>
+    <menuitem name="pbp.all-users-m.i" title="Users" icon="fa-blind" icon-background="#3f6bb9" order="670"
+              action="pbp.action-auth-users"/>
 
     <action-view name="pbp.action-auth-users" title="Users"
                  model="com.axelor.auth.db.User">
@@ -78,11 +88,24 @@
     </action-view>
 
     <!--  Меню которой открывает список юзеров для фейс айди   -->
-    <menuitem name="pbp.open-face-id-user-create.m-i" title="Face id" icon="fa-id-card-o" icon-background="#3f6bb9" action="pbp.user-info-face-id-view"/>
+    <menuitem name="pbp.open-face-id-user-create.m-i" title="Face id" icon="fa-id-card-o" icon-background="#3f6bb9"
+              action="pbp.user-info-face-id-view"/>
 
     <action-view name="pbp.user-info-face-id-view" title="Face id" model="com.axelor.auth.db.User">
         <view type="grid" name="pbp.user-face-id-grid"/>
         <view type="form" name="pbp.user-face-id-form"/>
+    </action-view>
+
+    <!-- Меню которое отображает Person info -->
+    <menuitem name="pbp.menu-partner-form" title="Person info" action="pbp.partner-form-for-self-user-action" order="900"
+              icon="fa-info-circle" icon-background="#3f6bb9"/>
+
+    <action-view name="pbp.partner-form-for-self-user-action" title="Person info" model="com.axelor.apps.base.db.Partner">
+        <view type="form" name="pbp.partner-form-for-self-user"/>
+        <view-param name="forceEdit" value="true"/>
+        <view-param name="show-toolbar" value="false"/>
+        <context name="_showRecord" expr="eval: __user__.partner?.id"/>
+        <context name="_showSingle" expr="true"/>
     </action-view>
 
 </object-views>

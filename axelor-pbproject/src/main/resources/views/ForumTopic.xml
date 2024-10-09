@@ -4,14 +4,14 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <cards name="pbp.forum-topic-cards" title="Forum Topics" model="com.axelor.apps.pbproject.db.ForumTopic"
-           width="100%" orderBy="createdOn">
+           width="100%" orderBy="createdDate">
         <field name="title"/>
         <field name="description"/>
-        <field name="createdBy"/>
-        <field name="createdOn"/>
+        <field name="author"/>
+        <field name="createdDate"/>
         <field name="viewCount"/>
         <field name="commentCount"/>
-        <field name="tag"/>
+        <field name="tags"/>
         <field name="upvoteCount"/>
         <field name="downvoteCount"/>
         <field name="importance"/>
@@ -28,14 +28,19 @@
               <strong style="font-size: 2.6em; font-weight: bold;">{{title}}</strong>
               <p style="font-size: 1.6em; margin-top: 1.5em; opacity: 0.9;">
                   {{description.length > 30 ? description.substring(0, 30) + '...' : description}}
+                  <p>
+                  {{tags.map((item) => {
+                    return item.name;
+                  })}}
+                  </p>
               </p>
               <br><br>
               </div>
               <div class="span3 card-body" style="background: linear-gradient(135deg, #EAE5C9 0%, #6CC6CB 100%); font-size:
                1.1em; padding: 1.5em; border-radius: 1em; color: #333333; padding-left: 2.5em; box-shadow:
                0 4px 12px rgba(0, 0, 0, 0.1);">
-                  <strong>Created by:</strong> {{createdBy.fullName}} <br>
-                  <strong>Created on:</strong> {{$fmt('createdOn')}}<br><br>
+                  <strong>Created by:</strong> {{author.fullName}} <br>
+                  <strong>Created on:</strong> {{$fmt('createdDate')}}<br><br>
                   <button type="button" class="btn" style="background-color: #333333; color: white; padding: 0.5em 1.5em;
                    border-radius: 2em; border: none;"
                       ui-action-click="pbp.action-method-for-btn-vote-up-controller" ui-params="{'id': id}">
@@ -56,68 +61,60 @@
 
 
     <form name="pbp.forum-topic-form" title="Forum topic" model="com.axelor.apps.pbproject.db.ForumTopic" width="large"
-          onLoad="pbp.hide-button">
-        <panel name="left_panel">
+          onLoad="pbp.hide-button" onNew="pbp.update-user-and-date-on-author">
+        <panel title="General" colSpan="12">
             <field name="title" title="Title" colSpan="12"/>
             <field name="description" title="Description" colSpan="12" widget="html"/>
         </panel>
-        <panel sidebar="true">
+
+
+        <panel title="Meta data" sidebar="true" canCollapse="true" collapseIf="false">
             <field name="tags" title="Tags" widget="TagSelect"/>
-            <panel name="AuthorAndCreatedOn" colSpan="12">
-                <field name="createdBy" title="Author" colSpan="6"/>
-                <field name="createdOn" title="Created on" readonly="true" colSpan="6"/>
-            </panel>
-            <panel name="ViewsAndPost" colSpan="12">
-                <field name="viewCount" title="Views" readonly="true" colSpan="6"/>
-                <field name="commentCount" title="Post" colSpan="6"/>
-            </panel>
-            <panel name="LikesAndDislikes" colSpan="12">
-                <field name="upvoteCount" title="Likes" readonly="true" colSpan="6">
-                    <viewer>
-                        <![CDATA[
+            <field name="importance" title="Importance" widget="SingleSelect"/>
+            <field name="author" title="Author" colSpan="6" readonly="true"/>
+            <field name="createdDate" readonly="true" title="createdDate" colSpan="6"/>
+        </panel>
+
+
+        <panel title="Count views and posts" sidebar="true" canCollapse="true" collapseIf="false">
+            <field name="viewCount" title="Views" readonly="true" colSpan="6"/>
+            <field name="commentCount" title="Post" colSpan="6"/>
+        </panel>
+
+
+        <panel title="Likes and dislikes" sidebar="true" canCollapse="true" collapseIf="false">
+            <field name="upvoteCount" title="Likes" readonly="true" colSpan="6">
+                <viewer>
+                    <![CDATA[
                             <div style="text-align: center;">
                               <span style="color: #28a745; font-weight: bold; font-size: 40px;">{{record.upvoteCount}}</span>
                             <div>
                         ]]>
-                    </viewer>
-                </field>
-                <field name="downvoteCount" title="Dislikes" readonly="true" colSpan="6">
-                    <viewer>
-                        <![CDATA[
+                </viewer>
+            </field>
+            <field name="downvoteCount" title="Dislikes" readonly="true" colSpan="6">
+                <viewer>
+                    <![CDATA[
                             <div style="text-align: center;">
                                 <span style="color: #dc3545; font-weight: bold; font-size: 40px;">{{record.downvoteCount}}</span>
                             <div>
                         ]]>
-                    </viewer>
-                </field>
-            </panel>
-            <panel name="btn" colSpan="12">
-                <field name="voteUpBtn" x-dirty="false" showTitle="false" colSpan="6">
-                    <viewer>
-                        <![CDATA[
-                            <button style="background-color: #28a745; width:150px ; color: white; border-radius: 15px; padding: 10px 20px; border: none; cursor: pointer;"
-                            ui-action-click="pbp.action-method-for-btn-vote-up-controller">
-                              <i class="fa fa-thumbs-up"></i> Like
-                            </button>
-                        ]]>
-                    </viewer>
-                </field>
-                <field name="voteDownBtn" x-dirty="false" showTitle="false" colSpan="6">
-                    <viewer>
-                        <![CDATA[
-                            <button style="background-color: #FF0000; width:150px ; color: white; border-radius: 15px; padding: 10px 20px; border: none; cursor: pointer;"
-                            ui-action-click="pbp.action-method-for-btn-vote-down-controller">
-                              <i class="fa fa-thumbs-down"></i> Dislike
-                            </button>
-                        ]]>
-                    </viewer>
-                </field>
-            </panel>
+                </viewer>
+            </field>
+
+            <button name="voteUpBtn" title="Like" colSpan="6" css="btn-success"
+                    icon="fa-thumbs-up" onClick="pbp.action-method-for-btn-vote-up-controller,save"/>
+            <button name="voteDownBtn" title="Dislike" colSpan="6" css="btn-danger"
+                    icon="fa-thumbs-down" onClick="pbp.action-method-for-btn-vote-down-controller,save"/>
+        </panel>
+
+        <panel title="Importance" itemSpan="6" sidebar="true" canCollapse="true" collapseIf="false">
             <field name="importantUsers" title="Users Who Marked as Important" widget="TagSelect"/>
             <button name="importantBtn" title="Important" colSpan="12" width="20" icon="fa-star"
-                    onClick="pbp.add-current-user-to-important,save,pbp.hide-button" x-dirty="false"/>
-            <field name="importance" title="Importance" widget="SingleSelect"/>
+                    onClick="pbp.add-current-user-to-important,save,pbp.hide-button" x-dirty="false" css="btn-info"/>
         </panel>
+
+
         <panel-mail name="mailPanel">
             <mail-messages filter="comment" limit="10000"/>
         </panel-mail>
@@ -151,6 +148,12 @@
 
     <action-attrs name="pbp.hide-button">
         <attribute for="importantBtn" name="hidden" expr="eval: importantUsers.collect{it.id}.contains(__user__.id)"/>
+    </action-attrs>
+
+
+    <action-attrs name="pbp.update-user-and-date-on-author">
+        <attribute name="value" expr="eval: __user__" for="author"/>
+        <attribute name="value" expr="eval: __time__" for="createdDate"/>
     </action-attrs>
 
 </object-views>
