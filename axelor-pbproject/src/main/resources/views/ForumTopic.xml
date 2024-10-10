@@ -16,10 +16,8 @@
         <field name="downvoteCount"/>
         <field name="importance"/>
         <template><![CDATA[
-
              <div class="span9 card-header" style="background: linear-gradient(135deg, #EAE5C9 0%, #6CC6CB 100%);
              padding: 1.5em;border-radius: 1em; color: #333333; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
-
              <div class="span card-color" style="background: linear-gradient(135deg, {{importance}} 0%, #FFFFE0 100%);
              padding: 0.2em; margin-right:50px; width: 5px; border-radius: 2em; color: #333333;
               box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
@@ -48,7 +46,6 @@
                   </button> <br><br>
                   <strong>Likes:</strong> {{upvoteCount}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <strong>Dislikes:</strong> {{downvoteCount}}<br>
-                  <strong>Views:</strong> {{viewCount}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <strong>Post:</strong> {{commentCount}}
               </div>
   ]]></template>
