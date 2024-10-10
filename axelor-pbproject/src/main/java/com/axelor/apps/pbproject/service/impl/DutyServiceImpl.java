@@ -10,7 +10,6 @@ import com.google.inject.persist.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,24 +49,19 @@ public class DutyServiceImpl implements DutyService {
 
         if (currentDuty != null) {
             Set<User> existingUsers = currentDuty.getUsers();
-
-            List<User> newDutyUsers = getAvailableUsersForDuty(existingUsers);
-
-            updateCurrentDutyUsers(currentDuty, newDutyUsers);
-
+            List<User> availableUsers = getAvailableUsersForDuty(existingUsers);
+            assignDutyToUsers(availableUsers);
+            updateCurrentDutyUsers(currentDuty, availableUsers);
             resetAlreadyInDutyFlag(existingUsers);
         } else {
             List<User> availableUsers = getAvailableUsersForDuty();
+            assignDutyToUsers(availableUsers);
             createNewDuty(currentMonday, currentSunday, availableUsers);
         }
     }
 
     private Duty getCurrentDuty(LocalDate start, LocalDate end) {
-        return dutyRepository.all()
-                .filter("self.dateStart >= :start AND self.dateEnd <= :end")
-                .bind("start", start)
-                .bind("end", end)
-                .fetchOne();
+        return dutyRepository.all().filter("self.dateStart >= :start AND self.dateEnd <= :end").bind("start", start).bind("end", end).fetchOne();
     }
 
     private void updateCurrentDutyUsers(Duty duty, List<User> newUsers) {
@@ -82,39 +76,23 @@ public class DutyServiceImpl implements DutyService {
         });
     }
 
-
-    private LocalDate getStartOfWeek() {
-        return LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), DayOfWeek.MONDAY.getValue());
-    }
-
-    private LocalDate getEndOfWeek(LocalDate startOfWeek) {
-        return startOfWeek.with(WeekFields.of(Locale.getDefault()).dayOfWeek(), DayOfWeek.SUNDAY.getValue());
-    }
-
     private List<User> getActiveUsers() {
-        return userRepository.all()
-                .filter("self.isActiveDuty = true")
-                .fetch();
+        return userRepository.all().filter("self.isActiveDuty = true").fetch();
     }
 
     private List<User> getAvailableUsersForDuty() {
         List<User> returnUsers = new ArrayList<>();
 
-        List<User> availableUsers = userRepository.all()
-                .filter("self.isActiveDuty = true AND self.alreadyInDuty = false")
-                .fetch(2);
+        List<User> availableUsers = userRepository.all().filter("self.isActiveDuty = true AND self.alreadyInDuty = false").fetch(2);
 
 
-        if (availableUsers.size() < 2) {
+        if (availableUsers.size() == 1) {
             User lastUserFromAll = availableUsers.get(0);
             returnUsers.add(lastUserFromAll);
 
             resetAllDutyFlags();
 
-            User secondUserForAdd = userRepository.all()
-                    .filter("self.isActiveDuty = true AND self.alreadyInDuty = false AND self.id != :id")
-                    .bind("id", lastUserFromAll.getId())
-                    .fetchOne();
+            User secondUserForAdd = userRepository.all().filter("self.isActiveDuty = true AND self.alreadyInDuty = false AND self.id != :id").bind("id", lastUserFromAll.getId()).fetchOne();
             returnUsers.add(secondUserForAdd);
         } else {
             returnUsers.addAll(availableUsers.subList(0, 2));
@@ -123,16 +101,32 @@ public class DutyServiceImpl implements DutyService {
         return returnUsers;
     }
 
-    private List<User> getAvailableUsersForDuty(Set<User> usersNot) {
-        Set<Long> excludedUserIds = usersNot.stream()
-                .map(User::getId)
-                .collect(Collectors.toSet());
+    private List<User> getAvailableUsersForDuty(Set<User> usersForExcept) {
+        List<User> returnUsers = new ArrayList<>();
+        Set<Long> excludedUserIds = getLongIdsSet(usersForExcept);
 
-        return userRepository.all()
-                .filter("self.isActiveDuty = true AND self.alreadyInDuty = false AND self.id NOT IN :excludedUserIds")
-                .bind("excludedUserIds", excludedUserIds)
-                .fetch(2);
+        List<User> availableUsers = userRepository.all().filter("self.isActiveDuty = true AND self.alreadyInDuty = false AND self.id NOT IN :excludedUserIds").bind("excludedUserIds", excludedUserIds).fetch(2);
+
+
+        if (availableUsers.size() == 1) {
+            User lastUserFromAll = availableUsers.get(0);
+            returnUsers.add(lastUserFromAll);
+
+            resetAllDutyFlags(usersForExcept);
+
+            User secondUserForAdd = userRepository.all().filter("self.isActiveDuty = true AND self.alreadyInDuty = false AND self.id != :id").bind("id", lastUserFromAll.getId()).fetchOne();
+            returnUsers.add(secondUserForAdd);
+            return returnUsers;
+        }
+        if (availableUsers.size() == 2) {
+            returnUsers.addAll(availableUsers.subList(0, 2));
+            return returnUsers;
+        }
+        resetAllDutyFlags(usersForExcept);
+        List<User> users = getAvailableUsersForDuty();
+        return users;
     }
+
 
     private void resetDutyFlagsIfAllInDuty(List<User> activeUsers) {
         if (allUsersAlreadyInDuty(activeUsers)) {
@@ -152,9 +146,18 @@ public class DutyServiceImpl implements DutyService {
     }
 
     private void resetAllDutyFlags() {
-        List<User> activeUsers = userRepository.all()
-                .filter("self.isActiveDuty = true")
-                .fetch();
+        List<User> activeUsers = userRepository.all().filter("self.isActiveDuty = true").fetch();
+
+        activeUsers.forEach(user -> {
+            user.setAlreadyInDuty(false);
+            userRepository.save(user);
+        });
+    }
+
+    private void resetAllDutyFlags(Set<User> usersForExcept) {
+        Set<Long> excludedUserIds = getLongIdsSet(usersForExcept);
+
+        List<User> activeUsers = userRepository.all().filter("self.isActiveDuty = true AND self.id NOT IN :excludedUserIds").bind("excludedUserIds", excludedUserIds).fetch();
 
         activeUsers.forEach(user -> {
             user.setAlreadyInDuty(false);
@@ -176,6 +179,18 @@ public class DutyServiceImpl implements DutyService {
         newDuty.setUsers(Set.copyOf(users));
 
         dutyRepository.save(newDuty);
+    }
+
+    private Set<Long> getLongIdsSet(Set<User> users) {
+        return users.stream().map(User::getId).collect(Collectors.toSet());
+    }
+
+    private LocalDate getStartOfWeek() {
+        return LocalDate.now().with(DayOfWeek.MONDAY);
+    }
+
+    private LocalDate getEndOfWeek(LocalDate startOfWeek) {
+        return startOfWeek.with(DayOfWeek.SUNDAY);
     }
 
 

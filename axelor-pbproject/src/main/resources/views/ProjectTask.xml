@@ -4,8 +4,8 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <form name="pbp.project-task-form" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large"
-          onLoad="action-business-project-project-task-group-on-load,action-readable-time-convert"
-          onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method">
+          onLoad="action-business-project-project-task-group-on-load,action-readable-time-convert,save"
+          onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method,pbp.validate.dateStart.dateEnd" onSave="pbp.validate.dateStart.dateEnd">
         <toolbar>
             <button name="grabEventBtn" help="Take charge" icon="fa-suitcase"
                     onClick="action-project-task-record-assigned-yourself,save"/>
@@ -510,5 +510,10 @@
         <attribute for="progress" name="value" expr="100" if="status?.name == 'Done'"/>
         <attribute for="progress" name="value" expr="0" if="status?.name == 'Canceled'"/>
     </action-attrs>
+
+    <action-method name="pbp.validate.dateStart.dateEnd">
+        <call class="com.axelor.apps.pbproject.web.WorkTimeController"
+              method="validateStartEndTimeTask"/>
+    </action-method>
 
 </object-views>
