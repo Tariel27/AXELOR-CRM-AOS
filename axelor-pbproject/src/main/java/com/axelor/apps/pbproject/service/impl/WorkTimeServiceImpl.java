@@ -39,7 +39,7 @@ public class WorkTimeServiceImpl implements WorkTimeService {
     }
 
     private String buildQuery(UserHoursManagement userHoursManagement) {
-        StringBuilder jpql = new StringBuilder("SELECT u.fullName, p.name, SUM(pt.spentTime), COUNT(pt.id) " +
+        StringBuilder jpql = new StringBuilder("SELECT u.fullName, p.name, SUM(pt.spentTime), COUNT(pt.id), u.id, p.id " +
                 "FROM ProjectTask pt " +
                 "JOIN pt.project p " +
                 "JOIN pt.assignedTo u " +
@@ -54,7 +54,7 @@ public class WorkTimeServiceImpl implements WorkTimeService {
             jpql.append("AND p.id IN :projects ");
         }
 
-        jpql.append("GROUP BY u.fullName, p.name");
+        jpql.append("GROUP BY u.fullName, p.name, u.id, p.id");
         return jpql.toString();
     }
 
@@ -95,6 +95,8 @@ public class WorkTimeServiceImpl implements WorkTimeService {
                     dto.setProjectName((String) result[1]);
                     dto.setTotalWorkedHours((BigDecimal) result[2]);
                     dto.setTaskCount((Long) result[3]);
+                    dto.setUserId((Long) result[4]);
+                    dto.setProjectId((Long) result[5]);
                     dto.setReadableTime(readableTimeService.calculateReadableTime(dto.getTotalWorkedHours()));
                     return dto;
                 })
