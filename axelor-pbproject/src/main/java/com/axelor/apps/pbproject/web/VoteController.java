@@ -41,18 +41,4 @@ public class VoteController {
         }
     }
 
-    // Метод для увеличения количества просмотров
-    public void incrementViewCount(ActionRequest request, ActionResponse response) {
-        Long topicId = (Long) request.getContext().get("id"); // Извлечение ID топика
-
-        try {
-            voteService.incrementViewCount(topicId); // Увеличиваем количество просмотров через сервис
-            response.setReload(true); // Обновляем интерфейс
-        } catch (Exception e) {
-            response.setError("Error while incrementing view count: " + e.getMessage());
-        }
-    }
-
-
-
 }
