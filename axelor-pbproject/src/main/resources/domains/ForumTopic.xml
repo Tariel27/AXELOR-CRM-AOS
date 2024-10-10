@@ -10,20 +10,24 @@
         <string name="title" title="Title topic"/>
         <string name="description" title="Description" large="true"/>
         <datetime name="createdDate"/>
-        <many-to-many name="importantUsers" ref="com.axelor.auth.db.User" title="Important Users"/>
+        <many-to-many name="importantUsers" ref="com.axelor.auth.db.User" title="Important users"/>
         <many-to-one name="author" ref="com.axelor.auth.db.User"/>
         <many-to-many name="tags" title="Tags" ref="com.axelor.apps.pbproject.db.Tag"/>
         <integer name="upvoteCount" title="Upvote Count"/>
         <integer name="downvoteCount" title="Downvote Count"/>
-        <integer name="voteCount" title="Vote Count"/>
-        <integer name="viewCount" title="View Count"/>
+        <integer name="voteCount" title="Vote Count" transient="true">
+            <![CDATA[return (votes == null || votes.isEmpty()) ? 0 : votes.size();]]>
+        </integer>
+        <integer name="viewCount" title="View Count" transient="true">
+            <![CDATA[return (votes == null || votes.isEmpty()) ? 0 : votes.size();]]>
+        </integer>
         <integer name="commentCount" title="Comments Count" formula="true">
             <![CDATA[
-                    (SELECT COUNT(*) FROM MAIL_MESSAGE WHERE MAIL_MESSAGE.related_model = 'com.axelor.apps.pbproject.db.ForumTopic' AND MAIL_MESSAGE.related_id = id AND MAIL_MESSAGE.type = 'comment')
-                ]]>
+                (SELECT COUNT(*) FROM MAIL_MESSAGE WHERE MAIL_MESSAGE.related_model = 'com.axelor.apps.pbproject.db.ForumTopic' AND MAIL_MESSAGE.related_id = id AND MAIL_MESSAGE.type = 'comment')
+            ]]>
         </integer>
         <string name="importance" title="Importance" selection="pbp.forum.color.select"/>
-
+        <one-to-many name="votes" ref="com.axelor.apps.pbproject.db.ForumVote" orphanRemoval="true" mappedBy="forumTopic"/>
         <track>
             <field name="title"/>
             <field name="description"/>
