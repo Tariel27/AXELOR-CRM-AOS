@@ -27,7 +27,6 @@
               </div>
               <strong style="font-size: 2.6em; font-weight: bold;">{{title}}</strong>
               <p style="font-size: 1.6em; margin-top: 1.5em; opacity: 0.9;">
-                  {{description.length > 30 ? description.substring(0, 30) + '...' : description}}
                   <p> Теги: {{tags.map((item) => {return item.name;})}} </p>
               </p>
               <br><br>
@@ -54,7 +53,6 @@
               </div>
   ]]></template>
     </cards>
-
 
     <form name="pbp.forum-topic-form" title="Forum topic" model="com.axelor.apps.pbproject.db.ForumTopic" width="large"
           onLoad="pbp.hide-button" onNew="pbp.update-user-and-date-on-author">
