@@ -27,15 +27,16 @@ public class FaceIdServiceImpl implements FaceIdService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void uploadUserToFaceId(User user) {
+        User userFromDb = userRepository.findByCode(user.getCode());
         String uuid = generateUUID();
-        user.setFaceUuid(uuid);
+        userFromDb.setFaceUuid(uuid);
 
         String accessToken = getAccessToken();
 
-        String response = createUserInFaceId(user, accessToken);
+        String response = createUserInFaceId(userFromDb, accessToken);
 
         if (response != null) {
-            userRepository.save(user);
+            userRepository.save(userFromDb);
         }
     }
 
@@ -72,7 +73,6 @@ public class FaceIdServiceImpl implements FaceIdService {
 
         JSONObject userJson = new JSONObject();
         userJson.put("username", user.getCode());
-        userJson.put("email", user.getEmail());
         userJson.put("first_name", firstName);
         userJson.put("last_name", lastName);
         userJson.put("uuid", user.getFaceUuid());
@@ -95,8 +95,6 @@ public class FaceIdServiceImpl implements FaceIdService {
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
             return br.lines().collect(Collectors.joining());
-        } finally {
-            connection.disconnect();
         }
     }
 
