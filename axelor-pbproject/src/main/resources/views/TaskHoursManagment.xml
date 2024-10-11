@@ -4,30 +4,61 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <action-method name="pbp.action-method-for-work-time-controller">
-        <call class="com.axelor.apps.pbproject.web.WorkTimeController"
-              method="calculateWorkHours"/>
+        <call class="com.axelor.apps.pbproject.web.WorkTimeController" method="calculateWorkHours"/>
     </action-method>
 
-    <form name="pbp-employee-hours-management-form" title="Hours Management" model="com.axelor.apps.pbproject.db.UserHoursManagement" width="large">
+    <form name="pbp-employee-hours-management-form" title="Hours Management"
+          model="com.axelor.apps.pbproject.db.UserHoursManagement" width="large">
         <panel>
             <field name="fromDate" colSpan="4" required="true" x-dirty="false"/>
             <field name="toDate" colSpan="4" required="true" x-dirty="false"/>
-            <button name="customBtn" title="Get data" colSpan="2" icon="fa-search" onClick="pbp.action-method-for-work-time-controller" x-dirty="false"/>
-            <button name="customBtn" prompt="Are you sure to change the duty?" title="Duty update" colSpan="2" icon="fa-search" onClick="pbp.action-method-for-update-duty-users" x-dirty="false" />
-            <field name="project" title="Projects" colSpan="12" placeholder="Select projects" widget="TagSelect" canNew="false" canEdit="false" form-view="project-form" grid-view="project-grid" x-dirty="false"/>
-            <field name="users" title="Users" colSpan="12" widget="TagSelect" canNew="false" form-view="user-form" grid-view="user-grid"/>
+            <button name="customBtn" title="Get data" colSpan="2" icon="fa-search"
+                    onClick="pbp.action-method-for-work-time-controller" x-dirty="false"/>
+            <button name="customBtn" prompt="Are you sure to change the duty?" title="Duty update" colSpan="2"
+                    icon="fa-search" onClick="pbp.action-method-for-update-duty-users" x-dirty="false"/>
+            <field name="project" title="Projects" colSpan="12" placeholder="Select projects" widget="TagSelect"
+                   canNew="false" canEdit="false" form-view="project-form" grid-view="project-grid" x-dirty="false"/>
+            <field name="users" title="Users" colSpan="12" widget="TagSelect" canNew="false" form-view="user-form"
+                   grid-view="user-grid"/>
         </panel>
-        <panel  readonly="true">
-            <field name="lines" showTitle="false" grid-view="pbp.data-users-hours-spent-grid" x-dirty="false" colSpan="12" canView="false"/>
+        <panel readonly="true">
+            <field name="lines" showTitle="false" grid-view="pbp.data-users-hours-spent-grid" x-dirty="false"
+                   colSpan="12" canView="false"/>
         </panel>
     </form>
 
-    <grid name="pbp.data-users-hours-spent-grid" title="Total hours spent" model="com.axelor.apps.pbproject.db.UserHoursManagement" edit-icon="false" x-selector="none">
+    <grid name="pbp.data-users-hours-spent-grid" title="Total hours spent"
+          model="com.axelor.apps.pbproject.db.UserHoursManagement" edit-icon="false" x-selector="none">
         <field name="userName" title="User name"/>
         <field name="projectName" title="Project name"/>
         <field name="readableTime" title="Spent time"/>
         <field name="totalWorkedHours" title="Total worked hours" hidden="true"/>
         <field name="taskCount" title="Task Count"/>
+        <field name="userId" hidden="true"/>
+        <field name="projectId" hidden="true"/>
+        <button name="btnViewTasks" onClick="pbp.project-task.hour-management-by-user.a-v" icon="fa-search"/>
+    </grid>
+
+    <action-view name="pbp.project-task.hour-management-by-user.a-v"
+                 title="Hours management by (${userName}) from (${_parent.fromDate}) to (${_parent.toDate}) project (${projectName})"
+                 model="com.axelor.apps.project.db.ProjectTask">
+        <view type="grid" name="pbp.project-task.hour-management-by-user.grid"/>
+        <view type="form" name="pbp.project-task-form"/>
+        <view-param name="popup" value="true"/>
+        <view-param name="popup-save" value="false"/>
+        <view-param name="hideActions" value="true"/>
+        <view-param name="show-toolbar" value="false"/>
+        <view-param name="show-confirm" value="false"/>
+        <domain>self.project.id = :projectId and self.assignedTo.id = :userId</domain>
+        <context name="projectId" expr="eval: projectId"/>
+        <context name="userId" expr="eval: userId"/>
+    </action-view>
+
+    <grid title="Hours management by user" name="pbp.project-task.hour-management-by-user.grid"
+          model="com.axelor.apps.project.db.ProjectTask" canEdit="false" edit-icon="false">
+        <field name="name"/>
+        <field name="deadlineDateTime"/>
+        <field name="spentTime"/>
     </grid>
 
 </object-views>

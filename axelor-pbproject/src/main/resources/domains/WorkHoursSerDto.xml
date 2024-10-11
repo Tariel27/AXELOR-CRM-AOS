@@ -7,8 +7,12 @@
     <module name="pbp" package="com.axelor.apps.pbproject.db"/>
 
     <entity name="WorkHoursDto">
+        <!--id пользователя-->
+        <long name="userId" title="User id" transient="true" />
         <!--Имя пользователя-->
         <string name="userName" title="User Name" transient="true" />
+        <!--id проекта-->
+        <long name="projectId" title="Project id" transient="true"/>
         <!--Наименование проекта-->
         <string name="projectName" title="Project Name" transient="true"/>
         <!--Поле для калькуляции читаемого времени-->

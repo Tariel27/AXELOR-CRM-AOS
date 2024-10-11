@@ -29,37 +29,15 @@ public class VoteServiceImpl implements VoteService {
         ForumTopic topic = forumTopicRepository.find(topicId);
         User user = userRepository.find(userId);
 
-        // Проверяем, голосовал ли пользователь за этот топик
-        ForumVote existingVote = forumVoteRepository.all()
-                .filter("self.forumTopic = ?1 AND self.author = ?2", topic, user)
-                .fetchOne();
+        ForumVote existingVote = findVote(topic, user);
 
         if (existingVote != null) {
-            if (!existingVote.getIsUpvote()) {
-                // Просто возвращаем, если пользователь уже поставил дизлайк, и ничего не делаем
-                return;
-            } else {
-                // Пользователь ранее поставил лайк, меняем на дизлайк
-                existingVote.setIsUpvote(false);
-                forumVoteRepository.save(existingVote);
-
-                topic.setUpvoteCount(topic.getUpvoteCount() - 1);
-                topic.setDownvoteCount(topic.getDownvoteCount() + 1);
-            }
+            handleExistingVote(existingVote, topic, false);
         } else {
-            ForumVote newVote = new ForumVote();
-            newVote.setForumTopic(topic);
-            newVote.setAuthor(user);
-            newVote.setIsUpvote(false);
-            forumVoteRepository.save(newVote);
-
-            topic.setDownvoteCount(topic.getDownvoteCount() + 1);
+            createNewVote(topic, user, false);
         }
-
-        topic.setVoteCount(topic.getUpvoteCount() - topic.getDownvoteCount());
         forumTopicRepository.save(topic);
     }
-
 
     @Override
     @Transactional
@@ -67,47 +45,51 @@ public class VoteServiceImpl implements VoteService {
         ForumTopic topic = forumTopicRepository.find(topicId);
         User user = userRepository.find(userId);
 
-        ForumVote existingVote = forumVoteRepository.all()
-                .filter("self.forumTopic = ?1 AND self.author = ?2", topic, user)
-                .fetchOne();
+        ForumVote existingVote = findVote(topic, user);
 
         if (existingVote != null) {
-            if (existingVote.getIsUpvote()) {
-                // Просто возвращаем, если пользователь уже поставил лайк, и ничего не делаем
-                return;
-            } else {
-                existingVote.setIsUpvote(true);
-                forumVoteRepository.save(existingVote);
-
-                topic.setUpvoteCount(topic.getUpvoteCount() + 1);
-                topic.setDownvoteCount(topic.getDownvoteCount() - 1);
-            }
+            handleExistingVote(existingVote, topic, true);
         } else {
-            ForumVote newVote = new ForumVote();
-            newVote.setForumTopic(topic);
-            newVote.setAuthor(user);
-            newVote.setIsUpvote(true);
-            forumVoteRepository.save(newVote);
-
-            topic.setUpvoteCount(topic.getUpvoteCount() + 1);
+            createNewVote(topic, user, true);
         }
-
-        topic.setVoteCount(topic.getUpvoteCount() - topic.getDownvoteCount());
         forumTopicRepository.save(topic);
     }
 
+    private ForumVote findVote(ForumTopic topic, User user) {
+        return forumVoteRepository.all()
+                .filter("self.forumTopic = ?1 AND self.author = ?2", topic, user)
+                .fetchOne();
+    }
 
+    private void handleExistingVote(ForumVote existingVote, ForumTopic topic, boolean isUpvote) {
+        if (existingVote.getIsUpvote() == isUpvote) {
+            // Пользователь уже голосовал так же
+            return;
+        }
 
-    @Override
-    @Transactional
-    public void incrementViewCount(Long topicId) throws Exception {
-        ForumTopic topic = forumTopicRepository.find(topicId);
-        if (topic != null) {
-            int currentViews = topic.getViewCount() != null ? topic.getViewCount() : 0;
-            topic.setViewCount(currentViews + 1);
-            forumTopicRepository.save(topic);
+        existingVote.setIsUpvote(isUpvote);
+        forumVoteRepository.save(existingVote);
+
+        if (isUpvote) {
+            topic.setUpvoteCount(topic.getUpvoteCount() + 1);
+            topic.setDownvoteCount(topic.getDownvoteCount() - 1);
         } else {
-            throw new Exception("Forum topic not found");
+            topic.setUpvoteCount(topic.getUpvoteCount() - 1);
+            topic.setDownvoteCount(topic.getDownvoteCount() + 1);
+        }
+    }
+
+    private void createNewVote(ForumTopic topic, User user, boolean isUpvote) {
+        ForumVote newVote = new ForumVote();
+        newVote.setForumTopic(topic);
+        newVote.setAuthor(user);
+        newVote.setIsUpvote(isUpvote);
+        forumVoteRepository.save(newVote);
+
+        if (isUpvote) {
+            topic.setUpvoteCount(topic.getUpvoteCount() + 1);
+        } else {
+            topic.setDownvoteCount(topic.getDownvoteCount() + 1);
         }
     }
 }
