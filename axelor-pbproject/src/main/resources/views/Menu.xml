@@ -108,4 +108,26 @@
         <context name="_showSingle" expr="true"/>
     </action-view>
 
+    <!-- Меню которое отображает Новости -->
+    <menuitem name="pbp-news-root" title="Manager news" order="500" icon="fa-newspaper-o"
+              icon-background="#3f6bb9"/>
+    <menuitem name="pbp-menu-manager-news" title="All news" action="pbp.manager-news-action,pbp.manager-news-action-isNotPublish"
+              parent="pbp-news-root"/>
+    <menuitem name="pbp-menu-manager-news-for-user" title="My news" action="pbp.manager-news-action-isNotPublish"
+              parent="pbp-news-root" />
+
+    <action-view name="pbp.manager-news-action" title="Manager news" model="com.axelor.apps.pbproject.db.News">
+        <view type="cards" name="pbp.news-cards-view"/>
+        <view type="form" name="pbp.news-form-view"/>
+        <domain>self.isPublish = true</domain>
+
+    </action-view>
+
+    <action-view name="pbp.manager-news-action-isNotPublish" title="Manager news" model="com.axelor.apps.pbproject.db.News">
+        <view type="cards" name="pbp.news-cards-view"/>
+        <view type="form" name="pbp.news-form-view"/>
+        <domain>self.createdBy = : __user__ </domain>
+        <context name="_user" expr="eval: __user__"/>
+    </action-view>
+
 </object-views>
