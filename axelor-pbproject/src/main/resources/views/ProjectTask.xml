@@ -430,7 +430,7 @@
     </tree>
     <!--Канбан, где тикеты работают с Date-Time, показывают также время начала-->
     <kanban name="pbp.project-task-kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
-            columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
+            columnBy="status" sequenceBy="createdOn" draggable="true" limit="30">
         <field name="name"/>
         <field name="project"/>
         <field name="assignedTo"/>
