@@ -29,7 +29,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendEmail(Long leaveRequestId) {
         WorkLeave workLeave = workLeaveRepository.find(leaveRequestId);
-        if (workLeave.getLeaveRequestStatus() == null || workLeave == null) throw new RuntimeException("Request status or work leave model is null!");
+        if (workLeave == null || workLeave.getLeaveRequestStatus() == null) throw new RuntimeException("Request status or work leave model is null!");
 
         if  (WorkLeaveRepository.STATUS_WAITING.equalsIgnoreCase(workLeave.getLeaveRequestStatus())){
             leaveRequestStrategy = Beans.get(WaitingStrategy.class);
