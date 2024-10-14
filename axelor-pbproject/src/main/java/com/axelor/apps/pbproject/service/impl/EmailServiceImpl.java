@@ -29,11 +29,11 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendEmail(Long leaveRequestId) {
         WorkLeave workLeave = workLeaveRepository.find(leaveRequestId);
-        if (workLeave.getLeaveRequestStatus() == null) throw new RuntimeException("Status of request null!");
+        if (workLeave.getLeaveRequestStatus() == null || workLeave == null) throw new RuntimeException("Request status or work leave model is null!");
 
-        if  (workLeave.getLeaveRequestStatus().equalsIgnoreCase(WorkLeaveRepository.STATUS_WAITING)){
+        if  (WorkLeaveRepository.STATUS_WAITING.equalsIgnoreCase(workLeave.getLeaveRequestStatus())){
             leaveRequestStrategy = Beans.get(WaitingStrategy.class);
-        } else if (workLeave.getLeaveRequestStatus().equalsIgnoreCase(WorkLeaveRepository.STATUS_APPROVE)) {
+        } else if (WorkLeaveRepository.STATUS_APPROVE.equalsIgnoreCase(workLeave.getLeaveRequestStatus())) {
             leaveRequestStrategy = Beans.get(ApprovedStrategy.class);
         } else {
             leaveRequestStrategy = Beans.get(DeniedStrategy.class);
