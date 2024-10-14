@@ -17,4 +17,11 @@
         <option value="grey" color="grey">Grey</option>
     </selection>
 
+    <!-- Статусы ожидания заявок на отпрос от работы -->
+    <selection name="pbp.ask.for.off.from.job.select">
+        <option value="approved" color="green">Approved</option>
+        <option value="denied" color="red">Denied</option>
+        <option value="waiting" color="blue">Waiting</option>
+    </selection>
+
 </object-views>
