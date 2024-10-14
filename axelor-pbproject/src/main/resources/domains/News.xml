@@ -9,15 +9,18 @@
         <string name="title" title="Title news"/>
         <string name="text" title="Text" large="true"/>
         <boolean name="isPublish" title="isPublish" default="false"/>
+        <boolean name="isUrl" title="isUrl" default="false"/>
         <datetime name="dateCreate" title="Date create"/>
         <many-to-one name="author" ref="com.axelor.auth.db.User"/>
-
+        <string name="addUrl" title="Add url"/>
         <track replace="true">
             <field name="title"/>
             <field name="text"/>
             <field name="isPublish"/>
             <field name="dateCreate"/>
             <field name="author"/>
+            <field name="isPublish"/>
+            <field name="isUrl"/>
         </track>
     </entity>
 </domain-models>
