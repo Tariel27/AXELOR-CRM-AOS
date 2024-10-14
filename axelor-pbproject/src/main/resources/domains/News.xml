@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_7.1.xsd">
+
+    <module name="pbproject" package="com.axelor.apps.pbproject.db"/>
+
+    <entity name="News">
+        <string name="title" title="Title news"/>
+        <string name="text" title="Text" large="true"/>
+        <boolean name="isPublish" title="isPublish" default="false"/>
+        <boolean name="isUrl" title="isUrl" default="false"/>
+        <datetime name="dateCreate" title="Date create"/>
+        <many-to-one name="author" ref="com.axelor.auth.db.User"/>
+        <string name="addUrl" title="Add url"/>
+        <track replace="true">
+            <field name="title"/>
+            <field name="text"/>
+            <field name="isPublish"/>
+            <field name="dateCreate"/>
+            <field name="author"/>
+            <field name="isPublish"/>
+            <field name="isUrl"/>
+        </track>
+    </entity>
+</domain-models>
