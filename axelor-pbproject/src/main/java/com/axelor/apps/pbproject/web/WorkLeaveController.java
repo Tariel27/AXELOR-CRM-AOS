@@ -19,6 +19,10 @@ public class WorkLeaveController {
     public void sendEmail(ActionRequest actionRequest, ActionResponse actionResponse){
         Long leaveRequestId = (Long) actionRequest.getContext().get("id");
         if (Objects.isNull(leaveRequestId)) actionResponse.setError("Id of request is null");
-        emailService.sendEmail(leaveRequestId);
+        try {
+            emailService.sendEmail(leaveRequestId);
+        } catch (RuntimeException e){
+            actionResponse.setError(e.getMessage());
+        }
     }
 }
