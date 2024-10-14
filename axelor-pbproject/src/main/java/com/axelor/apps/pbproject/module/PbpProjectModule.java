@@ -38,5 +38,6 @@ public class PbpProjectModule extends AxelorModule {
     bind(VoteService.class).to(VoteServiceImpl.class);
     bind(BirthdayService.class).to(BirthdayServiceImpl.class);
     bind(HolidayService.class).to(HolidayServiceImpl.class);
+    bind(EmailService.class).to(EmailServiceImpl.class);
   }
 }

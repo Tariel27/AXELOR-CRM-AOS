@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_7.1.xsd">
+
+    <module name="pbproject" package="com.axelor.apps.pbproject.db"/>
+
+    <entity name="WorkLeave">
+        <!--    Человек который подтверждает    -->
+        <many-to-one name="approver" ref="com.axelor.auth.db.User" title="Approver"/>
+        <!--    Человек который отправляет запрос чтобы отпросится    -->
+        <many-to-one name="requester" ref="com.axelor.auth.db.User" title="Requester"/>
+        <!-- Комментарий проверяющего -->
+        <string name="approverComment" title="Approver comment"/>
+        <!--    Статус запроса    -->
+        <string name="leaveRequestStatus" title="Request status" selection="pbp.ask.for.off.from.job.select"/>
+        <!-- Причина чтобы отпросится -->
+        <string name="reason" title="Reason"/>
+        <!-- Дата создания запроса -->
+        <datetime name="createdDateTime" title="Created date"/>
+        <!-- Дата старта отправшивания -->
+        <datetime name="startDateTime" title="Leave date"/>
+        <!-- Дата окончания отправшивания -->
+        <datetime name="endDateTime" title="End date"/>
+
+        <extra-code>
+            <![CDATA[
+
+				//LEAVE REQUEST  STATUS
+				public static final String STATUS_APPROVE = "approved";
+				public static final String STATUS_DENIED = "denied";
+				public static final String STATUS_WAITING = "waiting";
+            ]]>
+        </extra-code>
+
+        <track>
+            <field name="reason"/>
+            <field name="createdDateTime"/>
+            <field name="startDateTime"/>
+            <field name="endDateTime"/>
+        </track>
+    </entity>
+
+
+</domain-models>
+
