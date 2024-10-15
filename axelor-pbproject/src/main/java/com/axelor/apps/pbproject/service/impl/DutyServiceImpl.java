@@ -60,6 +60,19 @@ public class DutyServiceImpl implements DutyService {
         }
     }
 
+    @Override
+    @Transactional
+    public void updateDutyUsersFlags(List<User> users, Boolean activeForDuty, Boolean alreadyInDuty) {
+        userRepository.findByIds(users.stream().map(User::getId).collect(Collectors.toList()))
+                .forEach(user -> {
+                    user.setIsActiveDuty(activeForDuty);
+                    user.setAlreadyInDuty(alreadyInDuty);
+                    userRepository.save(user);
+                });
+    }
+
+
+
     private Duty getCurrentDuty(LocalDate start, LocalDate end) {
         return dutyRepository.all().filter("self.dateStart >= :start AND self.dateEnd <= :end").bind("start", start).bind("end", end).fetchOne();
     }
