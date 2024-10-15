@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+
+    <dashboard name="pbp.ratings-by-person-dashboard" title="Ratings by person!">
+        <dashlet action="chart:chart-best-person-completed-tasks" width="100%" height="400px"  />
+        <dashlet action="chart:chart-best-person-spent-hours" width="100%" height="400px"  />
+    </dashboard>
+<!-- диаграмма показывающая кто больше выполнил задач-->
+    <chart name="chart-best-person-completed-tasks" title="The best person who completed more tasks" stacked="true">
+        <search-fields>
+            <field type="datetime" name="fromDateTime" title="From Date"/>
+            <field type="datetime" name="toDateTime" title="To Date"/>
+        </search-fields>
+        <dataset type="jpql">
+            <![CDATA[
+        SELECT u.fullName AS userName, p.name AS priority, COUNT(t.id) AS taskCount
+        FROM ProjectTask t
+        JOIN t.assignedTo u
+        JOIN t.priority p
+        WHERE t.taskEndDate > :fromDateTime
+        AND t.taskEndDate < :toDateTime
+        AND t.status.id = 3
+        GROUP BY u.fullName, p.name
+        ORDER BY taskCount DESC
+        ]]>
+        </dataset>
+        <category key="userName"/>
+        <series key="taskCount" type="bar" groupBy="priority"/>
+    </chart>
+
+    <!-- диаграмма показывающая кто потратил больше часов-->
+
+    <chart name="chart-best-person-spent-hours" title="The best employee who spent the most hours" >
+        <search-fields>
+            <field type="datetime" name="fromDateTime" title="From Date"/>
+            <field type="datetime" name="toDateTime" title="To Date"/>
+        </search-fields>
+        <dataset type="jpql">
+            <![CDATA[
+            SELECT u.fullName AS userName, SUM(t.spentTime) AS totalHours
+            FROM ProjectTask t
+            JOIN t.assignedTo u
+            WHERE t.taskEndDate BETWEEN :fromDateTime AND :toDateTime
+            GROUP BY u.fullName
+            ORDER BY totalHours DESC
+        ]]>
+        </dataset>
+        <category key="userName"/>
+        <series key="totalHours" type="pie"/>
+    </chart>
+
+
+
+</object-views>
