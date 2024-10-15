@@ -8,7 +8,8 @@
         <dashlet action="chart:chart-best-person-spent-hours" width="100%" height="400px"  />
     </dashboard>
 <!-- диаграмма показывающая кто больше выполнил задач-->
-    <chart name="chart-best-person-completed-tasks" title="The best person who completed more tasks" stacked="true">
+    <chart name="chart-best-person-completed-tasks" title="The best person who completed more tasks" stacked="true"
+    onInit="pbp.rating-update-date">
         <search-fields>
             <field type="datetime" name="fromDateTime" title="From Date"/>
             <field type="datetime" name="toDateTime" title="To Date"/>
@@ -32,7 +33,8 @@
 
     <!-- диаграмма показывающая кто потратил больше часов-->
 
-    <chart name="chart-best-person-spent-hours" title="The best employee who spent the most hours" >
+    <chart name="chart-best-person-spent-hours" title="The best employee who spent the most hours"
+           onInit="pbp.rating-update-date">
         <search-fields>
             <field type="datetime" name="fromDateTime" title="From Date"/>
             <field type="datetime" name="toDateTime" title="To Date"/>
@@ -51,6 +53,10 @@
         <series key="totalHours" type="pie"/>
     </chart>
 
+    <action-attrs name="pbp.rating-update-date">
+        <attribute name="value" expr="eval: __time__.withDayOfMonth(1)" for="fromDateTime"/>
+        <attribute name="value" expr="eval: __time__.plusMonths(1).withDayOfMonth(1).minusDays(1)" for="toDateTime"/>
+    </action-attrs>
 
 
 </object-views>
