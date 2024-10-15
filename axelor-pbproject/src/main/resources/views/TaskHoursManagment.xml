@@ -14,8 +14,6 @@
             <field name="toDate" colSpan="4" required="true" x-dirty="false"/>
             <button name="customBtn" title="Get data" colSpan="2" icon="fa-search"
                     onClick="pbp.action-method-for-work-time-controller" x-dirty="false"/>
-            <button name="customBtn" prompt="Are you sure to change the duty?" title="Duty update" colSpan="2"
-                    icon="fa-search" onClick="pbp.action-method-for-update-duty-users" x-dirty="false"/>
             <field name="project" title="Projects" colSpan="12" placeholder="Select projects" widget="TagSelect"
                    canNew="false" canEdit="false" form-view="project-form" grid-view="project-grid" x-dirty="false"/>
             <field name="users" title="Users" colSpan="12" widget="TagSelect" canNew="false" form-view="user-form"

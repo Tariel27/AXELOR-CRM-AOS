@@ -117,4 +117,10 @@
         <context name="_user" expr="eval: __user__"/>
     </action-view>
 
+    <!-- Меню для управления отчетами с дежурными -->
+    <menuitem name="pbp.report-duty-users-m.i" title="Duty control" icon="fa-user-md" icon-background="#3f6bb9" action="pbp.duty-control-action.view"/>
+    <action-view name="pbp.duty-control-action.view" title="Duty control" model="com.axelor.apps.pbproject.db.Duty">
+        <view type="form" name="pbp.duty-control-form"/>
+    </action-view>
+
 </object-views>

@@ -262,4 +262,6 @@
 "com.axelor.apps.pbproject.job.HolidaySchedulerJob",,,
 "createdDate","Дата создания",,
 "hours","часы",,
+"Updated successfully!","Данные успешно обновлены!",,
+"Please select user for update!","Пожалуйста заполните данные пользователей!",,
 "whatever@example.com",,,
