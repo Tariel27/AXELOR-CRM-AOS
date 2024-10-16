@@ -3,6 +3,7 @@ package com.axelor.apps.pbproject.web;
 import com.axelor.apps.base.db.AdvancedExport;
 import com.axelor.apps.pbproject.service.DutyService;
 import com.axelor.apps.pbproject.service.ExportExcelService;
+import com.axelor.apps.pbproject.util.ExportUtil;
 import com.axelor.auth.db.User;
 import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
@@ -41,7 +42,7 @@ public class DutyUserController {
         try {
             File exportDutyExcel = exportExcelService.exportExcelDutyUsers(dateStart,dateEnd);
             MetaFile exportFile = Beans.get(MetaFiles.class).upload(exportDutyExcel);
-            actionResponse.setView(createResponseView(exportFile));
+            actionResponse.setView(ExportUtil.createResponseView(exportFile));
 
         } catch (IOException e){
             actionResponse.setError(e.getMessage());
@@ -60,14 +61,5 @@ public class DutyUserController {
         dutyService.updateDutyUsersFlags(usersForUpdate, activeForDutyFlagForUsers, alreadyDutyFlagForUsers);
         actionResponse.setAlert(I18n.get("Updated successfully!"));
         actionResponse.setAttr("panel-users-grid", "refresh", true);
-    }
-
-    private Map<String, Object> createResponseView(MetaFile exportFile) {
-        return ActionView.define(I18n.get("Export file"))
-                .model(AdvancedExport.class.getName())
-                .add("html", "ws/rest/com.axelor.meta.db.MetaFile/" + exportFile.getId() +
-                        "/content/download?v=" + exportFile.getVersion())
-                .param("download", "true")
-                .map();
     }
 }

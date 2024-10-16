@@ -42,7 +42,7 @@ public class FaceIdServiceImpl implements FaceIdService {
     }
 
     @Override
-    public File getExcelReportFaceId(LocalDate startDate, LocalDate endDate) {
+    public File exportExcelReportFaceId(LocalDate startDate, LocalDate endDate) {
         String accessToken = getAccessToken();
         File file = getExcelFile(startDate,endDate, accessToken);
 

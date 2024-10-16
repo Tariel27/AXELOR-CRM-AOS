@@ -3,6 +3,7 @@ package com.axelor.apps.pbproject.web;
 import com.axelor.apps.base.db.AdvancedExport;
 import com.axelor.apps.pbproject.service.FaceIdService;
 import com.axelor.apps.pbproject.service.UserPbpProjectService;
+import com.axelor.apps.pbproject.util.ExportUtil;
 import com.axelor.auth.AuthUtils;
 import com.axelor.auth.db.User;
 import com.axelor.i18n.I18n;
@@ -81,21 +82,12 @@ public class UserController {
         }
 
         try {
-            File fileFromService = faceIdService.getExcelReportFaceId(startDate,endDate);
+            File fileFromService = faceIdService.exportExcelReportFaceId(startDate,endDate);
             MetaFile exportFile = Beans.get(MetaFiles.class).upload(fileFromService);
-            actionResponse.setView(createResponseView(exportFile));
+            actionResponse.setView(ExportUtil.createResponseView(exportFile));
         }  catch (IOException e) {
             actionResponse.setError(e.getMessage());
         }
 
-    }
-
-    private Map<String, Object> createResponseView(MetaFile exportFile) {
-        return ActionView.define(I18n.get("Export file"))
-                .model(AdvancedExport.class.getName())
-                .add("html", "ws/rest/com.axelor.meta.db.MetaFile/" + exportFile.getId() +
-                        "/content/download?v=" + exportFile.getVersion())
-                .param("download", "true")
-                .map();
     }
 }

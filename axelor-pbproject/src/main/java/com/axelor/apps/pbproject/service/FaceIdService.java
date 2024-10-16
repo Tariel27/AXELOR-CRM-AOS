@@ -9,5 +9,5 @@ import java.time.LocalDate;
 
 public interface FaceIdService {
     void uploadUserToFaceId(User user);
-    File getExcelReportFaceId(LocalDate startDate, LocalDate endDate);
+    File exportExcelReportFaceId(LocalDate startDate, LocalDate endDate);
 }
