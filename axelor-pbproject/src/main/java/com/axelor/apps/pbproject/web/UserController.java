@@ -1,15 +1,25 @@
 package com.axelor.apps.pbproject.web;
 
+import com.axelor.apps.base.db.AdvancedExport;
 import com.axelor.apps.pbproject.service.FaceIdService;
 import com.axelor.apps.pbproject.service.UserPbpProjectService;
+import com.axelor.apps.pbproject.util.ExportUtil;
 import com.axelor.auth.AuthUtils;
 import com.axelor.auth.db.User;
 import com.axelor.i18n.I18n;
+import com.axelor.inject.Beans;
+import com.axelor.meta.MetaFiles;
+import com.axelor.meta.db.MetaFile;
+import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 
 public class UserController {
@@ -57,5 +67,27 @@ public class UserController {
         } catch (RuntimeException e) {
             actionResponse.setError(e.getMessage());
         }
+    }
+
+    public void commigLeavingReport(ActionRequest actionRequest, ActionResponse actionResponse){
+        LocalDate startDate = LocalDate.parse((String) actionRequest.getContext().get("startDate"));
+        LocalDate endDate = LocalDate.parse((String) actionRequest.getContext().get("endDate"));
+        if (Objects.isNull(startDate) || Objects.isNull(endDate)){
+            actionResponse.setError(I18n.get("Start/end dates is null! Please select!"));
+            return;
+        }
+        if (startDate.isAfter(endDate)) {
+            actionResponse.setError(I18n.get("Start date cannot is als end date!"));
+            return;
+        }
+
+        try {
+            File fileFromService = faceIdService.exportExcelReportFaceId(startDate,endDate);
+            MetaFile exportFile = Beans.get(MetaFiles.class).upload(fileFromService);
+            actionResponse.setView(ExportUtil.createResponseView(exportFile));
+        }  catch (IOException e) {
+            actionResponse.setError(e.getMessage());
+        }
+
     }
 }

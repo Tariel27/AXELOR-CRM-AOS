@@ -13,6 +13,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,45 @@ public class FaceIdServiceImpl implements FaceIdService {
             userRepository.save(userFromDb);
         }
     }
+
+    @Override
+    public File exportExcelReportFaceId(LocalDate startDate, LocalDate endDate) {
+        String accessToken = getAccessToken();
+        File file = getExcelFile(startDate,endDate, accessToken);
+
+        return file;
+    }
+
+    private File getExcelFile(LocalDate startDate, LocalDate endDate, String accessToken) {
+        String formattedUrl = String.format(FaceIdConfig.FACE_ID_REPORT_EXCEL, startDate, endDate);
+        File excelFile = new File("report.xlsx");
+
+        try {
+            HttpURLConnection connection = setupHttpConnection(formattedUrl, "GET", accessToken);
+            connection.connect();
+
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                try (InputStream inputStream = connection.getInputStream();
+                     FileOutputStream outputStream = new FileOutputStream(excelFile)) {
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                }
+            } else {
+                throw new RuntimeException("Failed to get Excel report: " + connection.getResponseCode());
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error while retrieving the Excel file: " + e.getMessage(), e);
+        }
+
+        return excelFile;
+    }
+
 
     private String createUserInFaceId(User user, String accessToken) {
         try {

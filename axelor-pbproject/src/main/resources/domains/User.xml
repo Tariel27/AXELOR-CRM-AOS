@@ -14,6 +14,8 @@
         <datetime name="lastActiveDateTime" title="Last active date time" transient="true"/>
         <!--    UUID для face-id    -->
         <string name="faceUuid" title="UUID"/>
+        <!-- Слежка за активность, в офисе ли человек -->
+        <boolean name="inOffice" title="In office"/>
     </entity>
 
 </domain-models>
