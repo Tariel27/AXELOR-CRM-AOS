@@ -88,12 +88,18 @@
     </action-view>
 
     <!--  Меню которой открывает список юзеров для фейс айди   -->
-    <menuitem name="pbp.open-face-id-user-create.m-i" title="Face id" icon="fa-id-card-o" icon-background="#3f6bb9"
-              action="pbp.user-info-face-id-view"/>
+    <menuitem name="pbp.open-face-id-user-create.m-i" title="Face id" icon="fa-id-card-o" icon-background="#3f6bb9"/>
+    <menuitem name="pbp.open-face-id-connections-users.m-i" title="Users" parent="pbp.open-face-id-user-create.m-i" action="pbp.user-info-face-id-view"/>
+
+    <menuitem name="pbp.open-report-users-comming-leaving.m-i" title="Report face id" parent="pbp.open-face-id-user-create.m-i" action="pbp.user-report-face-id.action-view"/>
 
     <action-view name="pbp.user-info-face-id-view" title="Face id" model="com.axelor.auth.db.User">
         <view type="grid" name="pbp.user-face-id-grid"/>
         <view type="form" name="pbp.user-face-id-form"/>
+    </action-view>
+
+    <action-view name="pbp.user-report-face-id.action-view" title="Report comming leaving" model="com.axelor.auth.db.User">
+        <view type="form" name="user-report-comming-leaving-form"/>
     </action-view>
 
     <!-- Меню которое отображает Person info -->

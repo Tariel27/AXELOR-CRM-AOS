@@ -10,7 +10,7 @@
 
     <!-- Форма с юзером -->
     <form name="pbp.user-face-id-form" title="User info" model="com.axelor.auth.db.User" width="large">
-        <panel title="User">
+        <panel title="User" colSpan="12">
             <field name="image" colSpan="6" x-accept=".png, .jpg, .jpeg"/>
             <field name="faceUuid" hidden="true"/>
         </panel>
@@ -20,15 +20,23 @@
             <field name="fullName" title="Full name" colSpan="12"/>
         </panel>
 
-        <panel title="Actions" sidebar="true" showIf="!faceUuid">
-            <button name="uploadToFaceId" title="Upload user" colSpan="12" onClick="pbp.upload-user-to-face-id"/>
-        </panel>
         <!-- Тут в зависимости от состояния, если юзер загружен, будут разные дейвствия -->
-        <panel title="Actions" sidebar="true" showIf="faceUuid">
-            <button name="updateUser" title="Update user" colSpan="12" onClick="pbp.update-user-to-face-id"/>
+        <panel title="Actions" sidebar="true" >
+            <button showIf="!faceUuid"  name="uploadToFaceId" title="Upload user" colSpan="12" onClick="pbp.upload-user-to-face-id"/>
+            <button showIf="faceUuid" name="updateUser"  title="Update user" colSpan="12" onClick="pbp.update-user-to-face-id"/>
         </panel>
     </form>
 
+    <form title="Report" name="user-report-comming-leaving-form" model="com.axelor.auth.db.User" width="large">
+        <panel name="report-users-comming-leaving-panel" title="Report" collapseIf="true" canCollapse="true" colSpan="12">
+            <field name="startDate" required="true" title="Start date" widget="date"/>
+            <field name="endDate" required="true" title="End date" widget="date"/>
+        </panel>
+
+        <panel title="Actions" sidebar="true" >
+            <button name="reportCommingLeaving" title="Report download" onClick="pbp.download-report-comming-leaving-action.method"/>
+        </panel>
+    </form>
 
 
     <!-- Грид с юзерами с подсветкой -->
@@ -40,5 +48,9 @@
         <field name="code" title="Login"/>
         <field name="faceUuid" hidden="true"/>
     </grid>
+    
+    <action-method name="pbp.download-report-comming-leaving-action.method">
+        <call class="com.axelor.apps.pbproject.web.UserController" method="commigLeavingReport"/>
+    </action-method>
 
 </object-views>
