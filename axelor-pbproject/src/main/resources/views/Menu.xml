@@ -143,7 +143,7 @@
               parent="pbp.menu-ratings-root"/>
     <menuitem name="pbp.menu-ratings-by-team" title="Ratings by team" action="pbp.ratings-by-team-action"
               parent="pbp.menu-ratings-root"/>
-    <menuitem name="pbp.menu-ratings-by-project" title="Ratings by project" action="some_act2"
+    <menuitem name="pbp.menu-ratings-by-project" title="Ratings by project" action="pbp.ratings-by-project-action"
               parent="pbp.menu-ratings-root"/>
 
     <action-view name="pbp.ratings-by-person-action" title="Ratings by person!">
@@ -152,7 +152,9 @@
     <action-view name="pbp.ratings-by-team-action" title="Ratings by person!">
         <view type="dashboard" name="pbp.ratings-by-team-dashboard"/>
     </action-view>
-
+    <action-view name="pbp.ratings-by-project-action" title="Ratings by project!">
+        <view type="dashboard" name="pbp.ratings-by-project-dashboard"/>
+    </action-view>
 
 
     <!-- Меню которое для отпросится -->
