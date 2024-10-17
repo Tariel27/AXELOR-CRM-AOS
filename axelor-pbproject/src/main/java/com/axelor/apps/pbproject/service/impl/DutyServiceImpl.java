@@ -198,11 +198,11 @@ public class DutyServiceImpl implements DutyService {
         return users.stream().map(User::getId).collect(Collectors.toSet());
     }
 
-    private LocalDate getStartOfWeek() {
+    public LocalDate getStartOfWeek() {
         return LocalDate.now().with(DayOfWeek.MONDAY);
     }
 
-    private LocalDate getEndOfWeek(LocalDate startOfWeek) {
+    public LocalDate getEndOfWeek(LocalDate startOfWeek) {
         return startOfWeek.with(DayOfWeek.SUNDAY);
     }
 

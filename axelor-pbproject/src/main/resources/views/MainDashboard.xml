@@ -11,7 +11,7 @@
 
     <!--  Дашборд страница, где будут дашлеты разные в будущем...  -->
     <dashboard name="pbp.main-pp-dashboard" title="Petaboard">
-        <dashlet height="250" width="300" action="pbp.dashlet-card-duty-users"/>
+        <dashlet height="250" width="300" action="pbp.dashlet-custom-duty-users"/>
         <dashlet height="250" width="300" action="pbp.list-activity-custom"/>
         <dashlet height="250" width="300" action="pbp.manager-news-action-for-main"/>
     </dashboard>
@@ -26,8 +26,13 @@
         <domain>dateStart = (select max(d.dateStart) from Duty d)</domain>
     </action-view>
 
-    <!-- Экшн для получения custom пользователей онлайн или нет -->
+    <!-- Экшн кастом с дежурными -->
+    <action-view name="pbp.dashlet-custom-duty-users" title="On this week">
+        <view type="custom" name="pbp.users-for-duty-custom-view"/>
+    </action-view>
 
+
+    <!-- Экшн для получения custom пользователей онлайн или нет -->
     <action-view name="pbp.list-activity-custom" title="Users activity">
         <view type="custom" name="pbp.users-activity-list-custom"/>
     </action-view>
@@ -56,6 +61,46 @@
             </div>
     ]]></template>
     </cards>
+
+    <custom title="Duty Users" name="pbp.users-for-duty-custom-view">
+        <field name="startWeekDate" type="date"/>
+        <field name="endWeekDate" type="date"/>
+        <dataset type="rpc">
+            <![CDATA[com.axelor.apps.pbproject.web.WeeklyDataController:getWeeklyData]]>
+        </dataset>
+        <template>
+            <![CDATA[
+        <>
+            {data ? (
+                <Box>
+                    <p>
+                        <strong>Дата начала недели:</strong> {data.startWeekDate}
+                    </p>
+                    <p>
+                        <strong>Дата конца недели:</strong> {data.endWeekDate}
+                    </p>
+                    <p>
+                        <strong>Дежурные:</strong>{" "}
+                        {data.duty && data.duty.users && data.duty.users.length > 0 ? (
+                            data.duty.users.map((user, index) => (
+                                <span key={user.id}>
+                                    {user.name || "Неизвестный пользователь"}
+                                    {index < data.duty.users.length - 1 ? ", " : ""}
+                                </span>
+                            ))
+                        ) : (
+                            "Дежурных пользователей не найдено."
+                        )}
+                    </p>
+                </Box>
+            ) : (
+                <Box>Нет данных для отображения.</Box>
+            )}
+        </>
+        ]]>
+        </template>
+    </custom>
+
 
     <custom name="pbp.users-activity-list-custom" title="Users activity">
         <field name="name" type="string"/>
