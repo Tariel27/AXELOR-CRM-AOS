@@ -62,44 +62,41 @@
     ]]></template>
     </cards>
 
-    <custom title="Duty Users" name="pbp.users-for-duty-custom-view">
-        <field name="startWeekDate" type="date"/>
-        <field name="endWeekDate" type="date"/>
-        <dataset type="rpc">
-            <![CDATA[com.axelor.apps.pbproject.web.WeeklyDataController:getWeeklyData]]>
-        </dataset>
-        <template>
-            <![CDATA[
+    <custom name="pbp.users-for-duty-custom-view" title="Duty Users">
+    <dataset type="rpc">
+        <![CDATA[
+            com.axelor.apps.pbproject.web.WeeklyDataController:getWeeklyData
+        ]]>
+    </dataset>
+    <template>
+        <![CDATA[
         <>
-            {data ? (
-                <Box>
-                    <p>
-                        <strong>Дата начала недели:</strong> {data.startWeekDate}
-                    </p>
-                    <p>
-                        <strong>Дата конца недели:</strong> {data.endWeekDate}
-                    </p>
-                    <p>
-                        <strong>Дежурные:</strong>{" "}
-                        {data.duty && data.duty.users && data.duty.users.length > 0 ? (
-                            data.duty.users.map((user, index) => (
-                                <span key={user.id}>
-                                    {user.name || "Неизвестный пользователь"}
-                                    {index < data.duty.users.length - 1 ? ", " : ""}
-                                </span>
-                            ))
-                        ) : (
-                            "Дежурных пользователей не найдено."
-                        )}
-                    </p>
-                </Box>
-            ) : (
-                <Box>Нет данных для отображения.</Box>
-            )}
+            <Box style={{
+                border: '1px solid #ccc',
+                borderRadius: '5px',
+                padding: '10px',
+                margin: '10px',
+                backgroundColor: '#f9f9f9',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+            }}>
+                {data ? (
+                    <>
+                        <p style={{ margin: '5px 0' }}>
+                            <strong>Рабочая неделя:</strong> <span style={{ fontWeight: 'bold', color: '#2980b9' }}>{data.startWeekDate}</span> - <span style={{ fontWeight: 'bold', color: '#2980b9' }}>{data.endWeekDate}</span>
+                        </p>
+                        <p style={{ margin: '5px 0' }}>
+                            <strong>Дежурные:</strong> {data.firstDutyUserFullName || "Неизвестный пользователь"}, {data.secondDutyUserFullName || "Неизвестный пользователь"}
+                        </p>
+                    </>
+                ) : (
+                    <Box>Нет данных для отображения.</Box>
+                )}
+            </Box>
         </>
         ]]>
-        </template>
-    </custom>
+    </template>
+</custom>
+
 
 
     <custom name="pbp.users-activity-list-custom" title="Users activity">
