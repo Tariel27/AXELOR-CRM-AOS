@@ -6,6 +6,8 @@
     <dashboard name="pbp.ratings-by-team-dashboard" title="Ratings by team!">
         <dashlet action="chart:chart-best-team-completed-tasks" width="100%" height="400px"/>
         <dashlet action="chart:chart-best-team-spent-hours" width="100%" height="400px"/>
+        <dashlet action="chart:chart-tasks-completed-by-team-project" width="100%" height="400px"  />
+
     </dashboard>
     <!-- диаграмма показывающая какая команда больше выполнила задач-->
     <chart name="chart-best-team-completed-tasks" title="The best team that completed the most tasks" stacked="true"
@@ -55,5 +57,28 @@
         <series key="total_hours" type="donut"/>
     </chart>
 
+    <!-- диаграмма показывающая сколько задач выполнила каждая команда в проектах-->
+    <chart name="chart-tasks-completed-by-team-project" title="How many tasks did the team complete in the project?" stacked="true"
+           onInit="pbp.rating-update-date">
+        <search-fields>
+            <field type="datetime" name="fromDateTime" title="From Date"/>
+            <field type="datetime" name="toDateTime" title="To Date"/>
+        </search-fields>
+        <dataset type="jpql">
+            <![CDATA[
+        SELECT t.name AS teamName, p.name AS projectName, COUNT(pt.id) AS totalTasks
+        FROM ProjectTask pt
+        JOIN pt.assignedTo u
+        JOIN u.teamSet t
+        JOIN pt.project p
+        WHERE pt.taskEndDate BETWEEN :fromDateTime AND :toDateTime
+        AND pt.status.id = 3
+        GROUP BY t.name, p.name
+        ORDER BY totalTasks DESC
+        ]]>
+        </dataset>
+        <category key="teamName"/>
+        <series key="totalTasks" type="bar" groupBy="projectName"/>
+    </chart>
 
 </object-views>

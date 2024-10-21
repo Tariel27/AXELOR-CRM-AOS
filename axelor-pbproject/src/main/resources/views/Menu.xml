@@ -149,7 +149,7 @@
     <action-view name="pbp.ratings-by-person-action" title="Ratings by person!">
         <view type="dashboard" name="pbp.ratings-by-person-dashboard"/>
     </action-view>
-    <action-view name="pbp.ratings-by-team-action" title="Ratings by person!">
+    <action-view name="pbp.ratings-by-team-action" title="Ratings by team!">
         <view type="dashboard" name="pbp.ratings-by-team-dashboard"/>
     </action-view>
     <action-view name="pbp.ratings-by-project-action" title="Ratings by project!">
