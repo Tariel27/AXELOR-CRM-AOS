@@ -14,7 +14,6 @@ public class TotalUserController {
     @Inject
     private UserRepository userRepository;
 
-
     public void reportTotalUsers(ActionRequest request, ActionResponse response) {
         long totalUsers = userRepository.all().count();
 

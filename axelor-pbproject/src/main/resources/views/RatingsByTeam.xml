@@ -20,12 +20,11 @@
         <dashlet colSpan="3" height="250px" action="custom:report-table-csharp-users"/>
         <dashlet colSpan="3" height="250px" action="custom:report-table-leaders-users"/>
         <dashlet colSpan="3" height="250px" action="custom:report-table-administration-users"/>
-        <dashlet colSpan="12" height="400px" action="chart:chart-team-members-distribution"/>
+        <dashlet colSpan="6" height="400px" action="chart:chart-team-members-distribution"/>
+        <dashlet colSpan="6" height="400px" action="chart:chart-tasks-completed-by-team-project"/>
         <dashlet colSpan="12" height="400px" action="chart:chart-best-team-completed-tasks"/>
         <dashlet colSpan="12" height="400px" action="chart:chart-best-team-spent-hours"/>
-        <dashlet colSpan="12" height="400px" action="chart:chart-tasks-completed-by-team-project"/>
     </dashboard>
-
 
     <!-- диаграмма показывающая какая команда больше выполнила задач-->
     <chart name="chart-best-team-completed-tasks" title="The best team that completed the most tasks" stacked="true"
@@ -47,7 +46,7 @@
     ]]>
         </dataset>
         <category key="team_name"/>
-        <series key="total_completed_tasks" type="bar"/>
+        <series key="total_completed_tasks" type="hbar"/>
     </chart>
 
     <!-- диаграмма показывающая какая команда потратила больше часов-->
@@ -97,11 +96,11 @@
         ]]>
         </dataset>
         <category key="teamName"/>
-        <series key="totalTasks" type="bar" groupBy="projectName"/>
+        <series key="totalTasks" type="hbar" groupBy="projectName"/>
     </chart>
 
     <!-- диаграмма показывающая общее количество команд-->
-    <chart name="chart-team-members-distribution" title="Team Members Distribution" stacked="false">
+    <chart name="chart-team-members-distribution" title="Team members distribution" stacked="false">
         <dataset type="jpql">
             <![CDATA[
         SELECT t.name AS teamName, COUNT(u.id) AS totalMembers
@@ -115,18 +114,14 @@
         <category key="teamName" title="Team"/>
         <series key="totalMembers" type="pie" title="Total Members"/>
     </chart>
-
     <!--    report-box-->
-
-
-    <custom name="report-team-analytics" title="Analytics Team" css="report-box">
+    <custom name="report-team-analytics" title="Analytics team" css="report-box">
         <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamAnalytics]]></dataset>
         <template><![CDATA[
 
   <div class="report-data">
     <h1>{{first.total}}</h1>
     <small>Total Members</small>
-
     <div class="report-tags" style="display: flex; align-items: center;">
       <i class="fa fa-user-o" style="margin-right: 5px;"></i>
       <span class="label label-success">Analytics</span>
@@ -136,8 +131,7 @@
     ]]></template>
     </custom>
 
-
-    <custom name="report-team-devops" title="DevOps Team" css="report-box">
+    <custom name="report-team-devops" title="DevOps team" css="report-box">
         <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamDevOps]]></dataset>
         <template><![CDATA[
 
@@ -154,7 +148,7 @@
     ]]></template>
     </custom>
 
-    <custom name="report-team-backend" title="Backend Team" css="report-box">
+    <custom name="report-team-backend" title="Backend team" css="report-box">
         <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamBackend]]></dataset>
         <template><![CDATA[
   <div class="report-data">
@@ -168,7 +162,8 @@
   </div>
     ]]></template>
     </custom>
-    <custom name="report-team-frontend" title="Frontend Team" css="report-box">
+
+    <custom name="report-team-frontend" title="Frontend team" css="report-box">
         <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamFrontend]]></dataset>
         <template><![CDATA[
   <div class="report-data">
@@ -182,7 +177,8 @@
   </div>
     ]]></template>
     </custom>
-    <custom name="report-team-python" title="Python Team" css="report-box">
+
+    <custom name="report-team-python" title="Python team" css="report-box">
         <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamPython]]></dataset>
         <template><![CDATA[
   <div class="report-data">
@@ -196,13 +192,13 @@
   </div>
     ]]></template>
     </custom>
-    <custom name="report-team-csharp" title="C# Team" css="report-box">
+
+    <custom name="report-team-csharp" title="C# team" css="report-box">
         <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamCSharp]]></dataset>
         <template><![CDATA[
   <div class="report-data">
     <h1>{{first.total}}</h1>
     <small>Total Members</small>
-
     <div class="report-tags" style="display: flex; align-items: center;">
       <i class="fa fa-user-o" style="margin-right: 5px;"></i>
       <span class="label label-success">C#</span>
@@ -210,13 +206,13 @@
   </div>
     ]]></template>
     </custom>
-    <custom name="report-team-leaders" title="Leaders Team" css="report-box">
+
+    <custom name="report-team-leaders" title="Leaders team" css="report-box">
         <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamLeaders]]></dataset>
         <template><![CDATA[
   <div class="report-data">
     <h1>{{first.total}}</h1>
     <small>Total Members</small>
-
     <div class="report-tags" style="display: flex; align-items: center;">
       <i class="fa fa-user-o" style="margin-right: 5px;"></i>
       <span class="label label-success">Leaders</span>
@@ -224,14 +220,14 @@
   </div>
     ]]></template>
     </custom>
-    <custom name="report-team-administration" title="Administration Team" css="report-box">
+
+    <custom name="report-team-administration" title="Administration team" css="report-box">
         <dataset type="rpc">
             <![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamAdministration]]></dataset>
         <template><![CDATA[
   <div class="report-data">
     <h1>{{first.total}}</h1>
     <small>Total Members</small>
-
     <div class="report-tags" style="display: flex; align-items: center;">
       <i class="fa fa-user-o" style="margin-right: 5px;"></i>
       <span class="label label-success">Administration</span>
@@ -239,10 +235,8 @@
   </div>
     ]]></template>
     </custom>
-
-<!--    report-table-->
-
-    <custom name="report-table-devops-users" title="DevOps Team Members" css="report-box">
+    <!--    report-table-->
+    <custom name="report-table-devops-users" title="DevOps team members" css="report-box">
         <field name="fullName" title="Name"/>
         <field name="mobilePhone" title="Mobile Phone" type="string"/>
         <field name="dateOfBirth" title="Date of Birth" type="date"/>
@@ -259,12 +253,12 @@
     ORDER BY u.fullName
     ]]>
         </dataset>
-
         <template><![CDATA[
     <report-table columns='fullName,mobilePhone,dateOfBirth'/>
   ]]></template>
     </custom>
-    <custom name="report-table-administration-users" title="Administration Team Members" css="report-box">
+
+    <custom name="report-table-administration-users" title="Administration team members" css="report-box">
         <field name="fullName" title="Name"/>
         <field name="mobilePhone" title="Mobile Phone" type="string"/>
         <field name="dateOfBirth" title="Date of Birth" type="date"/>
@@ -281,12 +275,12 @@ WHERE t.name = 'Administration'
 ORDER BY u.fullName
 ]]>
         </dataset>
-
         <template><![CDATA[
 <report-table columns='fullName,mobilePhone,dateOfBirth'/>
 ]]></template>
     </custom>
-    <custom name="report-table-analytics-users" title="Analytics Team Members" css="report-box">
+
+    <custom name="report-table-analytics-users" title="Analytics team members" css="report-box">
         <field name="fullName" title="Name"/>
         <field name="mobilePhone" title="Mobile Phone" type="string"/>
         <field name="dateOfBirth" title="Date of Birth" type="date"/>
@@ -303,12 +297,12 @@ WHERE t.name = 'Analytics'
 ORDER BY u.fullName
 ]]>
         </dataset>
-
         <template><![CDATA[
 <report-table columns='fullName,mobilePhone,dateOfBirth'/>
 ]]></template>
     </custom>
-    <custom name="report-table-backend-users" title="Backend Team Members" css="report-box">
+
+    <custom name="report-table-backend-users" title="Backend team members" css="report-box">
         <field name="fullName" title="Name"/>
         <field name="mobilePhone" title="Mobile Phone" type="string"/>
         <field name="dateOfBirth" title="Date of Birth" type="date"/>
@@ -325,12 +319,12 @@ WHERE t.name = 'Backend'
 ORDER BY u.fullName
 ]]>
         </dataset>
-
         <template><![CDATA[
 <report-table columns='fullName,mobilePhone,dateOfBirth'/>
 ]]></template>
     </custom>
-    <custom name="report-table-csharp-users" title="C# Team Members" css="report-box">
+
+    <custom name="report-table-csharp-users" title="C# team members" css="report-box">
         <field name="fullName" title="Name"/>
         <field name="mobilePhone" title="Mobile Phone" type="string"/>
         <field name="dateOfBirth" title="Date of Birth" type="date"/>
@@ -347,12 +341,12 @@ WHERE t.name = 'C#'
 ORDER BY u.fullName
 ]]>
         </dataset>
-
         <template><![CDATA[
 <report-table columns='fullName,mobilePhone,dateOfBirth'/>
 ]]></template>
     </custom>
-    <custom name="report-table-frontend-users" title="Frontend Team Members" css="report-box">
+
+    <custom name="report-table-frontend-users" title="Frontend team members" css="report-box">
         <field name="fullName" title="Name"/>
         <field name="mobilePhone" title="Mobile Phone" type="string"/>
         <field name="dateOfBirth" title="Date of Birth" type="date"/>
@@ -369,12 +363,12 @@ WHERE t.name = 'Frontend'
 ORDER BY u.fullName
 ]]>
         </dataset>
-
         <template><![CDATA[
 <report-table columns='fullName,mobilePhone,dateOfBirth'/>
 ]]></template>
     </custom>
-    <custom name="report-table-leaders-users" title="Leaders Team Members" css="report-box">
+
+    <custom name="report-table-leaders-users" title="Leaders team members" css="report-box">
         <field name="fullName" title="Name"/>
         <field name="mobilePhone" title="Mobile Phone" type="string"/>
         <field name="dateOfBirth" title="Date of Birth" type="date"/>
@@ -391,12 +385,12 @@ WHERE t.name = 'Leaders'
 ORDER BY u.fullName
 ]]>
         </dataset>
-
         <template><![CDATA[
 <report-table columns='fullName,mobilePhone,dateOfBirth'/>
 ]]></template>
     </custom>
-    <custom name="report-table-python-users" title="Python Team Members" css="report-box">
+
+    <custom name="report-table-python-users" title="Python team members" css="report-box">
         <field name="fullName" title="Name"/>
         <field name="mobilePhone" title="Mobile Phone" type="string"/>
         <field name="dateOfBirth" title="Date of Birth" type="date"/>
@@ -413,11 +407,9 @@ WHERE t.name = 'Python'
 ORDER BY u.fullName
 ]]>
         </dataset>
-
         <template><![CDATA[
 <report-table columns='fullName,mobilePhone,dateOfBirth'/>
 ]]></template>
     </custom>
-
 
 </object-views>

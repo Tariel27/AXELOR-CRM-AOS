@@ -4,9 +4,11 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <dashboard name="pbp.ratings-by-project-dashboard" title="Ratings by project!">
-        <dashlet action="chart:chart-count-tasks-by-project" width="100%" height="400px"/>
-        <dashlet action="chart:chart-count-hours-spent-project" width="100%" height="400px"/>
-        <dashlet action="chart:chart-count-people-working-project" width="100%" height="400px"/>
+        <dashlet action="custom:report-table-projects" colSpan="8" height="400px"/>
+        <dashlet action="chart:chart-count-people-working-project" colSpan="4" height="400px"/>
+
+        <dashlet action="chart:chart-count-tasks-by-project" colSpan="6" height="400px"/>
+        <dashlet action="chart:chart-count-hours-spent-project" colSpan="6" height="400px"/>
 
     </dashboard>
     <!-- диаграмма показывающая сколько задач в каждом проекте -->
@@ -23,7 +25,7 @@
 
       ]]></dataset>
         <category key="project_name" type="text"/>
-        <series key="total_tasks" type="bar" groupBy="status"/>
+        <series key="total_tasks" type="hbar" groupBy="status"/>
 
     </chart>
 
@@ -41,7 +43,7 @@
 
     ]]></dataset>
         <category key="project_name" type="text"/>
-        <series key="total_hours" type="bar" groupBy="status"/>
+        <series key="total_hours" type="hbar" groupBy="status"/>
 
     </chart>
 
@@ -55,10 +57,34 @@
         ORDER BY total_person DESC;
     ]]></dataset>
         <category key="project_name" type="text"/>
-        <series key="total_person" type="donut"/>
+        <series key="total_person" type="pie"/>
 
     </chart>
 
+    <custom name="report-table-projects" title="Projects Information" css="report-box">
+        <field name="name" title="Project Name"/>
+        <field name="tasksCount" title="Tasks Count"/>
+        <field name="assignedTo" title="Assigned To"/>
+        <field name="fromDate" title="From Date" type="date"/>
+        <field name="projectStatus" title="Status" type="string"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+    SELECT p.name AS name,
+           (SELECT COUNT(pt.id) FROM ProjectTask pt WHERE pt.project = p.id) AS tasksCount,
+           u.fullName AS assignedTo,
+           p.fromDate AS fromDate,
+           ps.name AS projectStatus
+    FROM Project p
+    LEFT JOIN p.assignedTo u
+    LEFT JOIN p.projectStatus ps
+    ORDER BY p.name
+    ]]>
+        </dataset>
+
+        <template><![CDATA[
+    <report-table columns='name,tasksCount,assignedTo,fromDate,projectStatus'/>
+  ]]></template>
+    </custom>
 
 
 </object-views>
