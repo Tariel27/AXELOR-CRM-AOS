@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
+
+    <!--  grid для обеда партнеров -->
+    <grid title="Partner lunch" name="pbp.lunch-grid-view" model="com.axelor.apps.pbproject.db.Lunch">
+        <field name="partnerName" title="Partner name"/>
+        <field name="dish" title="Dish"/>
+        <field name="portion" title="Portion size"/>
+        <field name="dateCreate" title="Order date"/>
+        <field name="partnerComment" title="Your comment"/>
+    </grid>
+
+    <!--  form для обеда партнеров -->
+    <form name="pbp.lunch-form-view" title="Partner lunch" model="com.axelor.apps.pbproject.db.Lunch" width="large">
+        <panel title="Dish menu" itemSpan="12">
+            <field name="partnerName" title="Partner name"/>
+            <field name="dish" title="Dish"/>
+            <field name="portion" title="Portion size" widget="SingleSelect"/>
+            <field name="dateCreate" title="Order date"/>
+            <field name="partnerComment" title="Your comment"/>
+        </panel>
+    </form>
+</object-views>
