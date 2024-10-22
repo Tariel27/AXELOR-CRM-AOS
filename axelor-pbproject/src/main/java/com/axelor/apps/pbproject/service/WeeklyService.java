@@ -1,7 +1,9 @@
 package com.axelor.apps.pbproject.service;
 
-import com.axelor.apps.pbproject.db.WeeklyDataDto;
+
+import java.util.Map;
 
 public interface WeeklyService {
-    WeeklyDataDto getWeekData();
+    String getDates();
+    Map<String, Object> getWeeklyData();
 }
