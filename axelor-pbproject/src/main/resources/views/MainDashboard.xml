@@ -11,7 +11,7 @@
 
     <!--  Дашборд страница, где будут дашлеты разные в будущем...  -->
     <dashboard name="pbp.main-pp-dashboard" title="Petaboard">
-        <dashlet height="250" width="300" action="pbp.dashlet-custom-duty-users"/>
+        <dashlet height="250" width="300" action="pbp.method-for-open-custom-duty"/>
         <dashlet height="250" width="300" action="pbp.list-activity-custom"/>
         <dashlet height="250" width="300" action="pbp.manager-news-action-for-main"/>
     </dashboard>
@@ -26,10 +26,10 @@
         <domain>dateStart = (select max(d.dateStart) from Duty d)</domain>
     </action-view>
 
-    <!-- Экшн кастом с дежурными -->
-    <action-view name="pbp.dashlet-custom-duty-users" title="On this week">
-        <view type="custom" name="pbp.users-for-duty-custom-view"/>
-    </action-view>
+    <!-- Через контроллер подает ActionView-->
+    <action-method name="pbp.method-for-open-custom-duty">
+        <call class="com.axelor.apps.pbproject.web.WeeklyDataController" method="actionMethodForWeekly"/>
+    </action-method>
 
 
     <!-- Экшн для получения custom пользователей онлайн или нет -->
@@ -82,10 +82,7 @@
                 {data ? (
                     <>
                         <p style={{ margin: '5px 0' }}>
-                            <strong>Рабочая неделя:</strong> <span style={{ fontWeight: 'bold', color: '#2980b9' }}>{data.startWeekDate}</span> - <span style={{ fontWeight: 'bold', color: '#2980b9' }}>{data.endWeekDate}</span>
-                        </p>
-                        <p style={{ margin: '5px 0' }}>
-                            <strong>Дежурные:</strong> {data.firstDutyUserFullName || "Неизвестный пользователь"}, {data.secondDutyUserFullName || "Неизвестный пользователь"}
+                            <strong>Дежурные:</strong> {data.firstUser || "Неизвестный пользователь"}, {data.secondUser || "Неизвестный пользователь"}
                         </p>
                     </>
                 ) : (
