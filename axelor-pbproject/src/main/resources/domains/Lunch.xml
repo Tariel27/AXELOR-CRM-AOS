@@ -14,13 +14,6 @@
         <boolean name="isOrderLunch" default="false"/>
         <string name="addUrlForGoogle" title="Search url" transient="true"/>
 
-        <track replace="true">
-            <field name="partnerName"/>
-            <field name="dish"/>
-            <field name="portion"/>
-            <field name="dateCreate"/>
-            <field name="partnerComment"/>
-        </track>
     </entity>
 
 </domain-models>
