@@ -6,17 +6,21 @@
     <!--  grid для обеда партнеров -->
     <grid title="Partner lunch" name="pbp.lunch-grid-view" model="com.axelor.apps.pbproject.db.Lunch">
         <field name="partnerName" title="Partner name"/>
-        <field name="dish" title="Dish"/>
+        <field name="dishName" title="Lunch"/>
         <field name="portion" title="Portion size"/>
         <field name="dateCreate" title="Order date"/>
         <field name="partnerComment" title="Your comment"/>
     </grid>
 
     <!--  form для обеда партнеров -->
-    <form name="pbp.lunch-form-view" title="Partner lunch" model="com.axelor.apps.pbproject.db.Lunch" width="large">
+    <form name="pbp.lunch-form-view" title="Partner lunch" model="com.axelor.apps.pbproject.db.Lunch" width="large"
+          onNew="pbp.update-user-and-date-on-partnerName">
         <panel title="Dish menu" itemSpan="12">
             <field name="partnerName" title="Partner name"/>
-            <field name="dish" title="Dish"/>
+            <field name="dishName" title="Lunch"/>
+            <field name="some" x-type="many-to-one"
+                   x-target="com.axelor.apps.pbproject.db.Dish"
+                   x-target-name="dishName" hidden="true"/>
             <field name="portion" title="Portion size" widget="SingleSelect"/>
             <field name="dateCreate" title="Order date"/>
             <field name="partnerComment" title="Your comment"/>

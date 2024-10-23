@@ -7,18 +7,11 @@
 
     <entity name="Lunch">
         <many-to-one name="partnerName" title="Partner name" ref="com.axelor.auth.db.User"/>
-        <many-to-one name="dish" title="Dish" ref="com.axelor.apps.pbproject.db.DishMenu"/>
+        <many-to-one name="dishName" title="Dish name" ref="com.axelor.apps.pbproject.db.Dish" />
         <string name="portion" title="Portion" selection="pbp.portion.dish.select"/>
         <datetime name="dateCreate" title="Date create"/>
         <string name="partnerComment" title="Your comment" large="true"/>
 
-        <track replace="true">
-            <field name="partnerName"/>
-            <field name="dish"/>
-            <field name="portion"/>
-            <field name="dateCreate"/>
-            <field name="partnerComment"/>
-        </track>
     </entity>
 
 </domain-models>
