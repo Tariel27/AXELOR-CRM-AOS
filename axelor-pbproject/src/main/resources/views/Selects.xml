@@ -23,5 +23,11 @@
         <option value="denied" color="red">Denied</option>
         <option value="waiting" color="blue">Waiting</option>
     </selection>
+    <!-- для порций блюд -->
+    <selection name="pbp.portion.dish.select">
+        <option value="1">1</option>
+        <option value="1.5">1.5</option>
+
+    </selection>
 
 </object-views>
