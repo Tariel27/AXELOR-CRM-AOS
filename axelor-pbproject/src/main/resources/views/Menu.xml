@@ -190,16 +190,22 @@
     </action-view>
 
     <!--Меню для заполнения блюд для обеда партнеров (видно только администрации)-->
-    <menuitem name="pbp.menu-lunch-for-admin" title="Dish menu" icon="fa-coffee" icon-background="#3f6bb9" action="pbp.lunch-for-admin-action"/>
+    <menuitem name="pbp.menu-lunch-for-admin" title="Dish menu" icon="fa-coffee" icon-background="#3f6bb9" action="pbp.lunch-for-admin-action"
+              if="eval: __user__.group?.name == 'Admins'"/>
+
     <action-view name="pbp.lunch-for-admin-action" title="Menu making" model="com.axelor.apps.pbproject.db.DishMenu">
         <view type="grid" name="pbp.dish-grid-view"/>
         <view type="form" name="pbp.dish-form-view"/>
+        <context name="_user" expr="eval: __user__"/>
     </action-view>
+
     <!--Меню для заказа обеда(партнеры)-->
     <menuitem name="pbp.menu-lunch-for-users" title="Lunch" icon="fa-coffee" icon-background="#3f6bb9" action="pbp.lunch-for-users-action"/>
     <action-view name="pbp.lunch-for-users-action" title="Lunch" model="com.axelor.apps.pbproject.db.Lunch">
-        <view type="grid" name="pbp.lunch-grid-view"/>
-        <view type="form" name="pbp.lunch-form-view"/>
+        <view type="dashboard" name="pbp.lunch-for-partners-dashboard"/>
+
+        <context name="_user" expr="eval: __user__"/>
+
     </action-view>
 
 </object-views>

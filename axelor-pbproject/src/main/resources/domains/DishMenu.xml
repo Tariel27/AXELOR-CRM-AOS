@@ -7,7 +7,7 @@
 
     <entity name="DishMenu">
         <many-to-one name="partnerName" title="Partner name" ref="com.axelor.auth.db.User"/>
-        <datetime name="dateCreate" title="Date create"/>
+        <datetime name="dateCreateMenu" title="Date create"/>
         <many-to-many name="dishName" title="Dish name" ref="com.axelor.apps.pbproject.db.Dish" />
     </entity>
 </domain-models>

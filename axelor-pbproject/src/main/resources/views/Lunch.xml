@@ -25,5 +25,81 @@
             <field name="dateCreate" title="Order date"/>
             <field name="partnerComment" title="Your comment"/>
         </panel>
+        <panel>
+            <button name="saveBtn" title="Save" onClick="save"/>
+        </panel>
+
     </form>
+
+
+    <dashboard name="pbp.lunch-for-partners-dashboard" title="Lunch for partners!">
+        <dashlet height="300px" colSpan="3" action="custom:report-user-lunch-stats"/>
+
+        <dashlet height="350px" colSpan="12" action="custom:report-table-lunch-for-users"/>
+        <dashlet height="500px" colSpan="12" action="form:pbp.lunch-form-view"/>
+        <dashlet height="350px" colSpan="12" action="grid:pbp.lunch-grid-view"/>
+
+    </dashboard>
+
+<!-- таблица показывающая всех партнеров сделавших заказ-->
+    <custom name="report-table-lunch-for-users" title="Users information" css="report-box">
+        <field name="fullName" title="Name"/>
+        <field name="dishName" title="Dish" type="string"/>
+        <field name="portion" title="Portion" type="string"/>
+        <field name="dateCreate" title="Date of create" type="date"/>
+        <field name="partnerComment" title="Comment" type="string"/>
+
+        <dataset type="jpql">
+            <![CDATA[
+        SELECT u.fullName AS fullName,
+               d.name AS dishName,
+               l.portion AS portion,
+               l.dateCreate AS dateCreate,
+               l.partnerComment AS partnerComment
+        FROM User u
+        LEFT JOIN Lunch l ON u.id = l.partnerName.id
+        LEFT JOIN l.dishName d
+        WHERE l.dateCreate >= CURRENT_DATE OR l.dateCreate IS NULL
+        ORDER BY u.fullName
+        ]]>
+        </dataset>
+
+        <template><![CDATA[
+    <report-table columns='fullName,dishName,portion,dateCreate,partnerComment'/>
+    ]]></template>
+    </custom>
+
+<!--    report-box-->
+
+    <custom name="report-total-users" title="" css="report-box">
+        <dataset type="rpc">
+            <![CDATA[com.axelor.apps.pbproject.web.LunchController:reportTotalUsers]]>
+        </dataset>
+        <template><![CDATA[
+        <div class="report-data">
+            <h1>{{first.total}}</h1>
+            <small>Total users</small>
+            <div class="report-tags" style="display: flex; align-items: center;">
+                <i class="fa fa-user-circle" style="margin-right: 5px;"></i>
+                <span class="label label-success">Total users</span>
+            </div>
+            <h2>{{first.ordered}}</h2>
+            <small>Users who ordered lunch</small>
+            <div class="report-tags" style="display: flex; align-items: center;">
+                <i class="fa fa-check-circle" style="margin-right: 5px;"></i>
+                <span class="label label-info">Ordered</span>
+            </div>
+            <h2>{{first.notOrdered}}</h2>
+            <small>Users who did not order lunch</small>
+            <div class="report-tags" style="display: flex; align-items: center;">
+                <i class="fa fa-times-circle" style="margin-right: 5px;"></i>
+                <span class="label label-warning">Not ordered</span>
+            </div>
+        </div>
+    ]]></template>
+    </custom>
+
+
+
+
 </object-views>
