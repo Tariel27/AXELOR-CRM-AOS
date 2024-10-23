@@ -15,7 +15,7 @@
     onNew="pbp.update-user-and-date-on-partnerName">
         <panel title="Dish menu" itemSpan="12">
             <field name="partnerName" title="Partner name"/>
-            <field name="dateCreate" title="Date create"/>
+            <field name="dateCreateMenu" title="Date create"/>
             <field name="dishName" title="Dishes"  widget="TagSelect"/>
         </panel>
     </form>
