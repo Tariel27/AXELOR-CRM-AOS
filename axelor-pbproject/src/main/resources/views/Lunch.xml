@@ -71,32 +71,19 @@
 
 <!--    report-box-->
 
-    <custom name="report-total-users" title="" css="report-box">
-        <dataset type="rpc">
-            <![CDATA[com.axelor.apps.pbproject.web.LunchController:reportTotalUsers]]>
-        </dataset>
+    <custom name="custom:report-user-lunch-stats" title="" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.LunchController:reportLunch]]></dataset>
         <template><![CDATA[
-        <div class="report-data">
-            <h1>{{first.total}}</h1>
-            <small>Total users</small>
-            <div class="report-tags" style="display: flex; align-items: center;">
-                <i class="fa fa-user-circle" style="margin-right: 5px;"></i>
-                <span class="label label-success">Total users</span>
-            </div>
-            <h2>{{first.ordered}}</h2>
-            <small>Users who ordered lunch</small>
-            <div class="report-tags" style="display: flex; align-items: center;">
-                <i class="fa fa-check-circle" style="margin-right: 5px;"></i>
-                <span class="label label-info">Ordered</span>
-            </div>
-            <h2>{{first.notOrdered}}</h2>
-            <small>Users who did not order lunch</small>
-            <div class="report-tags" style="display: flex; align-items: center;">
-                <i class="fa fa-times-circle" style="margin-right: 5px;"></i>
-                <span class="label label-warning">Not ordered</span>
-            </div>
-        </div>
-    ]]></template>
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total users</small>
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-user-circle" style="margin-right: 5px;"></i>
+      <span class="label label-success">Total users</span>
+    </div>
+  </div>
+
+]]></template>
     </custom>
 
 
