@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_7.1.xsd">
+
+    <module name="pbproject" package="com.axelor.apps.pbproject.db"/>
+
+    <entity name="Lunch">
+        <many-to-one name="partnerName" title="Partner name" ref="com.axelor.auth.db.User"/>
+        <many-to-one name="dish" title="Dish" ref="com.axelor.apps.pbproject.db.DishMenu"/>
+        <string name="portion" title="Portion" selection="pbp.portion.dish.select"/>
+        <datetime name="dateCreate" title="Date create"/>
+        <string name="partnerComment" title="Your comment" large="true"/>
+
+        <track replace="true">
+            <field name="partnerName"/>
+            <field name="dish"/>
+            <field name="portion"/>
+            <field name="dateCreate"/>
+            <field name="partnerComment"/>
+        </track>
+    </entity>
+
+</domain-models>

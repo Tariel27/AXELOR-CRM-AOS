@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+
+    <dashboard name="pbp.ratings-by-person-dashboard" title="Ratings by person!">
+        <dashlet height="150px" colSpan="3" action="custom:report-total-users"/>
+        <dashlet height="150px" colSpan="3" action="custom:report-total-teams"/>
+        <dashlet height="150px" colSpan="3" action="custom:report-total-tasks"/>
+        <dashlet height="150px" colSpan="3" action="custom:report-total-projects"/>
+        <dashlet height="350px" colSpan="12" action="custom:report-table-users"/>
+        <dashlet height="400px" colSpan="12" action="chart:chart-best-person-completed-tasks"/>
+        <dashlet height="400px" colSpan="12" action="chart:chart-best-person-spent-hours"/>
+        <dashlet height="400px" colSpan="12" action="chart:chart-tasks-completed-by-person-project"/>
+    </dashboard>
+
+    <!-- диаграмма показывающая кто больше выполнил задач-->
+    <chart name="chart-best-person-completed-tasks" title="The best person who completed more tasks" stacked="true"
+           onInit="pbp.rating-update-date">
+        <search-fields>
+            <field type="datetime" name="fromDateTime" title="From Date"/>
+            <field type="datetime" name="toDateTime" title="To Date"/>
+        </search-fields>
+        <dataset type="jpql">
+            <![CDATA[
+        SELECT u.fullName AS userName, p.name AS priority, COUNT(t.id) AS taskCount
+        FROM ProjectTask t
+        JOIN t.assignedTo u
+        JOIN t.priority p
+        WHERE t.taskEndDate > :fromDateTime
+        AND t.taskEndDate < :toDateTime
+        AND t.status.id = 3
+        GROUP BY u.fullName, p.name
+        ORDER BY taskCount DESC
+        ]]>
+        </dataset>
+        <category key="userName"/>
+        <series key="taskCount" type="hbar" groupBy="priority"/>
+    </chart>
+    <!-- диаграмма показывающая кто потратил больше часов-->
+    <chart name="chart-best-person-spent-hours" title="The best employee who spent the most hours"
+           onInit="pbp.rating-update-date">
+        <search-fields>
+            <field type="datetime" name="fromDateTime" title="From Date"/>
+            <field type="datetime" name="toDateTime" title="To Date"/>
+        </search-fields>
+        <dataset type="jpql">
+            <![CDATA[
+            SELECT u.fullName AS userName, SUM(t.spentTime) AS totalHours
+            FROM ProjectTask t
+            JOIN t.assignedTo u
+            WHERE t.taskEndDate BETWEEN :fromDateTime AND :toDateTime
+            GROUP BY u.fullName
+            ORDER BY totalHours DESC
+        ]]>
+        </dataset>
+        <category key="userName"/>
+        <series key="totalHours" type="hbar"/>
+    </chart>
+
+    <action-attrs name="pbp.rating-update-date">
+        <attribute name="value" expr="eval: __time__.withDayOfMonth(1)" for="fromDateTime"/>
+        <attribute name="value" expr="eval: __time__.plusMonths(1).withDayOfMonth(1).minusDays(1)" for="toDateTime"/>
+    </action-attrs>
+    <!-- диаграмма поазывающая сколько тасков выполнил в этом проекте-->
+    <chart name="chart-tasks-completed-by-person-project" title="Tasks completed by each person in projects"
+           stacked="true" onInit="pbp.rating-update-date">
+        <search-fields>
+            <field type="datetime" name="fromDateTime" title="From Date"/>
+            <field type="datetime" name="toDateTime" title="To Date"/>
+        </search-fields>
+        <dataset type="jpql">
+            <![CDATA[
+        SELECT u.fullName AS userName, p.name AS projectName, COUNT(t.id) AS totalTasks
+        FROM ProjectTask t
+        JOIN t.assignedTo u
+        JOIN t.project p
+        WHERE t.taskEndDate > :fromDateTime
+        AND t.taskEndDate < :toDateTime
+        AND t.status.id = 3
+        GROUP BY u.fullName, p.name
+        ORDER BY totalTasks DESC
+        ]]>
+        </dataset>
+
+        <category key="projectName"/>
+        <series key="totalTasks" type="hbar" groupBy="userName"/>
+    </chart>
+
+    <custom name="report-total-users" title="" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TotalUserController:reportTotalUsers]]></dataset>
+        <template><![CDATA[
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total users</small>
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-user-circle" style="margin-right: 5px;"></i>
+      <span class="label label-success">Total users</span>
+    </div>
+  </div>
+
+]]></template>
+    </custom>
+
+    <custom name="report-total-teams" title="" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TotalTeamController:reportTotalTeams]]></dataset>
+        <template><![CDATA[
+
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total teams</small>
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-users" style="margin-right: 5px;"></i>
+      <span class="label label-success">Total teams</span>
+    </div>
+  </div>
+
+    ]]></template>
+    </custom>
+
+    <custom name="report-total-tasks" title="" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TotalTaskController:reportTotalTasks]]></dataset>
+        <template><![CDATA[
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total tasks</small>
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-tasks" style="margin-right: 5px;"></i>
+      <span class="label label-success">Total tasks</span>
+    </div>
+  </div>
+
+  <div class="task-status" style="text-align: right; font-size: 15px; line-height: 1.2; margin-left: 250px; margin-top: -90px;">
+    <p style="margin: 0;"><strong>New:</strong> {{first.new}}</p>
+    <p style="margin: 0;"><strong>In Progress:</strong> {{first.inProgress}}</p>
+    <p style="margin: 0;"><strong>In Testing:</strong> {{first.inTesting}}</p>
+    <p style="margin: 0;"><strong>Done:</strong> {{first.done}}</p>
+    <p style="margin: 0;"><strong>Canceled:</strong> {{first.canceled}}</p>
+  </div>
+
+  ]]></template>
+    </custom>
+
+
+    <custom name="report-total-projects" title="" css="report-box">
+        <dataset type="rpc">
+            <![CDATA[com.axelor.apps.pbproject.web.TotalProjectController:reportTotalProjects]]></dataset>
+        <template><![CDATA[
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total projects</small>
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-archive" style="margin-right: 5px;"></i>
+      <span class="label label-success">Total projects</span>
+    </div>
+  </div>
+
+    ]]></template>
+    </custom>
+
+    <custom name="report-table-users" title="Users Information" css="report-box">
+        <field name="fullName" title="Name"/>
+        <field name="teamName" title="Team" type="string"/>
+        <field name="mobilePhone" title="Mobile Phone" type="string"/>
+        <field name="dateOfBirth" title="Date of Birth" type="date"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+    SELECT u.fullName AS fullName,
+           p.mobilePhone AS mobilePhone,
+           p.dateOfBirth AS dateOfBirth,
+           COALESCE(t.name, 'Не указано') AS teamName
+    FROM User u
+    LEFT JOIN u.partner p
+    LEFT JOIN u.teamSet t
+    ORDER BY u.fullName
+    ]]>
+        </dataset>
+        <template><![CDATA[
+    <report-table columns='fullName,teamName,mobilePhone,dateOfBirth'/>
+  ]]></template>
+    </custom>
+
+    <action-attrs name="pbp.rating-update-date">
+        <attribute name="value" expr="eval: __time__.withDayOfMonth(1)" for="fromDateTime"/>
+        <attribute name="value" expr="eval: __time__.plusMonths(1).withDayOfMonth(1).minusDays(1)" for="toDateTime"/>
+    </action-attrs>
+
+</object-views>

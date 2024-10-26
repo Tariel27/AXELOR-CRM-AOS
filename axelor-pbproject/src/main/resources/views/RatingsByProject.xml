@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+
+    <dashboard name="pbp.ratings-by-project-dashboard" title="Ratings by project!">
+        <dashlet action="custom:report-table-projects" colSpan="8" height="400px"/>
+        <dashlet action="chart:chart-count-people-working-project" colSpan="4" height="400px"/>
+
+        <dashlet action="chart:chart-count-tasks-by-project" colSpan="6" height="400px"/>
+        <dashlet action="chart:chart-count-hours-spent-project" colSpan="6" height="400px"/>
+
+    </dashboard>
+    <!-- диаграмма показывающая сколько задач в каждом проекте -->
+    <chart name="chart-count-tasks-by-project" title="Count of tasks in the project" stacked="true">
+        <dataset type="sql"><![CDATA[
+
+        SELECT p.name AS project_name, s.name AS status,
+        COUNT(pt.id) AS total_tasks
+        FROM project_project p
+        JOIN project_project_task pt ON pt.project = p.id
+        JOIN project_task_status s ON pt.status = s.id
+        GROUP BY p.name, s.name
+        ORDER BY project_name, total_tasks DESC;
+
+      ]]></dataset>
+        <category key="project_name" type="text"/>
+        <series key="total_tasks" type="hbar" groupBy="status"/>
+
+    </chart>
+
+    <!-- диаграмма показывающая сколько часов потрачено на проект -->
+    <chart name="chart-count-hours-spent-project" title="Count of hours spent on the project" stacked="true">
+        <dataset type="sql"><![CDATA[
+
+        SELECT p.name AS project_name, s.name AS status,
+               SUM(pt.spent_time) AS total_hours
+        FROM project_project p
+        JOIN project_project_task pt ON pt.project = p.id
+        JOIN project_task_status s ON pt.status = s.id
+        GROUP BY p.name, s.name
+        ORDER BY project_name, total_hours DESC;
+
+    ]]></dataset>
+        <category key="project_name" type="text"/>
+        <series key="total_hours" type="hbar" groupBy="status"/>
+
+    </chart>
+
+    <!-- диаграмма показывающая количество людей зайдествованных в проектах -->
+    <chart name="chart-count-people-working-project" title="Count of people working on the project" stacked="true">
+        <dataset type="sql"><![CDATA[
+        SELECT p.name AS project_name, COUNT(ppm.members_user_set) AS total_person
+        FROM project_project p
+        JOIN project_project_members_user_set ppm ON p.id = ppm.project_set
+        GROUP BY p.name
+        ORDER BY total_person DESC;
+    ]]></dataset>
+        <category key="project_name" type="text"/>
+        <series key="total_person" type="pie"/>
+
+    </chart>
+
+    <custom name="report-table-projects" title="Projects Information" css="report-box">
+        <field name="name" title="Project Name"/>
+        <field name="tasksCount" title="Tasks Count"/>
+        <field name="assignedTo" title="Assigned To"/>
+        <field name="fromDate" title="From Date" type="date"/>
+        <field name="projectStatus" title="Status" type="string"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+    SELECT p.name AS name,
+           (SELECT COUNT(pt.id) FROM ProjectTask pt WHERE pt.project = p.id) AS tasksCount,
+           u.fullName AS assignedTo,
+           p.fromDate AS fromDate,
+           ps.name AS projectStatus
+    FROM Project p
+    LEFT JOIN p.assignedTo u
+    LEFT JOIN p.projectStatus ps
+    ORDER BY p.name
+    ]]>
+        </dataset>
+
+        <template><![CDATA[
+    <report-table columns='name,tasksCount,assignedTo,fromDate,projectStatus'/>
+  ]]></template>
+    </custom>
+
+
+</object-views>
