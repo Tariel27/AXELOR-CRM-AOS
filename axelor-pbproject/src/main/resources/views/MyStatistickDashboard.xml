@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+    <dashboard name="pbp.ratings-by-project-dashboard" title="Ratings by project!">
+        <dashlet action="custom:report-table-projects" colSpan="8" height="400px"/>
+        <dashlet action="chart:chart-count-people-working-project" colSpan="4" height="400px"/>
+
+        <dashlet action="chart:chart-count-tasks-by-project" colSpan="6" height="400px"/>
+        <dashlet action="chart:chart-count-hours-spent-project" colSpan="6" height="400px"/>
+
+    </dashboard>
+
+</object-views>

@@ -173,4 +173,11 @@
         <view type="form" name="pbp.duty-control-form"/>
     </action-view>
 
+    <!-- Меню для статистики -->
+    <menuitem name="pbp.user-statistick-m.i" title="Statistic" icon="fa-bar-chart" icon-background="#3f6bb9"/>
+    <menuitem name="pbp.my-statistick-m.i" title="Statistic" parent="pbp.user-statistick-m.i"/>
+    <action-view name="pbp-my-statistic-action-view" title="My statistic">
+        <view type="dashboard" name="pbp.my-statistic-dashboard"/>
+     </action-view>
+
 </object-views>
