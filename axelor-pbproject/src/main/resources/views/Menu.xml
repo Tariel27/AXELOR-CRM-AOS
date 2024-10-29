@@ -200,7 +200,8 @@
     </action-view>
 
     <!--Меню для заказа обеда(партнеры)-->
-    <menuitem name="pbp.menu-lunch-for-users" title="Lunch" icon="fa-coffee" icon-background="#3f6bb9" action="pbp.lunch-for-users-action"/>
+    <menuitem name="pbp.menu-lunch-for-users" title="Lunch" icon="fa-coffee" icon-background="#3f6bb9"
+              action="pbp.lunch-for-users-action" />
     <action-view name="pbp.lunch-for-users-action" title="Lunch" model="com.axelor.apps.pbproject.db.Lunch">
         <view type="dashboard" name="pbp.lunch-for-partners-dashboard"/>
         <context name="_user" expr="eval: __user__"/>

@@ -7,5 +7,7 @@
 
     <entity name="Dish">
         <string name="name" title="Dishes name" unique="true"/>
+        <date name="dateCreateDish" title="Date dish create" required="true"/>
+
     </entity>
 </domain-models>

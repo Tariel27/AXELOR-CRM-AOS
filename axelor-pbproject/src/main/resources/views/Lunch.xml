@@ -15,36 +15,28 @@
     </grid>
 
     <!--  form для обеда партнеров -->
-    <form name="pbp.lunch-form-view" title="Partner lunch" model="com.axelor.apps.pbproject.db.Lunch" width="large"
-          onNew="pbp.update-user-and-date-on-partnerName-for-lunch" >
-        <panel name="help" colSpan="12" hideIf="isOrderLunch">
-        <help>
-            <![CDATA[
+    <form name="pbp.lunch-form-view" title="Partner lunch" model="com.axelor.apps.pbproject.db.Lunch" width="large" onNew="pbp.update-user-and-date-on-partnerName-for-lunch">
+        <panel name="help" hideIf="isOrderLunch" colSpan="12">
+            <help><![CDATA[
+
 
 Orders are accepted until 19:00!
-]]>
-        </help>
-        </panel>
 
-        <panel title="Dish menu" itemSpan="12" hideIf="isOrderLunch">
+        ]]></help>
+        </panel>
+        <panel title="Dish menu" hideIf="isOrderLunch" itemSpan="12">
             <field name="partnerName" title="Partner name" hidden="true"/>
-            <field name="dishName" title="Lunch" onChange="pbp.searchDishOnDuckDuckGo"/>
-            <field name="some" x-type="many-to-one"
-                   x-target="com.axelor.apps.pbproject.db.Dish"
-                   x-target-name="dishName" hidden="true"/>
+            <field name="dishName" title="Lunch" onChange="pbp.searchDishOnDuckDuckGo" domain="self.dateCreateDish = :__date__"  target-name="name"/>
+            <field name="some" hidden="true" x-target-name="dishName" x-target="com.axelor.apps.pbproject.db.Dish" x-type="many-to-one"/>
             <field name="portion" title="Portion size" widget="SingleSelect"/>
             <field name="dateCreate" title="Order date" hidden="true"/>
             <field name="partnerComment" title="Your comment"/>
-            <field name="isOrderLunch" title="is order lunch" readonly="true" hidden="true"/>
-
+            <field name="isOrderLunch" title="is order lunch" hidden="true" readonly="true"/>
         </panel>
         <panel hideIf="isOrderLunch">
-            <button name="saveBtn" title="Save" onClick="pbp.update-field-isShow-true,save" css="btn-success"
-                    icon="fa-check-square-o" colSpan="6"/>
-            <field name="addUrlForGoogle" widget="url" colSpan="6"/>
-
+            <button name="saveBtn" title="Save" colSpan="6" css="btn-success" icon="fa-check-square-o" onClick="pbp.update-field-isShow-true,save"/>
+            <field name="addUrlForGoogle" colSpan="6" widget="url"/>
         </panel>
-
     </form>
 
 
