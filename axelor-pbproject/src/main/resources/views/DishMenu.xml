@@ -4,17 +4,17 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <!--  grid для меню обедов -->
-    <grid title="DishMenu" name="pbp.dish-grid-view" model="com.axelor.apps.pbproject.db.DishMenu">
+    <grid title="DishMenu" name="pbp.dish-grid-view" model="com.axelor.apps.pbproject.db.DishMenu" orderBy="dateCreateMenu">
         <field name="partnerName" title="Partner name"/>
-        <field name="dateCreate" title="Date create"/>
+        <field name="dateCreateMenu" title="Date create"/>
         <field name="dishName" title="Dishes"/>
     </grid>
 
     <!--  form для меню обедов -->
     <form name="pbp.dish-form-view" title="Dish menu" model="com.axelor.apps.pbproject.db.DishMenu" width="large"
-    onNew="pbp.update-user-and-date-on-partnerName">
-        <panel title="Dish menu" itemSpan="12">
-            <field name="partnerName" title="Partner name"/>
+    onNew="pbp.update-user-and-date-on-partnerName" >
+        <panel title="Dish menu" itemSpan="12" >
+            <field name="partnerName" title="Partner name" hidden="true"/>
             <field name="dateCreateMenu" title="Date create"/>
             <field name="dishName" title="Dishes"  widget="TagSelect"/>
         </panel>
@@ -31,6 +31,6 @@
 
     <action-attrs name="pbp.update-user-and-date-on-partnerName">
         <attribute name="value" expr="eval: __user__" for="partnerName"/>
-        <attribute name="value" expr="eval: __time__" for="dateCreate"/>
+        <attribute name="value" expr="eval: __time__" for="dateCreateMenu"/>
     </action-attrs>
 </object-views>
