@@ -20,12 +20,17 @@
         </panel>
     </form>
 
-    <form name="pbp.dish-form" title="Dishes" model="com.axelor.apps.pbproject.db.Dish">
+    <form name="pbp.dish-form" title="Dishes" model="com.axelor.apps.pbproject.db.Dish" onNew="pbp.update-date-on-dish">
         <panel>
             <field name="name" title="Dish name"/>
+            <field name="dateCreateDish" title="Date dish create"/>
+
         </panel>
     </form>
 
+    <action-attrs name="pbp.update-date-on-dish">
+        <attribute name="value" expr="eval: __date__" for="dateCreateDish"/>
+    </action-attrs>
 
 
 
