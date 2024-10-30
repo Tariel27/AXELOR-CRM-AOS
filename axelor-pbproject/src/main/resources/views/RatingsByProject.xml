@@ -5,10 +5,10 @@
 
     <dashboard name="pbp.ratings-by-project-dashboard" title="Ratings by project!">
         <dashlet action="custom:report-table-projects" colSpan="8" height="400px"/>
-        <dashlet action="chart:chart-count-people-working-project" colSpan="4" height="400px"/>
+        <dashlet action="chart:chart-count-people-working-project" colSpan="4" height="1000"/>
 
-        <dashlet action="chart:chart-count-tasks-by-project" colSpan="6" height="400px"/>
-        <dashlet action="chart:chart-count-hours-spent-project" colSpan="6" height="400px"/>
+        <dashlet action="chart:chart-count-tasks-by-project" colSpan="6" height="1000"/>
+        <dashlet action="chart:chart-count-hours-spent-project" colSpan="6" height="1000"/>
 
     </dashboard>
     <!-- диаграмма показывающая сколько задач в каждом проекте -->
