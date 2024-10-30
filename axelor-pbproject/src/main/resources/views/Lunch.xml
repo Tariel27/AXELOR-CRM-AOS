@@ -167,20 +167,14 @@ Orders are accepted until 19:00!
     ]]></template>
     </custom>
 
-
-
     <action-attrs name="pbp.update-field-isShow-true">
         <attribute for="isOrderLunch" name="value" expr="true"/>
     </action-attrs>
-
 
     <action-attrs name="pbp.update-user-and-date-on-partnerName-for-lunch">
         <attribute name="value" expr="eval: __user__" for="partnerName"/>
         <attribute name="value" expr="eval: __time__" for="dateCreate"/>
     </action-attrs>
 
-    <action-method name="pbp.searchDishOnDuckDuckGo">
-        <call class="com.axelor.apps.pbproject.web.LunchController" method="searchDishOnDuckDuckGo"/>
-    </action-method>
 
 </object-views>
