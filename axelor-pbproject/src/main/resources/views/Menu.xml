@@ -175,9 +175,17 @@
 
     <!-- Меню для статистики -->
     <menuitem name="pbp.user-statistick-m.i" title="Statistic" icon="fa-bar-chart" icon-background="#3f6bb9"/>
-    <menuitem name="pbp.my-statistick-m.i" title="Statistic" parent="pbp.user-statistick-m.i"/>
+
+    <menuitem name="pbp.my-statistick-m.i" title="My Statistic" parent="pbp.user-statistick-m.i" action="pbp-my-statistic-action-view"/>
     <action-view name="pbp-my-statistic-action-view" title="My statistic">
         <view type="dashboard" name="pbp.my-statistic-dashboard"/>
      </action-view>
+
+    <!--  Менюшка с достижениями для добавления -->
+    <menuitem name="pbp.open-award-settings" title="Awards config" action="pbp.award-action-view"/>
+    <action-view name="pbp.award-action-view" title="Awards" model="com.axelor.apps.pbproject.db.Awards">
+        <view type="grid" name="pbp.award-grid"/>
+        <view type="form" name="pbp.award-form"/>
+    </action-view>
 
 </object-views>

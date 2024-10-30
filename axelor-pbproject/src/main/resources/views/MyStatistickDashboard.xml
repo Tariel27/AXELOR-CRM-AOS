@@ -2,13 +2,38 @@
 <object-views xmlns="http://axelor.com/xml/ns/object-views"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
-    <dashboard name="pbp.ratings-by-project-dashboard" title="Ratings by project!">
-        <dashlet action="custom:report-table-projects" colSpan="8" height="400px"/>
-        <dashlet action="chart:chart-count-people-working-project" colSpan="4" height="400px"/>
-
-        <dashlet action="chart:chart-count-tasks-by-project" colSpan="6" height="400px"/>
-        <dashlet action="chart:chart-count-hours-spent-project" colSpan="6" height="400px"/>
-
+    <dashboard name="pbp.my-statistic-dashboard" title="Ratings by project!">
+        <dashlet action="custom:pbp.self-user-statistics" colSpan="8" height="400px"/>
     </dashboard>
+
+
+    <custom title="Taks statistick" name="pbp.self-user-statistics" css="report-box">
+        <dataset type="rpc">
+            <![CDATA[com.axelor.apps.pbproject.web.StatisticsController:getStatOfTasks]]>
+        </dataset>
+
+
+        <template><![CDATA[
+    <div class="report-data">
+        <h1>{{data.totalTasks}}</h1>
+        <small>Total Tasks</small>
+        <div class="report-tags" style="display: flex; align-items: center;">
+            <i class="fa fa-tasks" style="margin-right: 5px;"></i>
+            <span class="label label-success">Tasks Overview</span>
+        </div>
+        <div class="task-status" style="margin-top: 20px;">
+            <p><strong>New:</strong> {{data.newTasks}}</p>
+            <p><strong>In Progress:</strong> {{data.inProgressTasks}}</p>
+            <p><strong>Completed:</strong> {{data.completedTasks}}</p>
+            <p><strong>Canceled:</strong> {{data.canceledTasks}}</p>
+        </div>
+        <div class="hours-spent" style="margin-top: 20px;">
+            <h2>Total Hours Spent: {{data.totalHours}}</h2>
+            <p><strong>Average Time per Task:</strong> {{data.averageTimePerTask}} hours</p>
+        </div>
+    </div>
+]]></template>
+
+    </custom>
 
 </object-views>
