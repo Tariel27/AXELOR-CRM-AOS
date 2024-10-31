@@ -565,5 +565,8 @@
         <action name="action-project-task-attrs-hide-time-spent-button"/>
     </action-group>
 
+    <action-attrs name="pbp.auto-set-complexity">
+        <attribute for="complexity" name="value" expr="eval: 'medium'"/>
+    </action-attrs>
 
 </object-views>
