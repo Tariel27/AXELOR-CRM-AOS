@@ -70,18 +70,18 @@ public class StatisticsServiceImpl implements StatisticsService {
             if (task.getStatus().getName().equalsIgnoreCase(ProjectTaskRepository.CANCELED)) canceledCount++;
         }
 
-        statusCounts.put("Новые", newCount);
-        statusCounts.put("Выполняются", inProgressCount);
-        statusCounts.put("Завершенные", doneCount);
-        statusCounts.put("Отмено", canceledCount);
+        statusCounts.put("new", newCount);
+        statusCounts.put("inProgress", inProgressCount);
+        statusCounts.put("done", doneCount);
+        statusCounts.put("canceled", canceledCount);
 
         return statusCounts;
     }
 //    private Map<String, Integer> getTaskStatusCounts(List<ProjectTask> projectTasks) {
 //        return projectTasks.stream()
 //                .collect(Collectors.groupingBy(
-//                        task -> task.getStatus().getName(), // Или task.getStatus().name()
-//                        Collectors.summingInt(task -> 1) // Суммируем 1 для каждой задачи
+//                        task -> task.getStatus().getName(),
+//                        Collectors.summingInt(task -> 1)
 //                ));
 //    }
 

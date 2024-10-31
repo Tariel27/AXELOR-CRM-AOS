@@ -3,37 +3,64 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
     <dashboard name="pbp.my-statistic-dashboard" title="Ratings by project!">
-        <dashlet action="custom:pbp.self-user-statistics" colSpan="8" height="400px"/>
+        <dashlet colSpan="3" rowSpan="7"  action="custom:pbp.self-user-statistics"/>
     </dashboard>
 
 
-    <custom title="Taks statistick" name="pbp.self-user-statistics" css="report-box">
+
+    <custom name="pbp.self-user-statistics" title="Task Statistics" >
         <dataset type="rpc">
-            <![CDATA[com.axelor.apps.pbproject.web.StatisticsController:getStatOfTasks]]>
+            <![CDATA[
+            com.axelor.apps.pbproject.web.StatisticsController:getStatOfTasks
+        ]]>
         </dataset>
 
-
         <template><![CDATA[
-    <div class="report-data">
-        <h1>{{data.totalTasks}}</h1>
-        <small>Total Tasks</small>
-        <div class="report-tags" style="display: flex; align-items: center;">
-            <i class="fa fa-tasks" style="margin-right: 5px;"></i>
-            <span class="label label-success">Tasks Overview</span>
+    <div class="report-data" style="
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #ffffff;
+        margin-left: 64px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 320px;
+        font-family: Arial, sans-serif;
+        color: #333;">
+
+        <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin: 0 0 10px;">Всего задач</h2>
+        <div style="font-size: 28px; font-weight: bold; text-align: center; color: #007bff; margin-bottom: 8px;">
+            {{data.taskCount}}
         </div>
-        <div class="task-status" style="margin-top: 20px;">
-            <p><strong>New:</strong> {{data.newTasks}}</p>
-            <p><strong>In Progress:</strong> {{data.inProgressTasks}}</p>
-            <p><strong>Completed:</strong> {{data.completedTasks}}</p>
-            <p><strong>Canceled:</strong> {{data.canceledTasks}}</p>
+
+        <div class="task-status" style="
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            font-size: 16px;
+            margin-bottom: 10px;">
+
+            <p style="margin: 3px 0;"><strong>Новых:</strong> {{data.new}}</p>
+            <p style="margin: 3px 0;"><strong>В процессе:</strong> {{data.inProgress}}</p>
+            <p style="margin: 3px 0;"><strong>Завершённых:</strong> {{data.done}}</p>
+            <p style="margin: 3px 0;"><strong>Отменённых:</strong> {{data.canceled}}</p>
         </div>
-        <div class="hours-spent" style="margin-top: 20px;">
-            <h2>Total Hours Spent: {{data.totalHours}}</h2>
-            <p><strong>Average Time per Task:</strong> {{data.averageTimePerTask}} hours</p>
+
+        <div style="
+            padding-top: 10px;
+            border-top: 1px solid #ccc;
+            font-size: 16px;
+            margin-top: 15px;
+            text-align: center;">
+
+            <h3 style="font-size: 18px; font-weight: bold; margin: 0;">Всего потрачено часов</h3>
+            <p style="font-size: 20px; font-weight: bold; color: #28a745; margin: 5px 0 0;">
+                {{data.totalWorkHours}}
+            </p>
         </div>
     </div>
-]]></template>
-
+    ]]></template>
     </custom>
+
 
 </object-views>
