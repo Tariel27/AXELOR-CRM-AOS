@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
+
+    <!--  grid для меню обедов -->
+    <grid title="DishMenu" name="pbp.dish-grid-view" model="com.axelor.apps.pbproject.db.DishMenu">
+        <field name="dishes" title="Dishes"/>
+        <field name="soups" title="Soups"/>
+        <field name="salads" title="Salads"/>
+     </grid>
+
+    <!--  form для меню обедов -->
+    <form name="pbp.dish-form-view" title="News" model="com.axelor.apps.pbproject.db.DishMenu" width="large">
+        <panel title="Dish menu" itemSpan="12">
+            <field name="dishes" title="Dishes"/>
+            <field name="soups" title="Soups"/>
+            <field name="salads" title="Salads"/>
+            </panel>
+    </form>
+</object-views>

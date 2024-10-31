@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+
+    <dashboard name="pbp.ratings-by-team-dashboard" title="Ratings by team!">
+        <dashlet colSpan="3" height="150px" action="custom:report-team-analytics"/>
+        <dashlet colSpan="3" height="150px" action="custom:report-team-devops"/>
+        <dashlet colSpan="3" height="150px" action="custom:report-team-backend"/>
+        <dashlet colSpan="3" height="150px" action="custom:report-team-frontend"/>
+        <dashlet colSpan="3" height="250px" action="custom:report-table-analytics-users"/>
+        <dashlet colSpan="3" height="250px" action="custom:report-table-devops-users"/>
+        <dashlet colSpan="3" height="250px" action="custom:report-table-backend-users"/>
+        <dashlet colSpan="3" height="250px" action="custom:report-table-frontend-users"/>
+        <dashlet colSpan="3" height="150px" action="custom:report-team-python"/>
+        <dashlet colSpan="3" height="150px" action="custom:report-team-csharp"/>
+        <dashlet colSpan="3" height="150px" action="custom:report-team-leaders"/>
+        <dashlet colSpan="3" height="150px" action="custom:report-team-administration"/>
+        <dashlet colSpan="3" height="250px" action="custom:report-table-python-users"/>
+        <dashlet colSpan="3" height="250px" action="custom:report-table-csharp-users"/>
+        <dashlet colSpan="3" height="250px" action="custom:report-table-leaders-users"/>
+        <dashlet colSpan="3" height="250px" action="custom:report-table-administration-users"/>
+        <dashlet colSpan="6" height="1000" action="chart:chart-team-members-distribution"/>
+        <dashlet colSpan="6" height="1000" action="chart:chart-tasks-completed-by-team-project"/>
+        <dashlet colSpan="12" height="1000" action="chart:chart-best-team-completed-tasks"/>
+        <dashlet colSpan="12" height="1000" action="chart:chart-best-team-spent-hours"/>
+    </dashboard>
+
+    <!-- диаграмма показывающая какая команда больше выполнила задач-->
+    <chart name="chart-best-team-completed-tasks" title="The best team that completed the most tasks" stacked="true"
+           onInit="pbp.rating-update-date">
+        <search-fields>
+            <field type="datetime" name="fromDateTime" title="From Date"/>
+            <field type="datetime" name="toDateTime" title="To Date"/>
+        </search-fields>
+        <dataset type="sql">
+            <![CDATA[
+        SELECT t.name AS team_name, COUNT(pt.id) AS total_completed_tasks
+        FROM team_team t
+        JOIN team_team_members m ON t.id = m.team_set
+        JOIN auth_user u ON m.members = u.id
+        JOIN project_project_task pt ON pt.assigned_to = u.id
+        WHERE pt.status = 3
+        GROUP BY t.name
+        ORDER BY total_completed_tasks DESC
+    ]]>
+        </dataset>
+        <category key="team_name"/>
+        <series key="total_completed_tasks" type="hbar"/>
+    </chart>
+
+    <!-- диаграмма показывающая какая команда потратила больше часов-->
+
+    <chart name="chart-best-team-spent-hours" title="Best team that spent the most hours"
+           onInit="pbp.rating-update-date">
+        <search-fields>
+            <field name="fromDateTime" title="From Date" type="datetime"/>
+            <field name="toDateTime" title="To Date" type="datetime"/>
+        </search-fields>
+        <dataset type="sql">
+            <![CDATA[
+          SELECT t.name AS team_name,
+          SUM(pt.spent_time) AS total_hours
+          FROM team_team t
+          JOIN team_team_members m ON t.id = m.team_set
+          JOIN auth_user u ON m.members = u.id
+          JOIN project_project_task pt ON pt.assigned_to = u.id
+          WHERE pt.task_end_date BETWEEN DATE_TRUNC('month', CURRENT_DATE) AND CURRENT_DATE
+          GROUP BY t.name
+          ORDER BY total_hours DESC;
+        ]]>
+        </dataset>
+        <category key="team_name"/>
+        <series key="total_hours" type="hbar"/>
+    </chart>
+
+    <!-- диаграмма показывающая сколько задач выполнила каждая команда в проектах-->
+    <chart name="chart-tasks-completed-by-team-project" title="How many tasks did the team complete in the project?"
+           stacked="true"
+           onInit="pbp.rating-update-date">
+        <search-fields>
+            <field type="datetime" name="fromDateTime" title="From Date"/>
+            <field type="datetime" name="toDateTime" title="To Date"/>
+        </search-fields>
+        <dataset type="jpql">
+            <![CDATA[
+        SELECT t.name AS teamName, p.name AS projectName, COUNT(pt.id) AS totalTasks
+        FROM ProjectTask pt
+        JOIN pt.assignedTo u
+        JOIN u.teamSet t
+        JOIN pt.project p
+        WHERE pt.taskEndDate BETWEEN :fromDateTime AND :toDateTime
+        AND pt.status.id = 3
+        GROUP BY t.name, p.name
+        ORDER BY totalTasks DESC
+        ]]>
+        </dataset>
+        <category key="teamName"/>
+        <series key="totalTasks" type="hbar" groupBy="projectName"/>
+    </chart>
+
+    <!-- диаграмма показывающая общее количество команд-->
+    <chart name="chart-team-members-distribution" title="Team members distribution" stacked="false">
+        <dataset type="jpql">
+            <![CDATA[
+        SELECT t.name AS teamName, COUNT(u.id) AS totalMembers
+        FROM User u
+        LEFT JOIN u.teamSet t
+        GROUP BY t.name
+        ORDER BY totalMembers DESC
+        ]]>
+        </dataset>
+
+        <category key="teamName" title="Team"/>
+        <series key="totalMembers" type="pie" title="Total Members"/>
+    </chart>
+    <!--    report-box-->
+    <custom name="report-team-analytics" title="Analytics team" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamAnalytics]]></dataset>
+        <template><![CDATA[
+
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total Members</small>
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-user-o" style="margin-right: 5px;"></i>
+      <span class="label label-success">Analytics</span>
+    </div>
+  </div>
+
+    ]]></template>
+    </custom>
+
+    <custom name="report-team-devops" title="DevOps team" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamDevOps]]></dataset>
+        <template><![CDATA[
+
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total Members</small>
+
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-user-o" style="margin-right: 5px;"></i>
+      <span class="label label-success">DevOps</span>
+    </div>
+  </div>
+
+    ]]></template>
+    </custom>
+
+    <custom name="report-team-backend" title="Backend team" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamBackend]]></dataset>
+        <template><![CDATA[
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total Members</small>
+
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-user-o" style="margin-right: 5px;"></i>
+      <span class="label label-success">Backend</span>
+    </div>
+  </div>
+    ]]></template>
+    </custom>
+
+    <custom name="report-team-frontend" title="Frontend team" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamFrontend]]></dataset>
+        <template><![CDATA[
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total Members</small>
+
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-user-o" style="margin-right: 5px;"></i>
+      <span class="label label-success">Frontend</span>
+    </div>
+  </div>
+    ]]></template>
+    </custom>
+
+    <custom name="report-team-python" title="Python team" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamPython]]></dataset>
+        <template><![CDATA[
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total Members</small>
+
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-user-o" style="margin-right: 5px;"></i>
+      <span class="label label-success">Python</span>
+    </div>
+  </div>
+    ]]></template>
+    </custom>
+
+    <custom name="report-team-csharp" title="C# team" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamCSharp]]></dataset>
+        <template><![CDATA[
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total Members</small>
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-user-o" style="margin-right: 5px;"></i>
+      <span class="label label-success">C#</span>
+    </div>
+  </div>
+    ]]></template>
+    </custom>
+
+    <custom name="report-team-leaders" title="Leaders team" css="report-box">
+        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamLeaders]]></dataset>
+        <template><![CDATA[
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total Members</small>
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-user-o" style="margin-right: 5px;"></i>
+      <span class="label label-success">Leaders</span>
+    </div>
+  </div>
+    ]]></template>
+    </custom>
+
+    <custom name="report-team-administration" title="Administration team" css="report-box">
+        <dataset type="rpc">
+            <![CDATA[com.axelor.apps.pbproject.web.TeamReportController:reportTeamAdministration]]></dataset>
+        <template><![CDATA[
+  <div class="report-data">
+    <h1>{{first.total}}</h1>
+    <small>Total Members</small>
+    <div class="report-tags" style="display: flex; align-items: center;">
+      <i class="fa fa-user-o" style="margin-right: 5px;"></i>
+      <span class="label label-success">Administration</span>
+    </div>
+  </div>
+    ]]></template>
+    </custom>
+    <!--    report-table-->
+    <custom name="report-table-devops-users" title="DevOps team members" css="report-box">
+        <field name="fullName" title="Name"/>
+        <field name="mobilePhone" title="Mobile Phone" type="string"/>
+        <field name="dateOfBirth" title="Date of Birth" type="date"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+    SELECT u.fullName AS fullName,
+           p.mobilePhone AS mobilePhone,
+           p.dateOfBirth AS dateOfBirth,
+           COALESCE(t.name, 'Не указано') AS teamName
+    FROM User u
+    LEFT JOIN u.partner p
+    LEFT JOIN u.teamSet t
+    WHERE t.name = 'DevOps'
+    ORDER BY u.fullName
+    ]]>
+        </dataset>
+        <template><![CDATA[
+    <report-table columns='fullName,mobilePhone,dateOfBirth'/>
+  ]]></template>
+    </custom>
+
+    <custom name="report-table-administration-users" title="Administration team members" css="report-box">
+        <field name="fullName" title="Name"/>
+        <field name="mobilePhone" title="Mobile Phone" type="string"/>
+        <field name="dateOfBirth" title="Date of Birth" type="date"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+SELECT u.fullName AS fullName,
+       p.mobilePhone AS mobilePhone,
+       p.dateOfBirth AS dateOfBirth,
+       COALESCE(t.name, 'Не указано') AS teamName
+FROM User u
+LEFT JOIN u.partner p
+LEFT JOIN u.teamSet t
+WHERE t.name = 'Administration'
+ORDER BY u.fullName
+]]>
+        </dataset>
+        <template><![CDATA[
+<report-table columns='fullName,mobilePhone,dateOfBirth'/>
+]]></template>
+    </custom>
+
+    <custom name="report-table-analytics-users" title="Analytics team members" css="report-box">
+        <field name="fullName" title="Name"/>
+        <field name="mobilePhone" title="Mobile Phone" type="string"/>
+        <field name="dateOfBirth" title="Date of Birth" type="date"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+SELECT u.fullName AS fullName,
+       p.mobilePhone AS mobilePhone,
+       p.dateOfBirth AS dateOfBirth,
+       COALESCE(t.name, 'Не указано') AS teamName
+FROM User u
+LEFT JOIN u.partner p
+LEFT JOIN u.teamSet t
+WHERE t.name = 'Analytics'
+ORDER BY u.fullName
+]]>
+        </dataset>
+        <template><![CDATA[
+<report-table columns='fullName,mobilePhone,dateOfBirth'/>
+]]></template>
+    </custom>
+
+    <custom name="report-table-backend-users" title="Backend team members" css="report-box">
+        <field name="fullName" title="Name"/>
+        <field name="mobilePhone" title="Mobile Phone" type="string"/>
+        <field name="dateOfBirth" title="Date of Birth" type="date"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+SELECT u.fullName AS fullName,
+       p.mobilePhone AS mobilePhone,
+       p.dateOfBirth AS dateOfBirth,
+       COALESCE(t.name, 'Не указано') AS teamName
+FROM User u
+LEFT JOIN u.partner p
+LEFT JOIN u.teamSet t
+WHERE t.name = 'Backend'
+ORDER BY u.fullName
+]]>
+        </dataset>
+        <template><![CDATA[
+<report-table columns='fullName,mobilePhone,dateOfBirth'/>
+]]></template>
+    </custom>
+
+    <custom name="report-table-csharp-users" title="C# team members" css="report-box">
+        <field name="fullName" title="Name"/>
+        <field name="mobilePhone" title="Mobile Phone" type="string"/>
+        <field name="dateOfBirth" title="Date of Birth" type="date"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+SELECT u.fullName AS fullName,
+       p.mobilePhone AS mobilePhone,
+       p.dateOfBirth AS dateOfBirth,
+       COALESCE(t.name, 'Не указано') AS teamName
+FROM User u
+LEFT JOIN u.partner p
+LEFT JOIN u.teamSet t
+WHERE t.name = 'C#'
+ORDER BY u.fullName
+]]>
+        </dataset>
+        <template><![CDATA[
+<report-table columns='fullName,mobilePhone,dateOfBirth'/>
+]]></template>
+    </custom>
+
+    <custom name="report-table-frontend-users" title="Frontend team members" css="report-box">
+        <field name="fullName" title="Name"/>
+        <field name="mobilePhone" title="Mobile Phone" type="string"/>
+        <field name="dateOfBirth" title="Date of Birth" type="date"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+SELECT u.fullName AS fullName,
+       p.mobilePhone AS mobilePhone,
+       p.dateOfBirth AS dateOfBirth,
+       COALESCE(t.name, 'Не указано') AS teamName
+FROM User u
+LEFT JOIN u.partner p
+LEFT JOIN u.teamSet t
+WHERE t.name = 'Frontend'
+ORDER BY u.fullName
+]]>
+        </dataset>
+        <template><![CDATA[
+<report-table columns='fullName,mobilePhone,dateOfBirth'/>
+]]></template>
+    </custom>
+
+    <custom name="report-table-leaders-users" title="Leaders team members" css="report-box">
+        <field name="fullName" title="Name"/>
+        <field name="mobilePhone" title="Mobile Phone" type="string"/>
+        <field name="dateOfBirth" title="Date of Birth" type="date"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+SELECT u.fullName AS fullName,
+       p.mobilePhone AS mobilePhone,
+       p.dateOfBirth AS dateOfBirth,
+       COALESCE(t.name, 'Не указано') AS teamName
+FROM User u
+LEFT JOIN u.partner p
+LEFT JOIN u.teamSet t
+WHERE t.name = 'Leaders'
+ORDER BY u.fullName
+]]>
+        </dataset>
+        <template><![CDATA[
+<report-table columns='fullName,mobilePhone,dateOfBirth'/>
+]]></template>
+    </custom>
+
+    <custom name="report-table-python-users" title="Python team members" css="report-box">
+        <field name="fullName" title="Name"/>
+        <field name="mobilePhone" title="Mobile Phone" type="string"/>
+        <field name="dateOfBirth" title="Date of Birth" type="date"/>
+        <dataset type="jpql" limit="20">
+            <![CDATA[
+SELECT u.fullName AS fullName,
+       p.mobilePhone AS mobilePhone,
+       p.dateOfBirth AS dateOfBirth,
+       COALESCE(t.name, 'Не указано') AS teamName
+FROM User u
+LEFT JOIN u.partner p
+LEFT JOIN u.teamSet t
+WHERE t.name = 'Python'
+ORDER BY u.fullName
+]]>
+        </dataset>
+        <template><![CDATA[
+<report-table columns='fullName,mobilePhone,dateOfBirth'/>
+]]></template>
+    </custom>
+
+</object-views>
