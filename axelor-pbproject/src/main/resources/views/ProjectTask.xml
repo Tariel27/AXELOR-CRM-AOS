@@ -5,7 +5,7 @@
 
     <form name="pbp.project-task-form" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large"
           onLoad="action-business-project-project-task-group-on-load,action-readable-time-convert,save"
-          onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method,pbp.validate.dateStart.dateEnd" onSave="pbp.validate.dateStart.dateEnd">
+          onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method,pbp.validate.dateStart.dateEnd,pbp.auto-set-complexity" onSave="pbp.validate.dateStart.dateEnd">
         <toolbar>
             <button name="grabEventBtn" help="Take charge" icon="fa-suitcase"
                     onClick="action-project-task-record-assigned-yourself,save"/>
@@ -76,10 +76,14 @@
                            form-view="user-form" grid-view="user-grid"/>
 
                     <field name="assignedBy" colSpan="6" form-view="user-form" grid-view="user-grid"/>
-
-                    <field name="parentTask" readonlyIf="project == null" colSpan="12"
+                    <field name="complexity" widget="SingleSelect" colSpan="3"/>
+                    <field name="planHours" colSpan="3" required="true"/>
+                    <field name="parentTask" readonlyIf="project == null" colSpan="6"
                            onChange="action-project-task-record-get-parent-timeunit"
                            onSelect="action-project-task-attrs-project-parent-task-configurations"/>
+                    <field name="descriptionOfChange" colSpan="12" widget="html" required="true"/>
+
+
                     <field name="frameworkCustomerContract" hidden="true"
                            showIf="project.allowToGetPricesFromFrameworkContract"
                            onChange="action-project-task-group-set-price-from-contract"
@@ -143,7 +147,7 @@
                 <!--Даты с использованием времени-->
                 <field name="startDateTime" colSpan="4" onChange="update-date-fields"/>
                 <field name="endDateTime" colSpan="4" onChange="update-date-fields"/>
-                <field name="deadlineDateTime" colSpan="4" onChange="update-date-fields"/>
+                <field name="deadlineDateTime" colSpan="4" onChange="update-date-fields" required="true"/>
 
                 <!--Скрытые даты-->
                 <field name="taskDate" colSpan="4"
@@ -515,5 +519,8 @@
         <call class="com.axelor.apps.pbproject.web.WorkTimeController"
               method="validateStartEndTimeTask"/>
     </action-method>
+    <action-attrs name="pbp.auto-set-complexity">
+        <attribute for="complexity" name="value" expr="eval: 'medium'"/>
+    </action-attrs>
 
 </object-views>

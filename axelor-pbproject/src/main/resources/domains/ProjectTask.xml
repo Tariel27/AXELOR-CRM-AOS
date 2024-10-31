@@ -10,6 +10,9 @@
     <datetime name="endDateTime" title="End date-time"/>
     <datetime name="deadlineDateTime" title="Deadline date-time"/>
     <many-to-one name="assignedBy" title="Assigned by" ref="com.axelor.auth.db.User" />
+    <string title="Complexity" name="complexity" selection="pbp.complexity.of.task.select"/>
+    <time name="planHours" title="Plan hours"/>
+    <string name="descriptionOfChange" title="Description of change"/>
     <extra-code>
       <![CDATA[
 	   			public static final String NEW = "New";
