@@ -76,12 +76,12 @@
                            form-view="user-form" grid-view="user-grid"/>
 
                     <field name="assignedBy" colSpan="6" form-view="user-form" grid-view="user-grid"/>
-                    <field name="complexity" widget="SingleSelect" colSpan="3"/>
+                    <field name="complexity" widget="SingleSelect" colSpan="3" onChange=""/>
                     <field name="planHours" colSpan="3" required="true"/>
                     <field name="parentTask" readonlyIf="project == null" colSpan="6"
                            onChange="action-project-task-record-get-parent-timeunit"
                            onSelect="action-project-task-attrs-project-parent-task-configurations"/>
-                    <field name="descriptionOfChange" colSpan="12" widget="html" required="true"/>
+                    <field name="descriptionOfChange" hideIf="$readonly() &amp;&amp; descriptionOfChange == null" colSpan="12" widget="html"/>
 
 
                     <field name="frameworkCustomerContract" hidden="true"
