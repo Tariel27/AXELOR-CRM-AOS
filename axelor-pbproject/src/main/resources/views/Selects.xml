@@ -24,4 +24,10 @@
         <option value="waiting" color="blue">Waiting</option>
     </selection>
 
+    <selection name="pbp.complexity.of.task.select">
+        <option value="easy" color="green">Easy</option>
+        <option value="medium" color="blue">Medium</option>
+        <option value="hard" color="red">Hard</option>
+    </selection>
+
 </object-views>
