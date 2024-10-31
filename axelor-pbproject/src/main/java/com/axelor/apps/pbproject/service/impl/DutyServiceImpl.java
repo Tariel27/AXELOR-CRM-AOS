@@ -3,6 +3,7 @@ package com.axelor.apps.pbproject.service.impl;
 import com.axelor.apps.pbproject.db.Duty;
 import com.axelor.apps.pbproject.db.repo.DutyRepository;
 import com.axelor.apps.pbproject.service.DutyService;
+import com.axelor.apps.pbproject.service.WeeklyDataProvider;
 import com.axelor.auth.db.User;
 import com.axelor.auth.db.repo.UserRepository;
 import com.google.inject.Inject;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DutyServiceImpl implements DutyService {
+public class DutyServiceImpl implements DutyService, WeeklyDataProvider {
     private final DutyRepository dutyRepository;
     private final UserRepository userRepository;
 
@@ -198,13 +199,24 @@ public class DutyServiceImpl implements DutyService {
         return users.stream().map(User::getId).collect(Collectors.toSet());
     }
 
-    private LocalDate getStartOfWeek() {
+    public LocalDate getStartOfWeek() {
         return LocalDate.now().with(DayOfWeek.MONDAY);
     }
 
-    private LocalDate getEndOfWeek(LocalDate startOfWeek) {
+    public LocalDate getEndOfWeek(LocalDate startOfWeek) {
         return startOfWeek.with(DayOfWeek.SUNDAY);
     }
 
+
+    @Override
+    public Map<String, Object> getWeekDataProvider() {
+        Map<String, Object> weeklyDataMap = new HashMap<>();
+
+        List<User> users = new ArrayList<>(getCurrentDuty(getStartOfWeek(), getEndOfWeek(getStartOfWeek())).getUsers());
+
+        weeklyDataMap.put("firstUser", users.get(0).getFullName());
+        weeklyDataMap.put("secondUser", users.get(1).getFullName());
+        return weeklyDataMap;
+    }
 
 }

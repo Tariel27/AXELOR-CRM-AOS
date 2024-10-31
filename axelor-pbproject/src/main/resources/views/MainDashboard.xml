@@ -11,7 +11,7 @@
 
     <!--  Дашборд страница, где будут дашлеты разные в будущем...  -->
     <dashboard name="pbp.main-pp-dashboard" title="Petaboard">
-        <dashlet height="250" width="300" action="pbp.dashlet-card-duty-users"/>
+        <dashlet height="250" width="300" action="pbp.method-for-open-custom-duty"/>
         <dashlet height="250" width="300" action="pbp.list-activity-custom"/>
         <dashlet height="250" width="300" action="pbp.manager-news-action-for-main"/>
     </dashboard>
@@ -26,8 +26,13 @@
         <domain>dateStart = (select max(d.dateStart) from Duty d)</domain>
     </action-view>
 
-    <!-- Экшн для получения custom пользователей онлайн или нет -->
+    <!-- Через контроллер подает ActionView-->
+    <action-method name="pbp.method-for-open-custom-duty">
+        <call class="com.axelor.apps.pbproject.web.WeeklyDataController" method="actionMethodForWeekly"/>
+    </action-method>
 
+
+    <!-- Экшн для получения custom пользователей онлайн или нет -->
     <action-view name="pbp.list-activity-custom" title="Users activity">
         <view type="custom" name="pbp.users-activity-list-custom"/>
     </action-view>
@@ -56,6 +61,40 @@
             </div>
     ]]></template>
     </cards>
+
+    <custom name="pbp.users-for-duty-custom-view" title="Duty Users">
+    <dataset type="rpc">
+        <![CDATA[
+            com.axelor.apps.pbproject.web.WeeklyDataController:getWeeklyData
+        ]]>
+    </dataset>
+    <template>
+        <![CDATA[
+        <>
+            <Box style={{
+                border: '1px solid #ccc',
+                borderRadius: '5px',
+                padding: '10px',
+                margin: '10px',
+                backgroundColor: '#f9f9f9',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+            }}>
+                {data ? (
+                    <>
+                        <p style={{ margin: '5px 0' }}>
+                            <strong>Дежурные:</strong> {data.firstUser || "Неизвестный пользователь"}, {data.secondUser || "Неизвестный пользователь"}
+                        </p>
+                    </>
+                ) : (
+                    <Box>Нет данных для отображения.</Box>
+                )}
+            </Box>
+        </>
+        ]]>
+    </template>
+</custom>
+
+
 
     <custom name="pbp.users-activity-list-custom" title="Users activity">
         <field name="name" type="string"/>

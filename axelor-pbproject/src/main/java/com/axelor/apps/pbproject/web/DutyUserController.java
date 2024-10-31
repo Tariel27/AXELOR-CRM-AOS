@@ -1,6 +1,5 @@
 package com.axelor.apps.pbproject.web;
 
-import com.axelor.apps.base.db.AdvancedExport;
 import com.axelor.apps.pbproject.service.DutyService;
 import com.axelor.apps.pbproject.service.ExportExcelService;
 import com.axelor.apps.pbproject.util.ExportUtil;
@@ -9,7 +8,6 @@ import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.axelor.meta.MetaFiles;
 import com.axelor.meta.db.MetaFile;
-import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
