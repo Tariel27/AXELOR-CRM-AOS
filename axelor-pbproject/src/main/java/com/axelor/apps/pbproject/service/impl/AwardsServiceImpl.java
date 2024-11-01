@@ -13,10 +13,9 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class AwardsServiceImpl implements AwardsService {
     private final AwardRepository awardRepository;
@@ -43,6 +42,10 @@ public class AwardsServiceImpl implements AwardsService {
         if (workTimeServiceProvider.get().getTotalSumWorkHours(user).compareTo(BigDecimal.valueOf(1000)) >= 0 && !hasUser1000HoursAward(user)){
             awards.add(awardRepository.findByCode(AwardRepository.HOURS_1000_CODE));
         }
+        if (workTimeServiceProvider.get().getAllTasksOfUser(user).size() >= 30){
+            awards.add(awardRepository.findByCode(AwardRepository.TASKS_30_CODE));
+        }
+
         if (awards.size() == 0){
             return;
         }
@@ -50,6 +53,30 @@ public class AwardsServiceImpl implements AwardsService {
         Set<Award> awardOfUser = user.getAwards();
         awardOfUser.addAll(awards);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<Map<String, Object>> getUserAwards(User user) {
+        List<Map<String,Object>> data = new ArrayList<>();
+
+        User userFromDb = userPbpProjectService.find(user.getId());
+
+        List<Award> awards = new ArrayList<>(userFromDb.getAwards());
+        try {
+            for (Award award : awards) {
+                Map<String, Object> tempData = new HashMap<>();
+                tempData.put("image", award.getImageAward() != null ? new String(award.getImageAward(), "UTF-8") : null);
+                tempData.put("name", award.getName());
+                tempData.put("descrip", award.getDescription());
+                data.add(tempData);
+            }
+
+        } catch (UnsupportedEncodingException e){
+            throw new RuntimeException();
+        }
+
+
+        return data;
     }
 
     private boolean hasUser500HoursAward(User user){

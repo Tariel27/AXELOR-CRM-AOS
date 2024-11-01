@@ -8,12 +8,56 @@
         <dashlet colSpan="6"  rowSpan="7" action="custom:pbp.self-user-award-info"/>
     </dashboard>
 
-    <custom title="Awards" name="pbp.self-user-award-info">
-        <dataset type="rpc">
+    <custom name="pbp.self-user-award-info" title="Awards">
+        <dataset type="rpc"><![CDATA[
 
-        </dataset>
-        <template></template>
+          com.axelor.apps.pbproject.web.AwardsController:getAwardsOfUser
+
+      ]]></dataset>
+        <template><![CDATA[
+
+      <>
+          {data && data.length ? (
+              <Table>
+                  <thead>
+                      <tr>
+                          <th style={{ textAlign: "center" }}>Медаль</th>
+                          <th style={{ textAlign: "left" }}>Благодарность</th>
+                          <th style={{ textAlign: "left" }}>Способ получения</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {data.map((award, index) => (
+                          <tr key={index}>
+                              <td>
+                                  {award.image ? (
+                                      <img
+                                          src={`${award.image}`}
+                                          style={{ width: "120px", height: "120px", borderRadius: "50%" }}
+                                      />
+                                  ) : (
+                                      <Box as="span">Нет изображения</Box>
+                                  )}
+                              </td>
+                              <td>
+                                  <Box as="span">{award.name || "Без названия"}</Box>
+                              </td>
+                              <td>
+                                  <Box as="span">{award.descrip || "Описание отсутствует"}</Box>
+                              </td>
+                          </tr>
+                      ))}
+                  </tbody>
+              </Table>
+          ) : (
+              <Box style={{ marginTop: "1rem" }}>Достижения не найдены.</Box>
+          )}
+      </>
+
+      ]]></template>
     </custom>
+
+
 
 
     <custom name="pbp.self-user-statistics" title="Task Statistics" >

@@ -7,6 +7,7 @@ import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
 
+import java.util.List;
 import java.util.Map;
 
 public class AwardsController {
@@ -18,7 +19,7 @@ public class AwardsController {
 
     public void getAwardsOfUser(ActionRequest actionRequest, ActionResponse actionResponse){
         User user = AuthUtils.getUser();
-        Map<String, Object> data = awardsService.getUserAwards(user);
+        List<Map<String, Object>> data = awardsService.getUserAwards(user);
         actionResponse.setData(data);
     }
 }
