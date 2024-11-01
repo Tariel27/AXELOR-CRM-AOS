@@ -76,7 +76,7 @@
                            form-view="user-form" grid-view="user-grid"/>
 
                     <field name="assignedBy" colSpan="6" form-view="user-form" grid-view="user-grid"/>
-                    <field name="complexity" widget="SingleSelect" colSpan="3" onChange=""/>
+                    <field name="complexity" widget="SingleSelect" colSpan="3" />
                     <field name="planHours" colSpan="3" required="true"/>
                     <field name="parentTask" readonlyIf="project == null" colSpan="6"
                            onChange="action-project-task-record-get-parent-timeunit"
@@ -480,6 +480,27 @@
 </>
  ]]></template>
     </kanban>
+    <grid name="pbp.project-task-grid" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
+          edit-icon="true" orderBy="-priority.technicalTypeSelect">
+        <hilite if="$get('status.id') == $get('project.completedTaskStatus.id')" color="success"/>
+        <hilite if="$moment(taskEndDate).diff(todayDate,'days') &lt; 0" color="danger"/>
+        <hilite if="$get('priority.technicalTypeSelect') == 4" color="warning"/>
+        <field name="name"/>
+        <field name="project"/>
+        <field name="taskDate"/>
+        <field name="taskEndDate" title="Task end date"/>
+        <field name="taskDeadline" title="Task deadline"/>
+        <field name="spentTime"/>
+        <field name="planHours"/>
+        <field name="status"/>
+        <field name="complexity" widget="SingleSelect"/>
+        <field name="descriptionOfChange" title="Subject of change"/>
+        <field name="targetVersion" if-module="axelor-business-support"
+               if="__config__.app.isApp('business-support')"/>
+        <field name="taskEndDate" hidden="true"/>
+        <field name="priority.technicalTypeSelect" hidden="true"/>
+        <field name="project.completedTaskStatus.id" hidden="true"/>
+    </grid>
 
     <!-- При нажатии в тулбаре меняет прогрес -->
     <action-attrs name="progress-finish-if-done-button-click">
