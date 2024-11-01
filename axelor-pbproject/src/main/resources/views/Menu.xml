@@ -183,7 +183,7 @@
 
     <!--  Менюшка с достижениями для добавления -->
     <menuitem name="pbp.open-award-settings" title="Awards config" action="pbp.award-action-view"/>
-    <action-view name="pbp.award-action-view" title="Awards" model="com.axelor.apps.pbproject.db.Awards">
+    <action-view name="pbp.award-action-view" title="Awards" model="com.axelor.apps.pbproject.db.Award">
         <view type="grid" name="pbp.award-grid"/>
         <view type="form" name="pbp.award-form"/>
     </action-view>

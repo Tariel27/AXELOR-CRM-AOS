@@ -10,9 +10,10 @@ import com.axelor.auth.db.User;
 import com.google.inject.Inject;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 public class StatisticsServiceImpl implements StatisticsService {
     private final UserPbpProjectService userService;
@@ -28,14 +29,62 @@ public class StatisticsServiceImpl implements StatisticsService {
         Map<String, Object> data = new HashMap<>();
 
         User user = userService.find(userId);
-        BigDecimal totalWorkHours = workTimeService.getTotalSumWorkHours(user);
-        BigDecimal totalEndedTasks = workTimeService.getTotalEndedTasks(user);
+        List<ProjectTask> projectTasks = workTimeService.getAllTasksOfUser(user);
 
+        Double awgTaskInDay = getAwgTaskDoneInDay(projectTasks);
+        data.put("awgTaskInDay", awgTaskInDay);
 
-
-        return null;
+        String awgHoursForOneTask = getAwgHoursForOneTask(projectTasks,user);
+        data.put("awgHoursForOneTask", awgHoursForOneTask);
+        return data;
     }
 
+    private String getAwgHoursForOneTask(List<ProjectTask> projectTasks, User user) {
+        long doneAll = getTasksStatusDoneAll(projectTasks);
+        BigDecimal totalHours = workTimeService.getTotalSumWorkHours(user);
+
+        if (doneAll == 0 || totalHours == null || totalHours.doubleValue() == 0.0) {
+            return "00:00";
+        }
+
+        double avgHoursForOneTask = totalHours.doubleValue() / doneAll;
+
+        int hours = (int) avgHoursForOneTask;
+        int minutes = (int) ((avgHoursForOneTask - hours) * 60);
+
+        return String.format("%02d:%02d", hours, minutes);
+    }
+
+
+
+    private Double getAwgTaskDoneInDay(List<ProjectTask> projectTasks) {
+        Optional<LocalDate> minDateOpt = projectTasks.stream()
+                .map(ProjectTask::getTaskDate)
+                .min(Comparator.naturalOrder());
+
+        Integer daysOfStartTasksMaking = daysBetweenOfStart(minDateOpt.get());
+        long tasksEndedAll = getTasksStatusDoneAll(projectTasks);
+
+        if (tasksEndedAll == 0 || daysOfStartTasksMaking == 0) {
+            return 0.0;
+        }
+
+        double avgOneTaskInDay = (double) tasksEndedAll / daysOfStartTasksMaking;
+
+        BigDecimal roundedValue = BigDecimal.valueOf(avgOneTaskInDay).setScale(2, RoundingMode.HALF_UP);
+        return roundedValue.doubleValue();
+    }
+    private long getTasksStatusDoneAll(List<ProjectTask> projectTasks){
+        return projectTasks.stream()
+                .filter(p -> p.getStatus().getName().equalsIgnoreCase(ProjectTaskRepository.DONE))
+                .count();
+    }
+
+    private Integer daysBetweenOfStart(LocalDate startTaskDate){
+        LocalDate localDate = LocalDate.now();
+        long days = ChronoUnit.DAYS.between(startTaskDate, localDate);
+        return Math.toIntExact(days);
+    }
     @Override
     public Map<String, Object> getStatOfTasks(Long userId) {
         Map<String,Object> data = new HashMap<>();
@@ -77,12 +126,5 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         return statusCounts;
     }
-//    private Map<String, Integer> getTaskStatusCounts(List<ProjectTask> projectTasks) {
-//        return projectTasks.stream()
-//                .collect(Collectors.groupingBy(
-//                        task -> task.getStatus().getName(),
-//                        Collectors.summingInt(task -> 1)
-//                ));
-//    }
 
 }

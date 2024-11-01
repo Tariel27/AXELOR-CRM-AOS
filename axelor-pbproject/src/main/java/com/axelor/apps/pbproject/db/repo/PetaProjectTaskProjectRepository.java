@@ -2,6 +2,7 @@ package com.axelor.apps.pbproject.db.repo;
 
 import com.axelor.apps.businessproject.service.ProjectTaskProgressUpdateService;
 import com.axelor.apps.businesssupport.db.repo.ProjectTaskBusinessSupportRepository;
+import com.axelor.apps.pbproject.service.AwardsService;
 import com.axelor.apps.project.db.ProjectTask;
 import com.axelor.apps.project.db.repo.ProjectTaskRepository;
 import com.google.inject.Inject;
@@ -12,16 +13,18 @@ import java.time.*;
 
 public class PetaProjectTaskProjectRepository extends ProjectTaskBusinessSupportRepository {
 
-
+    private final AwardsService awardsService;
     @Inject
-    public PetaProjectTaskProjectRepository(ProjectTaskProgressUpdateService projectTaskProgressUpdateService) {
+    public PetaProjectTaskProjectRepository(ProjectTaskProgressUpdateService projectTaskProgressUpdateService, AwardsService awardsService) {
         super(projectTaskProgressUpdateService);
+        this.awardsService = awardsService;
     }
 
     @Override
     public ProjectTask save(ProjectTask projectTask) {
         updateProjectTaskDates(projectTask);
         calculateSpentTime(projectTask);
+        awardsService.recognizeAward(projectTask);
         return super.save(projectTask);
     }
 

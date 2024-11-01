@@ -5,11 +5,17 @@
 
     <module name="pbproject" package="com.axelor.apps.pbproject.db"/>
 
-    <entity name="Awards">
+    <entity name="Award">
         <string name="code" title="Code" unique="true"/>
         <binary name="imageAward" title="image"/>
-        <!--        <many-to-one name="image" title="Image" ref="com.axelor.meta.db.MetaFile"/>-->
         <string name="name" title="Name of award"/>
         <string name="description" title="Description"/>
+        <extra-code>
+            <![CDATA[
+	   			public static final String HOURS_500_CODE = "500hours";
+	   			public static final String HOURS_1000_CODE = "1000hours";
+	   			public static final String TASKS_30_CODE = "30tasks";
+	   		]]>
+        </extra-code>
     </entity>
 </domain-models>

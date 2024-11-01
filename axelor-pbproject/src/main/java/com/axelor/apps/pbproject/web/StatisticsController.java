@@ -20,16 +20,16 @@ public class StatisticsController {
         this.service = service;
     }
 
-    public void getUserAwgStat(ActionRequest actionRequest, ActionResponse actionResponse){
-        User user = AuthUtils.getUser();
-        if (Objects.isNull(user) || Objects.isNull(user.getId())){
-            actionResponse.setError(I18n.get("User or userId is null!"));
-            return;
-        }
-
-        Map<String, Object> data = service.getUserAwgStat(user.getId());
-
-    }
+//    public void getUserAwgStat(ActionRequest actionRequest, ActionResponse actionResponse){
+//        User user = AuthUtils.getUser();
+//        if (Objects.isNull(user) || Objects.isNull(user.getId())){
+//            actionResponse.setError(I18n.get("User or userId is null!"));
+//            return;
+//        }
+//
+//        Map<String, Object> data = service.getUserAwgStat(user.getId());
+//
+//    }
 
     public void getStatOfTasks(ActionRequest actionRequest, ActionResponse actionResponse){
         User user = AuthUtils.getUser();
@@ -41,5 +41,16 @@ public class StatisticsController {
         Map<String, Object> data = service.getStatOfTasks(user.getId());
         actionResponse.setData(data);
 
+    }
+
+    public void getAwgStatistics(ActionRequest actionRequest, ActionResponse actionResponse){
+        User user = AuthUtils.getUser();
+        if (Objects.isNull(user) || Objects.isNull(user.getId())){
+            actionResponse.setError(I18n.get("User or userId is null!"));
+            return;
+        }
+
+        Map<String, Object> data = service.getUserAwgStat(user.getId());
+        actionResponse.setData(data);
     }
 }

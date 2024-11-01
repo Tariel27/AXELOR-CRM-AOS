@@ -17,7 +17,7 @@
         <!-- Слежка за активность, в офисе ли человек -->
         <boolean name="inOffice" title="In office"/>
         <!--    Достижения человека    -->
-        <many-to-many name="awards" title="Awards" ref="com.axelor.apps.pbproject.db.Awards"/>
+        <many-to-many name="awards" title="Awards" ref="com.axelor.apps.pbproject.db.Award"/>
     </entity>
 
 </domain-models>
