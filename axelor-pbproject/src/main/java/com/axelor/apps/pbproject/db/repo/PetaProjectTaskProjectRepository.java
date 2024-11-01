@@ -32,6 +32,9 @@ public class PetaProjectTaskProjectRepository extends ProjectTaskBusinessSupport
         if (startDateTime == null || endDateTime == null) {
             return;
         }
+        if (projectTask.getSpentTime().compareTo(BigDecimal.ZERO) != 0){
+            return;
+        }
 
         BigDecimal spentTime = BigDecimal.ZERO;
         LocalDate currentDate = startDateTime.toLocalDate();
