@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -60,6 +61,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     private Double getAwgTaskDoneInDay(List<ProjectTask> projectTasks) {
         Optional<LocalDate> minDateOpt = projectTasks.stream()
                 .map(ProjectTask::getTaskDate)
+                .filter(Objects::nonNull)
                 .min(Comparator.naturalOrder());
 
         Integer daysOfStartTasksMaking = daysBetweenOfStart(minDateOpt.get());
@@ -99,6 +101,37 @@ public class StatisticsServiceImpl implements StatisticsService {
         data.putAll(taskStatusCounts);
         data.put("totalWorkHours", totalWorkHours);
 
+        return data;
+    }
+
+    @Override
+    public Map<String, Object> getKPDTasks(Long userId) {
+        Map<String, Object> data = new HashMap<>();
+        User user = userService.find(userId);
+
+        List<ProjectTask> projectTasks = workTimeService.getAllTasksOfUser(user);
+
+        int totalTasksWithDeadline = 0;
+        int completedBeforeDeadline = 0;
+
+        for (ProjectTask task : projectTasks) {
+            if (task.getDeadlineDateTime() != null && task.getEndDateTime() != null) {
+                totalTasksWithDeadline++;
+
+                if (!task.getEndDateTime().isAfter(task.getDeadlineDateTime())) {
+                    completedBeforeDeadline++;
+                }
+            }
+        }
+
+        double efficiency = (totalTasksWithDeadline > 0)
+                ? (double) completedBeforeDeadline / totalTasksWithDeadline * 100
+                : 0.0;
+
+        data.put("totalTasksWithDeadline", totalTasksWithDeadline);
+        data.put("completedBeforeDeadline", completedBeforeDeadline);
+        efficiency = Math.round(efficiency * 100.0) / 100.0;
+        data.put("efficiency", efficiency);
         return data;
     }
 

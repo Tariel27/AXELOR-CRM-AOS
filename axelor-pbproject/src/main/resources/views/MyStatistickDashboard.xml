@@ -6,6 +6,8 @@
         <dashlet colSpan="3" rowSpan="7"  action="custom:pbp.self-user-statistics"/>
         <dashlet colSpan="3" rowSpan="7"  action="custom:pbp.self-user-awg-statistics"/>
         <dashlet colSpan="6"  rowSpan="7" action="custom:pbp.self-user-award-info"/>
+        <dashlet colSpan="6"  rowSpan="7" action="custom:pbp.self-user-kpd"/>
+
     </dashboard>
 
     <custom name="pbp.self-user-award-info" title="Awards">
@@ -155,6 +157,61 @@
     </div>
     ]]></template>
     </custom>
+
+    <custom name="pbp.self-user-kpd" title="User KPD">
+        <dataset type="rpc">
+            <![CDATA[
+        com.axelor.apps.pbproject.web.StatisticsController:getKPDTasks
+        ]]>
+        </dataset>
+
+        <template><![CDATA[
+    <div class="report-data" style="
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #ffffff;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 320px;
+        font-family: Arial, sans-serif;
+        color: #333;">
+
+        <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin: 0 0 10px;">KPD Задачи</h2>
+
+        <div style="font-size: 28px; font-weight: bold; text-align: center; color: #007bff; margin-bottom: 8px;">
+            {{data.totalTasksWithDeadline}}
+        </div>
+
+        <div class="task-status" style="
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            font-size: 16px;
+            margin-bottom: 10px;">
+
+            <p style="margin: 3px 0;"><strong>Завершённых до дедлайна:</strong> {{data.completedBeforeDeadline}}</p>
+            <p style="margin: 3px 0;"><strong>Эффективность:</strong> {{data.efficiency}}%</p>
+        </div>
+
+        <div style="
+            padding-top: 10px;
+            border-top: 1px solid #ccc;
+            font-size: 16px;
+            margin-top: 15px;
+            text-align: center;">
+
+            <h3 style="font-size: 18px; font-weight: bold; margin: 0;">Общая информация</h3>
+            <p style="font-size: 20px; font-weight: bold; color: #28a745; margin: 5px 0 0;">
+                Всего задач с дедлайном: {{data.totalTasksWithDeadline}}
+            </p>
+        </div>
+    </div>
+    ]]></template>
+    </custom>
+
+
+
 
 
 </object-views>

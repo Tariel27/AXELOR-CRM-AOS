@@ -7,4 +7,6 @@ public interface StatisticsService {
     Map<String, Object> getUserAwgStat(Long userId);
 
     Map<String, Object> getStatOfTasks(Long id);
+
+    Map<String, Object> getKPDTasks(Long userId);
 }
