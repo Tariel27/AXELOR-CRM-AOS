@@ -5,6 +5,7 @@ import com.axelor.auth.AuthUtils;
 import com.axelor.auth.db.User;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
+import com.axelor.rpc.Context;
 import com.google.inject.Inject;
 
 import java.util.List;
@@ -18,8 +19,10 @@ public class AwardsController {
     }
 
     public void getAwardsOfUser(ActionRequest actionRequest, ActionResponse actionResponse){
-        User user = AuthUtils.getUser();
-        List<Map<String, Object>> data = awardsService.getUserAwards(user);
+        Map<String, Object> userMap = (Map<String, Object>) actionRequest.getData().get("_user");
+        Long userId = ((Number) userMap.get("id")).longValue();
+
+        List<Map<String, Object>> data = awardsService.getUserAwards(userId);
         actionResponse.setData(data);
     }
 }

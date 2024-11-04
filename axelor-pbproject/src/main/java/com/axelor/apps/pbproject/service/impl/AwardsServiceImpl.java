@@ -56,10 +56,10 @@ public class AwardsServiceImpl implements AwardsService {
     }
 
     @Override
-    public List<Map<String, Object>> getUserAwards(User user) {
+    public List<Map<String, Object>> getUserAwards(Long userId) {
         List<Map<String,Object>> data = new ArrayList<>();
 
-        User userFromDb = userPbpProjectService.find(user.getId());
+        User userFromDb = userPbpProjectService.find(userId);
 
         List<Award> awards = new ArrayList<>(userFromDb.getAwards());
         try {

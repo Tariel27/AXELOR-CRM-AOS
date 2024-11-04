@@ -9,5 +9,5 @@ import java.util.Map;
 public interface AwardsService {
     void recognizeAward(ProjectTask projectTask);
 
-    List<Map<String, Object>> getUserAwards(User user);
+    List<Map<String, Object>> getUserAwards(Long userId);
 }

@@ -41,4 +41,202 @@
         <field name="alreadyInDuty"/>
     </grid>
 
+    <!-- Форма юзера ПБП -->
+    <form name="pbp.user-form" title="User" model="com.axelor.auth.db.User" onLoad="action-user-group-on-load" onSave="com.axelor.apps.base.web.UserController:validate" onNew="action-user-group-on-new">
+        <panel name="stepUserPanel" showIf="[0,1,2,3,4].indexOf(stepStatusSelect) > -1">
+            <panel name="stepStatusPanel" colSpan="12">
+                <field name="stepStatusSelect" showTitle="false" readonly="true" colSpan="12" widget="NavSelect"/>
+                <panel name="buttonPanel" colSpan="12">
+                    <button name="previousBtn" readonlyIf="stepStatusSelect &lt; 1" colSpan="1" icon="fa-caret-left" onClick="action-user-group-previous-button"/>
+                    <button name="nextBtn" readonlyIf="stepStatusSelect > 3" colSpan="1" icon="fa-caret-right" onClick="action-user-group-next-button"/>
+                    <button name="validateBtn" title="Validate" showIf="stepStatusSelect == 4" onClick="action-user-record-step-status-next,save"/>
+                </panel>
+            </panel>
+            <panel name="stepOverviewPanel" title="Overview" showIf="stepStatusSelect == 0" colSpan="12">
+                <field name="name" placeholder="user name" onChange="action-condition-user-validName" validIf="name.length >= 2"/>
+                <field name="code" placeholder="login name" onChange="action-condition-user-validCode" validIf="code.length >= 2"/>
+                <field name="group" placeholder="user group"/>
+                <field name="email" showIf="!$readonly() || ($readonly() &amp;&amp; email != null)" widget="Email"/>
+                <field name="localization" title="Localization" onChange="action-base-user-record-change-language" form-view="localization-form" grid-view="localization-grid"/>
+                <field name="theme" widget="theme-select"/>
+                <panel name="actionsPanel" stacked="true">
+                    <field name="homeAction" hidden="true" x-bind="{{__actionSelect.name}}"/>
+                    <field name="__actionSelect" title="Action" widget="SuggestBox" canNew="false" target="com.axelor.meta.db.MetaAction" target-name="name" domain="self.home = true"/>
+                </panel>
+                <field name="singleTab" colSpan="3" widget="inline-checkbox"/>
+                <field name="noHelp" colSpan="3" widget="inline-checkbox"/>
+                <field name="contextProject" domain=":__self__ member of self.membersUserSet"/>
+                <field name="isIncludeSubContextProjects" showIf="contextProject"/>
+                <field name="change" title="Change password?" showIf="id &amp;&amp; !$readonly()" widget="boolean"/>
+                <panel name="allPasswordsPanel" title="" showIf="change || !id" colSpan="12" itemSpan="12">
+                    <field name="oldPassword" title="Your password" placeholder="your password" widget="password" requiredIf="change || !id"/>
+                    <panel name="passwordPanel" itemSpan="12">
+                        <field name="newPassword" title="New password" placeholder="new password" widget="password" onChange="action-user-validate-password" requiredIf="change || !id" validIf="(!change &amp;&amp; id) || newPassword.length >= 4"/>
+                        <field name="chkPassword" title="Confirm password" placeholder="confirm password" widget="password" requiredIf="change || !id" validIf="chkPassword === newPassword"/>
+                        <label name="passwordPatternDescriptionLabel" css="label-danger"/>
+                        <field name="passwordUpdatedOn" readonly="true"/>
+                    </panel>
+                    <panel name="passwordOptionsPanel" showIf="code != $user">
+                        <field name="$generateRandomPassword" title="Generate random password" widget="boolean" onChange="action-user-generate-random-password"/>
+                        <field name="sendEmailUponPasswordChange"/>
+                    </panel>
+                </panel>
+                <field name="language" hidden="true"/>
+            </panel>
+            <panel name="stepContactPanel" showIf="stepStatusSelect == 2" colSpan="12">
+                <panel name="contactInformationPanel" title="Contact Information" showIf="id &amp;&amp; [2,5].indexOf(stepStatusSelect) > -1" colSpan="12">
+                    <button name="createPartnerBtn" title="Create Partner" showIf="partner == null &amp;&amp; id != null &amp;&amp; id>0" colSpan="12" onClick="save,action-user-view-user-partner-type-wizard,action-user-attrs"/>
+                    <field name="partner" showTitle="false" colSpan="12" canNew="true" onChange="action-user-attrs-remove-linked-employee" domain="self.linkedUser=null AND (self.partnerTypeSelect = 2 OR self.isContact = true OR self.isEmployee = true)" form-view="partner-employee-form" grid-view="partner-employee-grid">
+                        <editor x-viewer="true">
+                            <field name="fullName" readonly="true"/>
+                            <field name="fixedPhone" widget="phone" x-placeholder-number-type="FIXED_LINE"/>
+                            <field name="mobilePhone" widget="phone"/>
+                            <field name="emailAddress" placeholder="Email address" canSelect="false" canNew="!emailAddress" canRemove="false" form-view="email-address-simple-form"/>
+                        </editor>
+                    </field>
+                </panel>
+                <field name="activeCompany" widget="SuggestBox" onSelect="action-user-attrs-domain-active-company" form-view="company-form" grid-view="company-grid"/>
+                <field if="__config__.app.getApp('base')?.getEnableTradingNamesManagement()" name="tradingName" form-view="trading-name-form" grid-view="trading-name-grid"/>
+                <field name="activeTeam" canEdit="false" onSelect="action-user-attrs-domain-active-team" form-view="team-form" grid-view="team-grid"/>
+                <field if="__config__.app.getApp('crm')?.getAgenciesManagement()" name="activeAgency" canEdit="false" onSelect="action-user-attrs-domain-active-agency" form-view="agency-form" grid-view="agency-grid"/>
+                <panel-related name="companySetPanel" title="Internal companies" showTitle="false" showIf="[2,5].indexOf(stepStatusSelect) > -1" colSpan="12" field="companySet" canNew="false"/>
+                <field name="teamSet" colSpan="12" canEdit="false" form-view="team-form" grid-view="team-grid"/>
+                <field if="__config__.app.getApp('crm')?.getAgenciesManagement()" name="agencySet" colSpan="12" canEdit="false" form-view="agency-form" grid-view="agency-grid"/>
+            </panel>
+            <panel name="stepMainPanel" showIf="stepStatusSelect == 3" colSpan="12">
+                <field if="__config__.app.isApp('employee')" if-module="axelor-human-resource" name="employee" hidden="true" showIf="partner == null || partner.employee != null" canNew="false" canView="false" canEdit="false" onChange="action-user-attrs-fill-contact" onSelect="action-user-attrs-change-employee-domain" domain="self.user == null" form-view="employee-form" grid-view="employee-grid"/>
+                <button if="__config__.app.isApp('employee')" if-module="axelor-human-resource" name="createEmployeeBtn" title="Create employee" showIf="(employee == null &amp;&amp; id != null &amp;&amp; id>0) || (partner != null &amp;&amp; partner.employee == null) || (employee == null)" onClick="save,action-user-group-employee"/>
+                <field name="employee.contactPartner" hidden="true"/>
+                <field name="partner.employee" hidden="true"/>
+            </panel>
+            <panel name="stepActivationPanel" showIf="stepStatusSelect == 4" colSpan="12">
+                <field name="activateOn" validIf="!activateOn || (activateOn &amp;&amp; !expiresOn) || (activateOn &amp;&amp; expiresOn &amp;&amp; $moment(expiresOn) >= $moment(activateOn))"/>
+                <field name="expiresOn" validIf="!expiresOn || (!activateOn &amp;&amp; expiresOn) || (activateOn &amp;&amp; expiresOn &amp;&amp; $moment(expiresOn) >= $moment(activateOn))"/>
+            </panel>
+        </panel>
+        <panel name="mainPanel" showIf="stepStatusSelect == 5" sidebar="true">
+            <field name="activeCompany" widget="SuggestBox" onSelect="action-user-attrs-domain-active-company" form-view="company-form" grid-view="company-grid"/>
+            <field if="__config__.app.getApp('base')?.getEnableTradingNamesManagement()" name="tradingName" form-view="trading-name-form" grid-view="trading-name-grid"/>
+            <field if="__config__.app.isApp('production') &amp;&amp; __config__.app.getApp('production')?.getManageWorkshop()" name="workshopStockLocation" canEdit="false" onSelect="action-user-attrs-domain-workshop-stock-location"/>
+            <field if="__config__.app.isApp('employee')" if-module="axelor-human-resource" name="employee" readonly="true" readonlyIf="partner == null" canNew="false" canView="false" canEdit="false" domain="self.contactPartner = :partner" form-view="employee-form" grid-view="employee-grid"/>
+            <button if="__config__.app.isApp('employee')" if-module="axelor-human-resource" name="createEmployeeBtn" title="Create employee" showIf="employee == null &amp;&amp; id != null &amp;&amp; id>0" onClick="save,action-user-group-employee"/>
+        </panel>
+        <panel if="com.axelor.app.AppSettings.get().get('application.mode') != 'prod'" name="testingPanel" title="Testing" hidden="true" showIf="stepStatusSelect == 5" sidebar="true">
+            <field name="todayDateT"/>
+        </panel>
+        <panel name="configAppPanel" sidebar="true">
+            <button if="__config__.app.getApp('mobile-settings')?.getIsLoginUserQrcodeEnabled()" name="generateQrCodeBtn" title="Generate QR Code" readonlyIf="qrCode != null" onClick="action-user-group-generate-qr-code-button-on-click"/>
+        </panel>
+        <panel name="mainUserPanel" showIf="stepStatusSelect == 5" colSpan="12">
+            <panel name="overviewPanel" title="Overview" colSpan="10">
+                <button name="check-statistics" onClick="check-user-stat-action.method" title="Statistics"/>
+                <field name="name" placeholder="user name" onChange="action-condition-user-validName" validIf="name.length >= 2"/>
+                <field name="code" placeholder="login name" onChange="action-condition-user-validCode" validIf="code.length >= 2"/>
+                <field name="group" placeholder="user group"/>
+                <field name="email" showIf="!$readonly() || ($readonly() &amp;&amp; email != null)" widget="Email"/>
+                <field name="localization" title="Localization" onChange="action-base-user-record-change-language" form-view="localization-form" grid-view="localization-grid"/>
+                <field name="theme" widget="theme-select"/>
+                <panel name="actionsPanel" stacked="true">
+                    <field name="homeAction" hidden="true" x-bind="{{__actionSelect.name}}"/>
+                    <field name="__actionSelect" title="Action" widget="SuggestBox" canNew="false" target="com.axelor.meta.db.MetaAction" target-name="name" domain="self.home = true"/>
+                </panel>
+                <field name="singleTab" colSpan="3" widget="inline-checkbox"/>
+                <field name="noHelp" colSpan="3" widget="inline-checkbox"/>
+                <field name="contextProject" domain=":__self__ member of self.membersUserSet"/>
+                <field name="isIncludeSubContextProjects" showIf="contextProject"/>
+                <field name="language" hidden="true"/>
+            </panel>
+            <panel name="qrCodePanel" colSpan="2">
+                <field if="__config__.app.getApp('mobile-settings')?.getIsLoginUserQrcodeEnabled()" name="qrCode" showTitle="false" hidden="true" readonly="true" hideIf="qrCode == null" colSpan="12" widget="Image" canRemove="true"/>
+            </panel>
+            <panel name="authorizationPanel" title="Authorization" colSpan="12">
+                <field name="activateOn" validIf="!activateOn || (activateOn &amp;&amp; !expiresOn) || (activateOn &amp;&amp; expiresOn &amp;&amp; $moment(expiresOn) >= $moment(activateOn))"/>
+                <field name="expiresOn" validIf="!expiresOn || (!activateOn &amp;&amp; expiresOn) || (activateOn &amp;&amp; expiresOn &amp;&amp; $moment(expiresOn) >= $moment(activateOn))"/>
+                <field name="blocked"/>
+                <field name="forcePasswordChange" showIf="id &amp;&amp; !$readonly()" widget="boolean"/>
+                <field name="change" title="Change password?" showIf="id &amp;&amp; !$readonly()" widget="boolean"/>
+                <panel name="allPasswordsPanel" showIf="change || !id" colSpan="12" itemSpan="12">
+                    <field name="oldPassword" title="Your password" placeholder="your password" widget="password" requiredIf="change || !id"/>
+                    <panel name="passwordPanel" itemSpan="12">
+                        <field name="newPassword" title="New password" placeholder="new password" widget="password" onChange="action-user-validate-password" requiredIf="change || !id" validIf="(!change &amp;&amp; id) || newPassword.length >= 4"/>
+                        <field name="chkPassword" title="Confirm password" placeholder="confirm password" widget="password" requiredIf="change || !id" validIf="chkPassword === newPassword"/>
+                        <label name="passwordPatternDescriptionLabel" css="label-danger"/>
+                    </panel>
+                    <panel name="passwordOptionsPanel" showIf="code != $user" itemSpan="4">
+                        <field name="$generateRandomPassword" title="Generate random password" widget="boolean" onChange="action-user-generate-random-password"/>
+                        <field name="sendEmailUponPasswordChange"/>
+                    </panel>
+                </panel>
+                <field name="passwordUpdatedOn" readonly="true"/>
+            </panel>
+        </panel>
+        <panel-tabs name="PermisionsPanelTab" showIf="[1,5].indexOf(stepStatusSelect) > -1">
+            <panel-related name="rolesPanel" showIf="[1,5].indexOf(stepStatusSelect) > -1" field="roles" form-view="role-form" grid-view="role-grid"/>
+            <panel name="parentPermissionsPanel" title="Permissions" showIf="[1,5].indexOf(stepStatusSelect) > -1">
+                <field if="__config__.app.isApp('mobile')" name="appPermissions" widget="MultiSelect"/>
+                <panel-related name="permissionsPanel" colSpan="12" field="permissions" form-view="permission-form" grid-view="simple-permission-grid"/>
+            </panel>
+            <panel-related name="metaPermissionsPanel" showIf="[1,5].indexOf(stepStatusSelect) > -1" field="metaPermissions"/>
+            <panel-dashlet name="userPermissionPanel" title="All permissions" showIf="id" action="action-user-view-show-all-permissions" canSearch="true"/>
+            <panel-related if="__config__.app.isApp('project')" name="projectSetPanel" showIf="stepStatusSelect == 1" colSpan="12" field="projectSet" form-view="project-form" grid-view="project-grid" canEdit="false"/>
+        </panel-tabs>
+        <panel-tabs name="mainPanelTab" showIf="stepStatusSelect == 5">
+            <panel name="contactInformationPanel" title="Contact Information" showIf="id &amp;&amp; [2,5].indexOf(stepStatusSelect) > -1">
+                <button name="createPartnerBtn" title="Create Partner" showIf="partner == null &amp;&amp; id != null &amp;&amp; id>0" colSpan="12" onClick="action-user-view-user-partner-type-wizard,action-user-attrs"/>
+                <field name="partner" showTitle="false" colSpan="12" canNew="true" onChange="action-user-attrs-remove-linked-employee" domain="self.linkedUser=null AND (self.partnerTypeSelect = 2 OR self.isContact = true OR self.isEmployee = true)" form-view="partner-employee-form" grid-view="partner-employee-grid">
+                    <editor x-viewer="true">
+                        <field name="fullName" readonly="true"/>
+                        <field name="fixedPhone" widget="phone" x-placeholder-number-type="FIXED_LINE"/>
+                        <field name="mobilePhone" widget="phone"/>
+                        <field name="emailAddress" placeholder="Email address" canSelect="false" canNew="!emailAddress" canRemove="false" form-view="email-address-simple-form"/>
+                    </editor>
+                </field>
+            </panel>
+            <panel-related name="companySetPanel" title="Internal companies" showTitle="false" showIf="[2,5].indexOf(stepStatusSelect) > -1" field="companySet" onChange="action-user-attrs-set-pfp-validator-panel-show" canNew="false"/>
+            <panel if="__config__.app.getApp('base')?.getTeamManagement()" name="teamsPanel" title="Teams" showIf="[2,5].indexOf(stepStatusSelect) > -1">
+                <field name="activeTeam" canEdit="false" onSelect="action-user-attrs-domain-active-team" form-view="team-form" grid-view="team-grid"/>
+                <field name="teamSet" colSpan="12" canEdit="false" form-view="team-form" grid-view="team-grid"/>
+            </panel>
+            <panel if="__config__.app.getApp('crm')?.getAgenciesManagement()" name="agencyPanel" title="Agencies" showIf="[2,5].indexOf(stepStatusSelect) > -1">
+                <field name="activeAgency" canEdit="false" onSelect="action-user-attrs-domain-active-agency" form-view="agency-form" grid-view="agency-grid"/>
+                <field name="agencySet" colSpan="12" canEdit="false" form-view="agency-form" grid-view="agency-grid"/>
+            </panel>
+            <panel name="calendarsConfigPanel" title="Calendars Configuration" showIf="[2,5].indexOf(stepStatusSelect) > -1">
+                <panel-related name="followersCalUserSetPanel" colSpan="12" field="followersCalUserSet" form-view="user-form" grid-view="user-grid" onSelect="action-user-attrs-domain-followers" canNew="false" canEdit="false"/>
+                <field name="iCalendar" canNew="true" canEdit="true"/>
+            </panel>
+            <panel if="__config__.app.isApp('sale') || __config__.app.isApp('purchase') || __config__.app.isApp('stock')" name="electronicSignaturePanel" title="Electronic signature" showIf="[2,5].indexOf(stepStatusSelect) > -1">
+                <field name="electronicSignature" widget="Image"/>
+                <field if="__config__.app.isApp('stock')" name="useSignatureForStock"/>
+                <field if="__config__.app.isApp('sale')" name="useSignatureForSalesQuotations"/>
+                <field if="__config__.app.isApp('purchase')" name="useSignatureForPurchaseQuotations"/>
+            </panel>
+            <panel-related if="__config__.app.getApp('base')?.getEmailAccountByUser()" name="emailAccountListPanel" showIf="[2,5].indexOf(stepStatusSelect) > -1" colSpan="12" field="emailAccountList" form-view="mail-account-form" grid-view="mail-account-grid"/>
+            <panel-related if="__config__.app.isApp('project')" name="projectSetPanel" colSpan="12" field="projectSet" form-view="project-form" grid-view="project-grid" canEdit="false"/>
+            <panel if="__config__.app.isApp('account') &amp;&amp; __config__.app.getApp('account')?.getActivatePassedForPayment()" if-module="axelor-account" name="substitutePfpValidatorTabPanel" title="PFP Validator">
+                <field name="isPfpValidator" colSpan="4" widget="boolean-switch"/>
+                <field name="isSuperPfpUser" colSpan="4" widget="boolean-switch"/>
+                <button name="pfpSupplierListBtn" title="Supplier list" colSpan="4" onClick="action-view-user-pfp-supplier-list"/>
+                <button name="delegateRightsOfPfpValidatorBtn" title="Delegate Rights of Pfp Validator" colSpan="6" onClick="action-user-view-delegate-rights-pfp-validator"/>
+                <panel-related name="substitutePfpValidatorListPanel" title="Substitute PFP Validator" showIf="isPfpValidator" colSpan="12" field="substitutePfpValidatorList"/>
+            </panel>
+            <panel name="emailSignaturePanel" title="Email signature" colSpan="12">
+                <field name="emailSignature" colSpan="12" height="9" widget="Html" x-lite="true"/>
+            </panel>
+        </panel-tabs>
+        <panel name="transientPasswordPanel" hidden="true" colSpan="12">
+            <field name="transientPassword"/>
+        </panel>
+        <panel-mail name="mailsPanel">
+            <mail-messages limit="4"/>
+            <mail-followers/>
+        </panel-mail>
+    </form>
+
+    <!--  Метод через который просматриваем статистику юзера  -->
+    <action-method name="check-user-stat-action.method">
+        <call class="com.axelor.apps.pbproject.web.StatisticsController" method="openStatisticsOfUser"/>
+    </action-method>
+
+
 </object-views>
