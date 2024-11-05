@@ -12,11 +12,9 @@ import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+
 import com.axelor.apps.pbproject.db.repo.DishMenuRepository;
 import com.axelor.meta.CallMethod;
-import com.axelor.auth.AuthUtils;
-import com.axelor.apps.pbproject.db.Lunch;
-import java.time.LocalDate;
 
 
 public class LunchController extends JpaSupport {
@@ -173,8 +171,7 @@ public class LunchController extends JpaSupport {
 
     @CallMethod
     public String showO() {
-        return "@";
+        return "𖣠";
     }
-
 
 }

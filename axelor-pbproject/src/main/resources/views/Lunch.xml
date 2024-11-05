@@ -13,10 +13,10 @@
     </grid>
 
     <!--  form для обеда партнеров -->
-    <form name="pbp.lunch-form-view" title="Partner lunch" model="com.axelor.apps.pbproject.db.Lunch" width="large" onNew="pbp.update-user-and-date-on-partnerName-for-lunch">
+    <form name="pbp.lunch-form-view" title="Partner lunch" model="com.axelor.apps.pbproject.db.Lunch" width="large"
+          onNew="pbp.update-user-and-date-on-partnerName-for-lunch">
         <panel name="help" hideIf="isOrderLunch" colSpan="12">
             <help><![CDATA[
-
 
 Orders are accepted until 19:00!
 
@@ -24,35 +24,35 @@ Orders are accepted until 19:00!
         </panel>
         <panel title="Dish menu" hideIf="isOrderLunch" itemSpan="12">
             <field name="partnerName" title="Partner name" hidden="true"/>
-            <field name="dishName" title="Lunch" onChange="pbp.searchDishOnDuckDuckGo" domain="self.dateCreateDish = :__date__"  target-name="name"/>
-            <field name="some" hidden="true" x-target-name="dishName" x-target="com.axelor.apps.pbproject.db.Dish" x-type="many-to-one"/>
+            <field name="dishName" title="Lunch" onChange="pbp.searchDishOnDuckDuckGo"
+                   domain="self.dateCreateDish = :__date__" target-name="name"/>
+            <field name="some" hidden="true" x-target-name="dishName" x-target="com.axelor.apps.pbproject.db.Dish"
+                   x-type="many-to-one"/>
             <field name="portion" title="Portion size" widget="SingleSelect"/>
             <field name="dateCreate" title="Order date" hidden="true"/>
             <field name="partnerComment" title="Your comment"/>
             <field name="isOrderLunch" title="is order lunch" hidden="true" readonly="true"/>
         </panel>
         <panel hideIf="isOrderLunch">
-            <button name="saveBtn" title="Save" colSpan="6" css="btn-success" icon="fa-check-square-o" onClick="pbp.update-field-isShow-true,save"/>
+            <button name="saveBtn" title="Save" colSpan="6" css="btn-success" icon="fa-check-square-o"
+                    onClick="pbp.update-field-isShow-true,save"/>
             <field name="addUrlForGoogle" colSpan="6" widget="url"/>
         </panel>
     </form>
 
-
     <dashboard name="pbp.lunch-for-partners-dashboard" title="Lunch for partners!">
-
         <dashlet height="300px" colSpan="3" action="custom:report-user-lunch-stats"/>
         <dashlet height="300px" colSpan="3" action="custom:report-user-portion-stats"/>
         <dashlet height="300px" colSpan="3" action="custom:report-dish-count-stats"/>
         <dashlet height="300px" colSpan="3" action="custom:report-dish-count-half-stats"/>
         <dashlet height="350px" colSpan="12" action="custom:report-table-lunch-for-users"/>
         <dashlet height="800px" colSpan="12" action="form:pbp.lunch-form-view"/>
-
     </dashboard>
 
-<!-- таблица показывающая всех партнеров сделавших заказ-->
+    <!-- таблица показывающая всех партнеров сделавших заказ-->
     <custom name="report-table-lunch-for-users" title="Users information" css="report-box">
         <field name="fullName" title="Name"/>
-        <field name="dishName" title="Dish" type="string" />
+        <field name="dishName" title="Dish" type="string"/>
         <field name="portion" title="Portion" type="string"/>
         <field name="dateCreate" title="Date of create" type="date"/>
         <field name="partnerComment" title="Comment" type="string"/>
@@ -77,7 +77,7 @@ Orders are accepted until 19:00!
     ]]></template>
     </custom>
 
-<!--    report-box-->
+    <!--    report-box-->
 
     <custom name="report-user-lunch-stats" title="" css="report-box">
 
@@ -122,7 +122,8 @@ Orders are accepted until 19:00!
     </custom>
 
     <custom name="report-dish-count-stats" title="" css="report-box">
-        <dataset type="rpc"><![CDATA[com.axelor.apps.pbproject.web.LunchController:reportDishCountForPortion]]></dataset>
+        <dataset type="rpc">
+            <![CDATA[com.axelor.apps.pbproject.web.LunchController:reportDishCountForPortion]]></dataset>
         <template><![CDATA[
         <div class="report-data">
             <h1>{{first.firstDishCount}}</h1>
@@ -137,7 +138,6 @@ Orders are accepted until 19:00!
 
                  <h1>{{first.thirdDishCount}}</h1>
             <small>{{first.thirdDish}}</small>
-
 
         </div>
     ]]></template>
@@ -159,7 +159,6 @@ Orders are accepted until 19:00!
 
                  <h1>{{first.thirdDishCount}}</h1>
             <small>{{first.thirdDish}}</small>
-
 
         </div>
     ]]></template>
