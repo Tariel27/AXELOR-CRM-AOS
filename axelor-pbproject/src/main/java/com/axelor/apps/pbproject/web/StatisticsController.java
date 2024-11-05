@@ -63,28 +63,24 @@ public class StatisticsController {
 
     }
 
+    public void getLastActivityMonthWeek(ActionRequest actionRequest, ActionResponse actionResponse){
+        Map<String, Object> userMap = (Map<String, Object>) actionRequest.getData().get("_user");
+        Long userId = ((Number) userMap.get("id")).longValue();
 
+        if (Objects.isNull(userId)){
+            actionResponse.setError(I18n.get("User or userId is null!"));
+            return;
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        Map<String, Object> data = service.getLastActivityStat(userId);
+        actionResponse.setData(data);
+    }
 
 
     public void openStatisticsOfUser(ActionRequest actionRequest,ActionResponse actionResponse){
         Map<String, Object> userContextMap = new LinkedHashMap<>();
 
-        Integer userId = (Integer) actionRequest.getContext().get("id");
+        Long userId = (Long) actionRequest.getContext().get("id");
         String userCode = (String) actionRequest.getContext().get("code");
         String userFullname = (String) actionRequest.getContext().get("name");
 

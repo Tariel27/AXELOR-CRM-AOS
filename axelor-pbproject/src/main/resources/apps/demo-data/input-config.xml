@@ -15,4 +15,6 @@
 
     <input file="partner_sequence.csv" separator=";" type="com.axelor.apps.base.db.Sequence"/>
 
+    <input file="award.csv" type="com.axelor.apps.pbproject.db.Award" search="self.importId = :importId"/>
+
 </csv-inputs>

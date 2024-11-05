@@ -12,10 +12,14 @@
         <string name="description" title="Description"/>
         <extra-code>
             <![CDATA[
-	   			public static final String HOURS_500_CODE = "500hours";
-	   			public static final String HOURS_1000_CODE = "1000hours";
-	   			public static final String TASKS_30_CODE = "30tasks";
-	   		]]>
+        public static final String TASKS_30_CODE = "30tasks";
+        public static final String TASKS_50_CODE = "50tasks";
+        public static final String TASKS_100_CODE = "100tasks";
+        public static final String HOURS_100_CODE = "100hours";
+        public static final String HOURS_500_CODE = "500hours";
+        public static final String HOURS_1000_CODE = "1000hours";
+        public static final String HOURS_2000_CODE = "2000hours";
+    ]]>
         </extra-code>
     </entity>
 </domain-models>

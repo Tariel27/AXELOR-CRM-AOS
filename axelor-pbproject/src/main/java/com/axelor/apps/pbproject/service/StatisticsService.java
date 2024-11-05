@@ -9,4 +9,5 @@ public interface StatisticsService {
     Map<String, Object> getStatOfTasks(Long id);
 
     Map<String, Object> getKPDTasks(Long userId);
+    Map<String, Object> getLastActivityStat(Long userId);
 }

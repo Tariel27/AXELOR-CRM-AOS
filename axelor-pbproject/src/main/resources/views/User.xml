@@ -129,9 +129,10 @@
         </panel>
         <panel name="mainUserPanel" showIf="stepStatusSelect == 5" colSpan="12">
             <panel name="overviewPanel" title="Overview" colSpan="10">
-                <button name="check-statistics" onClick="check-user-stat-action.method" title="Statistics"/>
-                <field name="name" placeholder="user name" onChange="action-condition-user-validName" validIf="name.length >= 2"/>
-                <field name="code" placeholder="login name" onChange="action-condition-user-validCode" validIf="code.length >= 2"/>
+                <field name="name" colSpan="3" placeholder="user name" onChange="action-condition-user-validName" validIf="name.length >= 2"/>
+                <field name="code" colSpan="3" placeholder="login name" onChange="action-condition-user-validCode" validIf="code.length >= 2"/>
+                <button colSpan="4" name="check-statistics" onClick="check-user-stat-action.method" title="Statistics" showIf="$readonly()"/>
+
                 <field name="group" placeholder="user group"/>
                 <field name="email" showIf="!$readonly() || ($readonly() &amp;&amp; email != null)" widget="Email"/>
                 <field name="localization" title="Localization" onChange="action-base-user-record-change-language" form-view="localization-form" grid-view="localization-grid"/>

@@ -183,7 +183,7 @@
      </action-view>
 
     <!--  Менюшка с достижениями для добавления -->
-    <menuitem name="pbp.open-award-settings" title="Awards config" action="pbp.award-action-view"/>
+    <menuitem name="pbp.open-award-settings" title="Awards config" action="pbp.award-action-view" parent="pbp.user-statistick-m.i" if="eval:__user__.group?.name == 'Admins'"/>
     <action-view name="pbp.award-action-view" title="Awards" model="com.axelor.apps.pbproject.db.Award">
         <view type="grid" name="pbp.award-grid"/>
         <view type="form" name="pbp.award-form"/>

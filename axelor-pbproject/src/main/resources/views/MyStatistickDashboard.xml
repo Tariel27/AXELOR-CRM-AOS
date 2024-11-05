@@ -6,7 +6,8 @@
         <dashlet colSpan="3" rowSpan="7"  action="custom:pbp.self-user-statistics"/>
         <dashlet colSpan="3" rowSpan="7"  action="custom:pbp.self-user-awg-statistics"/>
         <dashlet colSpan="6"  rowSpan="7" action="custom:pbp.self-user-award-info"/>
-        <dashlet colSpan="6"  rowSpan="7" action="custom:pbp.self-user-kpd"/>
+        <dashlet colSpan="3"  rowSpan="7" action="custom:pbp.self-user-kpd"/>
+        <dashlet colSpan="2"  rowSpan="7" action="custom:pbp.self-user-last-activity"/>
 
     </dashboard>
 
@@ -179,10 +180,6 @@
 
         <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin: 0 0 10px;">KPD Задачи</h2>
 
-        <div style="font-size: 28px; font-weight: bold; text-align: center; color: #007bff; margin-bottom: 8px;">
-            {{data.totalTasksWithDeadline}}
-        </div>
-
         <div class="task-status" style="
             display: flex;
             flex-direction: column;
@@ -203,12 +200,63 @@
 
             <h3 style="font-size: 18px; font-weight: bold; margin: 0;">Общая информация</h3>
             <p style="font-size: 20px; font-weight: bold; color: #28a745; margin: 5px 0 0;">
-                Всего задач с дедлайном: {{data.totalTasksWithDeadline}}
+               Выполненных задач: {{data.totalTasksWithDeadline}}
             </p>
         </div>
     </div>
     ]]></template>
     </custom>
+
+    <custom name="pbp.self-user-last-activity" title="Activity week/month">
+        <dataset type="rpc">
+            <![CDATA[
+    com.axelor.apps.pbproject.web.StatisticsController:getLastActivityMonthWeek
+    ]]>
+        </dataset>
+
+        <template><![CDATA[
+    <div class="activity-data" style="
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #ffffff;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 320px;
+        font-family: Arial, sans-serif;
+        color: #333;">
+
+        <div style="margin-top: 2px;">
+            <h3 style="font-size: 18px; font-weight: 600; color: #555; text-align: center;">
+                За последнюю неделю
+            </h3>
+            <p style="font-size: 16px; text-align: center;">
+                <strong>Выполнено задач:</strong> {{data.tasksCompletedLastWeek}}
+            </p>
+            <p style="font-size: 16px; text-align: center;">
+                <strong>Потрачено часов:</strong> {{data.hoursSpentLastWeek}}
+            </p>
+        </div>
+
+        <hr style="border-top: 1px solid #ddd; margin: 20px 0;">
+
+        <div style="margin-top: 20px;">
+            <h3 style="font-size: 18px; font-weight: 600; color: #555; text-align: center;">
+                За последний месяц
+            </h3>
+            <p style="font-size: 16px; text-align: center;">
+                <strong>Выполнено задач:</strong> {{data.tasksCompletedLastMonth}}
+            </p>
+            <p style="font-size: 16px; text-align: center;">
+                <strong>Потрачено часов:</strong> {{data.hoursSpentLastMonth}}
+            </p>
+        </div>
+
+    </div>
+    ]]></template>
+    </custom>
+
+
 
 
 

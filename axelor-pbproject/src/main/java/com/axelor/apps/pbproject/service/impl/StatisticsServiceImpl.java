@@ -12,9 +12,11 @@ import com.google.inject.Inject;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class StatisticsServiceImpl implements StatisticsService {
     private final UserPbpProjectService userService;
@@ -135,6 +137,46 @@ public class StatisticsServiceImpl implements StatisticsService {
         return data;
     }
 
+    @Override
+    public Map<String, Object> getLastActivityStat(Long userId) {
+         Map<String, Object> data = new HashMap<>();
+        User user = userService.find(userId);
+
+        List<ProjectTask> projectTasks = workTimeService.getAllTasksOfUser(user);
+
+        LocalDate now = LocalDate.now();
+        LocalDate weekAgo = now.minusWeeks(1);
+        LocalDate monthAgo = now.minusMonths(1);
+
+        List<ProjectTask> tasksLastWeek = projectTasks.stream()
+                .filter(task -> task.getStatus().getName().equalsIgnoreCase("done") && !task.getTaskEndDate().isBefore(weekAgo))
+                .collect(Collectors.toList());
+
+        List<ProjectTask> tasksLastMonth = projectTasks.stream()
+                .filter(task -> task.getStatus().getName().equalsIgnoreCase("done") && !task.getTaskEndDate().isBefore(monthAgo))
+                .collect(Collectors.toList());
+
+        int completedTasksLastWeek = tasksLastWeek.size();
+        double hoursSpentLastWeek = tasksLastWeek.stream()
+                .mapToDouble(task -> Duration.between(task.getStartDateTime(), task.getEndDateTime()).toHours())
+                .sum();
+
+        int completedTasksLastMonth = tasksLastMonth.size();
+        double hoursSpentLastMonth = tasksLastMonth.stream()
+                .mapToDouble(task -> Duration.between(task.getStartDateTime(), task.getEndDateTime()).toHours())
+                .sum();
+
+        hoursSpentLastMonth= Math.round(hoursSpentLastMonth * 100.0) / 100.0;
+        hoursSpentLastWeek= Math.round(hoursSpentLastWeek * 100.0) / 100.0;
+
+
+        data.put("tasksCompletedLastWeek", completedTasksLastWeek);
+        data.put("hoursSpentLastWeek", hoursSpentLastWeek);
+        data.put("tasksCompletedLastMonth", completedTasksLastMonth);
+        data.put("hoursSpentLastMonth", hoursSpentLastMonth);
+
+        return data;
+    }
 
 
     private Map<String, Integer> getTaskStatusCounts(List<ProjectTask> projectTasks) {

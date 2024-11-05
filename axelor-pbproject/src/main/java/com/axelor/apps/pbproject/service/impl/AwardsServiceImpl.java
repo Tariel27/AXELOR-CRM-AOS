@@ -34,25 +34,34 @@ public class AwardsServiceImpl implements AwardsService {
     @Transactional
     public void recognizeAward(ProjectTask projectTask) {
         User user = userPbpProjectService.find(AuthUtils.getUser().getId());
+        BigDecimal totalWorkHours = workTimeServiceProvider.get().getTotalSumWorkHours(user);
+        int taskCount = workTimeServiceProvider.get().getAllTasksOfUser(user).size();
         Set<Award> awards = new HashSet<>();
 
-        if (workTimeServiceProvider.get().getTotalSumWorkHours(user).compareTo(BigDecimal.valueOf(500)) >= 0 && !hasUser500HoursAward(user)){
-            awards.add(awardRepository.findByCode(AwardRepository.HOURS_500_CODE));
-        }
-        if (workTimeServiceProvider.get().getTotalSumWorkHours(user).compareTo(BigDecimal.valueOf(1000)) >= 0 && !hasUser1000HoursAward(user)){
-            awards.add(awardRepository.findByCode(AwardRepository.HOURS_1000_CODE));
-        }
-        if (workTimeServiceProvider.get().getAllTasksOfUser(user).size() >= 30){
-            awards.add(awardRepository.findByCode(AwardRepository.TASKS_30_CODE));
+        List<AwardCondition> awardConditions = List.of(
+                new AwardCondition(AwardRepository.HOURS_100_CODE, () -> totalWorkHours.compareTo(BigDecimal.valueOf(100)) >= 0),
+                new AwardCondition(AwardRepository.HOURS_500_CODE, () -> totalWorkHours.compareTo(BigDecimal.valueOf(500)) >= 0),
+                new AwardCondition(AwardRepository.HOURS_1000_CODE, () -> totalWorkHours.compareTo(BigDecimal.valueOf(1000)) >= 0),
+                new AwardCondition(AwardRepository.HOURS_2000_CODE, () -> totalWorkHours.compareTo(BigDecimal.valueOf(2000)) >= 0),
+                new AwardCondition(AwardRepository.TASKS_30_CODE, () -> taskCount >= 30),
+                new AwardCondition(AwardRepository.TASKS_50_CODE, () -> taskCount >= 50),
+                new AwardCondition(AwardRepository.TASKS_100_CODE, () -> taskCount >= 100)
+        );
+
+        for (AwardCondition condition : awardConditions) {
+            if (condition.isConditionMet() && !hasUserAward(user, condition.getAwardCode())) {
+                awards.add(awardRepository.findByCode(condition.getAwardCode()));
+            }
         }
 
-        if (awards.size() == 0){
-            return;
+        if (!awards.isEmpty()) {
+            user.getAwards().addAll(awards);
+            userRepository.save(user);
         }
+    }
 
-        Set<Award> awardOfUser = user.getAwards();
-        awardOfUser.addAll(awards);
-        userRepository.save(user);
+    private boolean hasUserAward(User user, String awardCode) {
+        return user.getAwards().stream().anyMatch(award -> award.getCode().equals(awardCode));
     }
 
     @Override
@@ -79,11 +88,28 @@ public class AwardsServiceImpl implements AwardsService {
         return data;
     }
 
-    private boolean hasUser500HoursAward(User user){
-        return user.getAwards().stream().anyMatch(award -> award.getCode().equals(AwardRepository.HOURS_500_CODE));
-    }
 
-    private boolean hasUser1000HoursAward(User user){
-        return user.getAwards().stream().anyMatch(award -> award.getCode().equals(AwardRepository.HOURS_1000_CODE));
+    private static class AwardCondition {
+        private final String awardCode;
+        private final Condition condition;
+
+        AwardCondition(String awardCode, Condition condition) {
+            this.awardCode = awardCode;
+            this.condition = condition;
+        }
+
+        String getAwardCode() {
+            return awardCode;
+        }
+
+        boolean isConditionMet() {
+            return condition.check();
+        }
+
+        @FunctionalInterface
+        interface Condition {
+            boolean check();
+        }
     }
 }
+
