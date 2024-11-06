@@ -38,9 +38,7 @@ Orders are accepted until 19:00!
                     onClick="pbp.update-field-isShow-true,save"/>
             <field name="addUrlForGoogle" colSpan="6" widget="url"/>
         </panel>
-        <panel>
-            <button name="saveBtn" title="Save" onClick="save"/>
-        </panel>
+
 
     </form>
 
