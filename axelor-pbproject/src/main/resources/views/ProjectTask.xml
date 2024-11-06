@@ -4,7 +4,7 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <form name="pbp.project-task-form" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large"
-          onLoad="action-business-project-project-task-group-on-load,action-readable-time-convert,save"
+          onLoad="pbp.action-business-project-project-task-group-on-load,action-readable-time-convert,save"
           onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method,pbp.validate.dateStart.dateEnd,pbp.auto-set-complexity" onSave="pbp.validate.dateStart.dateEnd">
         <toolbar>
             <button name="grabEventBtn" help="Take charge" icon="fa-suitcase"
@@ -548,5 +548,22 @@
     <action-attrs name="pbp.auto-set-complexity">
         <attribute for="complexity" name="value" expr="eval: 'medium'"/>
     </action-attrs>
+
+    <!--  On load экшн группа -->
+    <action-group name="pbp.action-business-project-project-task-group-on-load">
+        <action name="pbp.action-project-task-group-timer-process"/> <!-- тут баг, закоментировал ненужный метод -->
+    </action-group>
+
+    <action-group name="pbp.action-project-task-group-timer-process">
+        <action name="action-project-task-attrs-project-filter-status" if="project?.isShowStatus"/>
+        <action name="action-project-task-method-manage-timer-buttons"/>
+<!--        <action name="action-project-task-method-compute-total-timer-duration"/> &lt;!&ndash; вот баг &ndash;&gt;-->
+        <action name="action-project-task-attrs-scale-and-precision"
+                if="__config__.app.isApp('business-project')"/>
+        <action name="action-project-task-business-support-provider"
+                if="__config__.app.isApp('business-support')"/>
+        <action name="action-project-task-attrs-hide-time-spent-button"/>
+    </action-group>
+
 
 </object-views>
