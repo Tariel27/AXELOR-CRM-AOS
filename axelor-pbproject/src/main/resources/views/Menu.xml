@@ -166,8 +166,10 @@
 
 
     <!-- Меню которое для отпросится -->
-    <menuitem name="pbp.ask-for-leave-from-job-m.i" tag-count="true" title="Ask for off" icon="fa-sign-out" icon-background="#3f6bb9" action="pbp.ask-for-leave-from-action.view"/>
-    <action-view name="pbp.ask-for-leave-from-action.view" title="Leave ask" model="com.axelor.apps.pbproject.db.WorkLeave">
+    <menuitem name="pbp.ask-for-leave-from-job-m.i" title="Ask for off" icon="fa-sign-out" icon-background="#3f6bb9"
+              action="pbp.ask-for-leave-from-action.view"/>
+    <action-view name="pbp.ask-for-leave-from-action.view" title="Leave ask"
+                 model="com.axelor.apps.pbproject.db.WorkLeave">
         <view type="grid" name="pbp.ask-for-leave-grid"/>
         <view type="form" name="pbp.ask-for-leave-form"/>
         <view-param name="auto-reload" value="15"/>
@@ -175,25 +177,10 @@
     </action-view>
 
     <!-- Меню для управления отчетами с дежурными -->
-    <menuitem name="pbp.report-duty-users-m.i" title="Duty control" icon="fa-user-md" icon-background="#3f6bb9" action="pbp.duty-control-action.view"/>
+    <menuitem name="pbp.report-duty-users-m.i" title="Duty control" icon="fa-user-md" icon-background="#3f6bb9"
+              action="pbp.duty-control-action.view"/>
     <action-view name="pbp.duty-control-action.view" title="Duty control" model="com.axelor.apps.pbproject.db.Duty">
         <view type="form" name="pbp.duty-control-form"/>
-    </action-view>
-
-    <!-- Меню для статистики -->
-    <menuitem name="pbp.user-statistick-m.i" title="Statistic" icon="fa-bar-chart" icon-background="#3f6bb9"/>
-
-    <menuitem name="pbp.my-statistick-m.i" title="My Statistic" parent="pbp.user-statistick-m.i" action="pbp-my-statistic-action-view"/>
-    <action-view name="pbp-my-statistic-action-view" title="My statistic">
-        <view type="dashboard" name="pbp.my-statistic-dashboard"/>
-        <context name="_user" expr="eval: __user__"/>
-     </action-view>
-
-    <!--  Менюшка с достижениями для добавления -->
-    <menuitem name="pbp.open-award-settings" title="Awards config" action="pbp.award-action-view" parent="pbp.user-statistick-m.i" if="eval:__user__.group?.name == 'Admins'"/>
-    <action-view name="pbp.award-action-view" title="Awards" model="com.axelor.apps.pbproject.db.Award">
-        <view type="grid" name="pbp.award-grid"/>
-        <view type="form" name="pbp.award-form"/>
     </action-view>
 
     <!--Меню для заполнения блюд для обеда партнеров (видно только администрации)-->
@@ -218,5 +205,23 @@
     <action-method name="pbp.setLunch">
         <call class="com.axelor.apps.pbproject.web.LunchController" method="setLunchForCurrentUser"/>
     </action-method>
+
+    <!-- Меню для статистики -->
+    <menuitem name="pbp.user-statistick-m.i" title="Statistic" icon="fa-bar-chart" icon-background="#3f6bb9"/>
+
+    <menuitem name="pbp.my-statistick-m.i" title="My Statistic" parent="pbp.user-statistick-m.i" action="pbp-my-statistic-action-view"/>
+    <action-view name="pbp-my-statistic-action-view" title="My statistic">
+        <view type="dashboard" name="pbp.my-statistic-dashboard"/>
+        <context name="_user" expr="eval: __user__"/>
+     </action-view>
+
+    <!--  Менюшка с достижениями для добавления -->
+    <menuitem name="pbp.open-award-settings" title="Awards config" action="pbp.award-action-view" parent="pbp.user-statistick-m.i" if="eval:__user__.group?.name == 'Admins'"/>
+    <action-view name="pbp.award-action-view" title="Awards" model="com.axelor.apps.pbproject.db.Award">
+        <view type="grid" name="pbp.award-grid"/>
+        <view type="form" name="pbp.award-form"/>
+    </action-view>
+
+
 
 </object-views>
