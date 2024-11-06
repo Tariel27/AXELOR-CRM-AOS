@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+
+
+    <form title="Award" name="pbp.award-form" model="com.axelor.apps.pbproject.db.Award">
+        <panel>
+            <field name="code"/>
+            <field name="name"/>
+            <field name="imageAward" widget="image"/>
+            <field name="description"/>
+        </panel>
+    </form>
+
+    <grid title="Awards" name="pbp.award-grid" model="com.axelor.apps.pbproject.db.Award">
+        <field name="code"/>
+        <field name="name"/>
+        <field name="imageAward" widget="image"/>
+        <field name="description"/>
+    </grid>
+
+</object-views>

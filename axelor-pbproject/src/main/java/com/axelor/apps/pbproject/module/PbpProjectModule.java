@@ -41,5 +41,7 @@ public class PbpProjectModule extends AxelorModule {
     bind(EmailService.class).to(EmailServiceImpl.class);
     bind(ExportExcelService.class).to(ExcelExportServiceImpl.class);
     bind(WeeklyService.class).to(WeeklyServiceImpl.class);
+    bind(StatisticsService.class).to(StatisticsServiceImpl.class);
+    bind(AwardsService.class).to(AwardsServiceImpl.class);
   }
 }

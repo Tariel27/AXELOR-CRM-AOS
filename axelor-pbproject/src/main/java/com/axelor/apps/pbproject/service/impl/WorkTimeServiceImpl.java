@@ -5,6 +5,8 @@ import com.axelor.apps.pbproject.db.WorkHoursDto;
 import com.axelor.apps.pbproject.service.ReadableTimeService;
 import com.axelor.apps.pbproject.service.WorkTimeService;
 import com.axelor.apps.project.db.Project;
+import com.axelor.apps.project.db.ProjectTask;
+import com.axelor.apps.project.db.repo.ProjectTaskRepository;
 import com.axelor.auth.db.User;
 import com.google.inject.Inject;
 
@@ -18,11 +20,13 @@ import java.util.stream.Collectors;
 public class WorkTimeServiceImpl implements WorkTimeService {
     private final EntityManager entityManager;
     private final ReadableTimeService readableTimeService;
+    private final ProjectTaskRepository projectTaskRepository;
 
     @Inject
-    public WorkTimeServiceImpl(EntityManager entityManager, ReadableTimeService readableTimeService) {
+    public WorkTimeServiceImpl(EntityManager entityManager, ReadableTimeService readableTimeService, ProjectTaskRepository projectTaskRepository) {
         this.entityManager = entityManager;
         this.readableTimeService = readableTimeService;
+        this.projectTaskRepository = projectTaskRepository;
     }
 
     @Override
@@ -102,5 +106,36 @@ public class WorkTimeServiceImpl implements WorkTimeService {
                 })
                 .collect(Collectors.toList());
     }
+
+
+    @Override
+    public BigDecimal getTotalSumWorkHours(User user) {
+        String jpql = "SELECT COALESCE(SUM(pt.spentTime), 0) FROM ProjectTask pt WHERE pt.assignedTo = :user";
+
+        TypedQuery<BigDecimal> query = entityManager.createQuery(jpql, BigDecimal.class);
+        query.setParameter("user", user);
+
+        return query.getSingleResult();
+    }
+
+    @Override
+    public BigDecimal getTotalEndedTasks(User user) {
+        String jpql = "SELECT COUNT(pt) FROM ProjectTask pt WHERE pt.assignedTo = :user AND pt.taskEndDate IS NOT NULL";
+
+        TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+        query.setParameter("user", user);
+
+        Long endedTasksCount = query.getSingleResult();
+        return BigDecimal.valueOf(endedTasksCount);
+    }
+
+    @Override
+    public List<ProjectTask> getAllTasksOfUser(User user) {
+        return projectTaskRepository.all()
+                .filter("self.assignedTo = :user")
+                .bind("user", user)
+                .fetch();
+    }
+
 
 }
