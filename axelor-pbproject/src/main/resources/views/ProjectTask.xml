@@ -433,8 +433,7 @@
         </node>
     </tree>
     <!--Канбан, где тикеты работают с Date-Time, показывают также время начала-->
-    <kanban name="pbp.project-task-kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
-            columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
+    <kanban name="pbp.project-task-kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask" columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
         <field name="name"/>
         <field name="project"/>
         <field name="assignedTo"/>
@@ -444,6 +443,8 @@
         <field name="project.isShowProgress"/>
         <field name="startDateTime"/>
         <field name="deadlineDateTime"/>
+        <field name="complexity"/>
+
         <template><![CDATA[
 <>
 	<strong>{name}</strong>
@@ -456,13 +457,17 @@
 		        {!deadlineDateTime && <span> {_t('Not specified')} </span>}
 		        {deadlineDateTime && <span>{_t('Deadline')}: {$moment(deadlineDateTime).format('YYYY-MM-DD HH:mm')}</span>}
 		</Box>
-		<Box>
-			{priority.technicalTypeSelect == 1 && <Badge bg="success">{priority.name}</Badge>}
-			{priority.technicalTypeSelect == 2 && <Badge bg="info">{priority.name}</Badge>}
-			{priority.technicalTypeSelect == 3 && <Badge bg="warning">{priority.name}</Badge>}
-			{priority.technicalTypeSelect == 4 && <Badge bg="danger">{priority.name}</Badge>}
-		</Box>
 	</Box>
+	<Box d="flex" justifyContent="flex-start">
+        {priority.technicalTypeSelect == 1 && <Badge bg="success" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
+    {priority.technicalTypeSelect == 2 && <Badge bg="info" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
+    {priority.technicalTypeSelect == 3 && <Badge bg="warning" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
+    {priority.technicalTypeSelect == 4 && <Badge bg="danger" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
+
+        {complexity == 'medium' && <Badge style={{ backgroundColor: "#0a40f2" }}>Сложность: {_t('Medium')}</Badge>}
+        {complexity == 'easy' && <Badge style={{ backgroundColor: "#4CF907" }}>Сложность: {_t('Easy')}</Badge>}
+        {complexity == 'hard' && <Badge style={{ backgroundColor: "#f01000" }}>Сложность: {_t('Hard')}</Badge>}
+    </Box>
 	{project.isShowProgress &&
 		<Box mt={1}>
 			{progress == 0 ? <span>{progress}%</span> : <LinearProgress value={progress} striped animated/>}
