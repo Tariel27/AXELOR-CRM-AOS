@@ -4,7 +4,7 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
 
     <menuitem name="pbp.user-change-password.menu-item" title="Change password"
-              action="pbp.user-change-password.action-view" order="100" icon="fa-pencil-square-o"/>
+              action="pbp.user-change-password.action-view" order="100" icon="fa-pencil-square-o" icon-background="#3f6bb9"/>
 
     <action-view name="pbp.user-change-password.action-view" title="Change password" model="com.axelor.auth.db.User">
         <view type="form" name="pbp.user-change-password.form"/>
