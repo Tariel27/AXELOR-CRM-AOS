@@ -77,8 +77,10 @@
 
                     <field name="assignedBy" colSpan="6" form-view="user-form" grid-view="user-grid"/>
                     <field name="complexity" widget="SingleSelect" colSpan="3" />
-                    <field name="planHours" colSpan="3" required="true"/>
-                    <field name="parentTask" readonlyIf="project == null" colSpan="6"
+                    <field name="planHoursString" showIf="$readonly()" title="Plan hours" readonly="true" colSpan="2" widget="String" x-dirty="false"/>
+                    <field name="planHours" showIf="!$readonly()" colSpan="2" required="true" onChange="action-readable-time-convert"/>
+
+                    <field name="parentTask" readonlyIf="project == null" colSpan="5"
                            onChange="action-project-task-record-get-parent-timeunit"
                            onSelect="action-project-task-attrs-project-parent-task-configurations"/>
                     <field name="descriptionOfChange" hideIf="$readonly() &amp;&amp; descriptionOfChange == null" colSpan="12" widget="html"/>
@@ -163,9 +165,8 @@
                        onChange="action-project-task-group-progress-onchange" min="0"/>
 
 
-                <field name="spentTime" colSpan="2" onChange="action-readable-time-convert"/>
-                <field name="readableSpentTime" readonly="true" title="Readable time" colSpan="2" widget="String" x-dirty="false"/>
-
+                <field name="readableSpentTime" showIf="$readonly()" title="Потраченное время" readonly="true" colSpan="2" widget="String" x-dirty="false"/>
+                <field name="spentTime" showIf="!$readonly()" colSpan="2" onChange="action-readable-time-convert"/>
 
                 <spacer showIf="project.isShowProgress &amp;&amp; !$readonly()" colSpan="8"/>
                 <field name="progress" showIf="project.isShowProgress &amp;&amp; $readonly()" colSpan="4"
