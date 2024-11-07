@@ -443,6 +443,7 @@
         <field name="project.isShowProgress"/>
         <field name="startDateTime"/>
         <field name="deadlineDateTime"/>
+        <field name="endDateTime"/>
         <field name="complexity"/>
 
         <template><![CDATA[
@@ -457,7 +458,15 @@
 		        {!deadlineDateTime && <span> {_t('Not specified')} </span>}
 		        {deadlineDateTime && <span>{_t('Deadline')}: {$moment(deadlineDateTime).format('YYYY-MM-DD HH:mm')}</span>}
 		</Box>
+
+		{((endDateTime && endDateTime > deadlineDateTime) || (!endDateTime && $moment().isAfter(deadlineDateTime))) && (
+        <Box d="flex" alignItems="center" style={{ color: "red", fontWeight: "bold", marginLeft: "5px" }}>
+            <Icon icon="exclamation-circle" color="red" style={{ marginRight: "3px" }}/>
+            <span style={{ fontSize: "0.9rem" }}>Просрочен</span>
+        </Box>
+        )}
 	</Box>
+
 	<Box d="flex" justifyContent="flex-start">
         {priority.technicalTypeSelect == 1 && <Badge bg="success" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
     {priority.technicalTypeSelect == 2 && <Badge bg="info" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
@@ -485,6 +494,7 @@
 </>
  ]]></template>
     </kanban>
+
     <grid name="pbp.project-task-grid" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
           edit-icon="true" orderBy="-priority.technicalTypeSelect">
         <hilite if="$get('status.id') == $get('project.completedTaskStatus.id')" color="success"/>
