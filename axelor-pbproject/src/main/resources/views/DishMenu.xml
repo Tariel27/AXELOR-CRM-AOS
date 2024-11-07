@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <object-views xmlns="http://axelor.com/xml/ns/object-views"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <!--  grid для меню обедов -->
-    <grid title="DishMenu" name="pbp.dish-grid-view" model="com.axelor.apps.pbproject.db.DishMenu">
-        <field name="dishes" title="Dishes"/>
-        <field name="soups" title="Soups"/>
-        <field name="salads" title="Salads"/>
-     </grid>
+    <grid title="DishMenu" name="pbp.dish-grid-view" model="com.axelor.apps.pbproject.db.DishMenu" orderBy="dateCreateMenu">
+        <field name="partnerName" title="Partner name"/>
+        <field name="dateCreateMenu" title="Date create"/>
+        <field name="dishName" title="Dishes"/>
+    </grid>
 
     <!--  form для меню обедов -->
-    <form name="pbp.dish-form-view" title="News" model="com.axelor.apps.pbproject.db.DishMenu" width="large">
-        <panel title="Dish menu" itemSpan="12">
-            <field name="dishes" title="Dishes"/>
-            <field name="soups" title="Soups"/>
-            <field name="salads" title="Salads"/>
-            </panel>
+    <form name="pbp.dish-form-view" title="Dish menu" model="com.axelor.apps.pbproject.db.DishMenu" width="large"
+    onNew="pbp.update-user-and-date-on-partnerName" >
+        <panel title="Dish menu" itemSpan="12" >
+            <field name="partnerName" title="Partner name" hidden="true"/>
+            <field name="dateCreateMenu" title="Date create"/>
+            <field name="dishName" title="Dishes"  widget="TagSelect"/>
+        </panel>
     </form>
+
+    <form name="pbp.dish-form" title="Dishes" model="com.axelor.apps.pbproject.db.Dish" onNew="pbp.update-date-on-dish">
+        <panel>
+            <field name="name" title="Dish name"/>
+            <field name="dateCreateDish" title="Date dish create"/>
+
+        </panel>
+    </form>
+
+    <action-attrs name="pbp.update-date-on-dish">
+        <attribute name="value" expr="eval: __date__" for="dateCreateDish"/>
+    </action-attrs>
+
+
+
+    <action-attrs name="pbp.update-user-and-date-on-partnerName">
+        <attribute name="value" expr="eval: __user__" for="partnerName"/>
+        <attribute name="value" expr="eval: __time__" for="dateCreateMenu"/>
+    </action-attrs>
 </object-views>

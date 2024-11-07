@@ -6,12 +6,12 @@
     <dashboard name="pbp.ratings-by-person-dashboard" title="Ratings by person!">
         <dashlet height="150px" colSpan="3" action="custom:report-total-users"/>
         <dashlet height="150px" colSpan="3" action="custom:report-total-teams"/>
-        <dashlet height="150px" colSpan="3" action="custom:report-total-tasks"/>
-        <dashlet height="150px" colSpan="3" action="custom:report-total-projects"/>
-        <dashlet height="500" colSpan="12" action="custom:report-table-users"/>
-        <dashlet height="1000" colSpan="12" action="chart:chart-best-person-completed-tasks"/>
-        <dashlet height="1000" colSpan="12" action="chart:chart-best-person-spent-hours"/>
-        <dashlet height="1000" colSpan="12" action="chart:chart-tasks-completed-by-person-project"/>
+        <dashlet height="150px" colSpan="4" action="custom:report-total-tasks"/>
+        <dashlet height="150px" colSpan="2" action="custom:report-total-projects"/>
+        <dashlet height="350px" colSpan="12" action="custom:report-table-users"/>
+        <dashlet height="400px" colSpan="12" action="chart:chart-best-person-completed-tasks"/>
+        <dashlet height="400px" colSpan="12" action="chart:chart-best-person-spent-hours"/>
+        <dashlet height="400px" colSpan="12" action="chart:chart-tasks-completed-by-person-project"/>
     </dashboard>
 
     <!-- диаграмма показывающая кто больше выполнил задач-->
