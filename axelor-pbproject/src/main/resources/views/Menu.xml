@@ -12,7 +12,7 @@
     <menuitem name="pbp.open-about-me-root" title="About me" icon="fa-street-view" icon-background="#3f6bb9"/>
 
     <!--  Меню для основного  -->
-    <menuitem name="pbp.open-main-work-root" title="Tasks and projects" icon="fa-indent" icon-background="#3f6bb9"/>
+    <menuitem name="pbp.open-main-work-root" order="-3" title="Tasks and projects" icon="fa-indent" icon-background="#3f6bb9"/>
     <!--  Меню для дополнительного  -->
     <menuitem name="pbp.open-extra-root" title="Extra" icon="fa-database" icon-background="#3f6bb9"/>
     <!-- Меню для статистики -->
@@ -68,7 +68,7 @@
 
 
     <!--  Меню который открывает главный дашборд  -->
-    <menuitem name="pbp.peta-dashboard-m-i" title="Main" icon="fa-users" icon-background="#3f6bb9"
+    <menuitem name="pbp.peta-dashboard-m-i" title="Main" order="-10" icon="fa-users" icon-background="#3f6bb9"
               action="pbp.duty-users-action-view"/>
 
     <action-view name="pbp.duty-users-action-view" title="Main">
