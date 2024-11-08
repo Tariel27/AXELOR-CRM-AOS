@@ -9,12 +9,12 @@
     <menuitem name="pbp.open-communication-root" title="Communication" icon="fa-paper-plane-o" icon-background="#3f6bb9"/>
 
     <!--  Меню о себе  -->
-    <menuitem name="pbp.open-about-me-root" title="About me" icon="fa-paper-plane-o" icon-background="#3f6bb9"/>
+    <menuitem name="pbp.open-about-me-root" title="About me" icon="fa-street-view" icon-background="#3f6bb9"/>
 
     <!--  Меню для основного  -->
-    <menuitem name="pbp.open-main-work-root" title="Tasks and projects" icon="fa-paper-plane-o" icon-background="#3f6bb9"/>
+    <menuitem name="pbp.open-main-work-root" title="Tasks and projects" icon="fa-indent" icon-background="#3f6bb9"/>
     <!--  Меню для дополнительного  -->
-    <menuitem name="pbp.open-extra-root" title="Extra" icon="fa-paper-plane-o" icon-background="#3f6bb9"/>
+    <menuitem name="pbp.open-extra-root" title="Extra" icon="fa-database" icon-background="#3f6bb9"/>
     <!-- Меню для статистики -->
     <menuitem name="pbp.user-statistick-root" title="Statistic" icon="fa-bar-chart" icon-background="#3f6bb9"/>
 
