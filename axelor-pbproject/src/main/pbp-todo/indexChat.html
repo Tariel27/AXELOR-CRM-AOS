@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat AI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="card shadow-lg">
+      <div class="card-header bg-primary text-white">
+        <h1 class="text-center mb-0">Chat AI</h1>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="inputText" class="form-label"></label>
+          <textarea id="inputText" class="form-control" rows="4" placeholder="Введите ваш текст здесь..." onkeydown="checkEnter(event)"></textarea>
+        </div>
+        <div class="d-flex justify-content-center">
+          <button onclick="sendText()" class="btn btn-primary btn-lg w-100">Отправить</button>
+        </div>
+        <div class="mt-4">
+          <h2>Ответ:</h2>
+          <p id="responseText" class="p-3 bg-light border rounded" style="min-height: 50px;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function checkEnter(event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendText();
+      }
+    }
+
+    async function sendText() {
+      const inputText = document.getElementById('inputText').value;
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/generate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ text: inputText })
+        });
+
+        const data = await response.json();
+        document.getElementById('responseText').innerText = data.response;
+        
+        document.getElementById('inputText').value = '';
+      } catch (error) {
+        console.error("Error fetching the response:", error);
+        document.getElementById('responseText').innerText = "Произошла ошибка. Попробуйте еще раз.";
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

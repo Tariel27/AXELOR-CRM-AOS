@@ -21,7 +21,7 @@
         JOIN project_project_task pt ON pt.project = p.id
         JOIN project_task_status s ON pt.status = s.id
         GROUP BY p.name, s.name
-        ORDER BY project_name, total_tasks DESC;
+        ORDER BY total_tasks DESC;
 
       ]]></dataset>
         <category key="project_name" type="text"/>

@@ -35,7 +35,7 @@
         ]]>
         </dataset>
         <category key="userName"/>
-        <series key="taskCount" type="hbar" groupBy="priority"/>
+        <series key="taskCount" type="hbar" groupBy="priority" aggregate="average"/>
     </chart>
     <!-- диаграмма показывающая кто потратил больше часов-->
     <chart name="chart-best-person-spent-hours" title="The best employee who spent the most hours"
