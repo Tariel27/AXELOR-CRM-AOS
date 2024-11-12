@@ -5,24 +5,29 @@
 
     <form name="pbp.project-task-form" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large"
           onLoad="pbp.action-business-project-project-task-group-on-load,action-readable-time-convert,save"
-          onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method,pbp.validate.dateStart.dateEnd,pbp.auto-set-complexity" onSave="pbp.validate.dateStart.dateEnd">
+          onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method,pbp.validate.dateStart.dateEnd,pbp.auto-set-complexity"
+          onSave="pbp.validate.dateStart.dateEnd">
+
         <toolbar>
             <button name="grabEventBtn" help="Take charge" icon="fa-suitcase"
                     onClick="action-project-task-record-assigned-yourself,save"/>
             <button name="doneBtn" help="Make done" showIf="project.isShowStatus" icon="fa-check-circle"
                     onClick="progress-finish-if-done-button-click,action-project-task-validate-finish-status,action-project-task-record-change-status,save"/>
         </toolbar>
+
         <menubar>
             <menu if="__config__.app.getApp('project')?.resourceManagement" name="projectTaskMenu" title="Tools">
                 <item name="bookResourceItem" title="Book resource" action="save,action-project-task-book-resource"/>
             </menu>
         </menubar>
+
         <panel showIf="nextProjectTask">
             <field name="doApplyToAllNextTasks" colSpan="12" widget="InlineCheckbox"/>
         </panel>
         <panel name="mainPanel" colSpan="12">
             <panel name="statusPanel" colSpan="6" stacked="true">
-                <field name="status" onChange="update-progress-on-status-change,save" showTitle="false" showIf="project.isShowStatus" widget="NavSelect"
+                <field name="status" onChange="update-progress-on-status-change,save" showTitle="false"
+                       showIf="project.isShowStatus" widget="NavSelect"
                        x-order="sequence"/>
                 <field name="typeSelect" hidden="true"/>
             </panel>
@@ -49,8 +54,12 @@
                     onClick="save,action-project-task-validate-check-employee,action-project-task-view-time-spent"/>
             <field name="project.isShowTimeSpent" hidden="true"/>
             <field name="$provider" hidden="true" type="string"/>
+
+
             <panel name="projectDetailsPanel" colSpan="12">
-                <panel name="detailsPanel" colSpan="8">
+
+
+                <panel name="detailsPanel" colSpan="9">
                     <field name="fullName" showTitle="false" colSpan="12">
                         <viewer depends="name">
                             <![CDATA[
@@ -62,26 +71,28 @@
                             ]]>
                         </viewer>
                         <editor>
-                            <field name="name" title="Subject" colSpan="12" css="label-bold bold large"
-                                   required="true"/>
+                            <field name="name" title="Subject" css="label-bold bold large"
+                                   required="true" colSpan="12"/>
                         </editor>
                     </field>
-                    <field name="description" colSpan="12" widget="html"/>
+                    <field name="description" widget="html" colSpan="12"/>
                     <field if="__config__.app.getApp('project')?.isEnablePerProjectTaskSequence" name="ticketNumber"/>
-                    <field name="project" colSpan="12" onChange="action-project-task-group-project-onchange"
-                           domain="self.projectStatus.isCompleted = false" required="true"/>
+                    <field name="project" onChange="action-project-task-group-project-onchange"
+                           domain="self.projectStatus.isCompleted = false" required="true" colSpan="12"/>
                     <field name="assignedTo" readonlyIf="project == null" colSpan="6" canNew="false" canView="false"
-                           canEdit="false" onChange="action-project-task-group-assigned-to-on-change,pbp.auto-set-assigned-by-action.method"
+                           canEdit="false"
+                           onChange="action-project-task-group-assigned-to-on-change,pbp.auto-set-assigned-by-action.method"
                            onSelect="action-project-task-attrs-project-assigned-to-configurations" required="true"
                            form-view="user-form" grid-view="user-grid"/>
 
                     <field name="assignedBy" colSpan="6" form-view="user-form" grid-view="user-grid"/>
-                    <field name="complexity" widget="SingleSelect" colSpan="3" />
+                    <field name="complexity" widget="SingleSelect" colSpan="3"/>
                     <field name="planHours" colSpan="3" required="true"/>
                     <field name="parentTask" readonlyIf="project == null" colSpan="6"
                            onChange="action-project-task-record-get-parent-timeunit"
                            onSelect="action-project-task-attrs-project-parent-task-configurations"/>
-                    <field name="descriptionOfChange" hideIf="$readonly() &amp;&amp; descriptionOfChange == null" colSpan="12" widget="html"/>
+                    <field name="descriptionOfChange" hideIf="$readonly() &amp;&amp; descriptionOfChange == null"
+                           colSpan="12" widget="html"/>
 
 
                     <field name="frameworkCustomerContract" hidden="true"
@@ -107,6 +118,17 @@
                            name="isOrderAccepted" hidden="true" showIf="typeSelect == 'ticket'" colSpan="3"/>
                     <field if="__config__.app.isApp('business-support')" if-module="axelor-business-support"
                            name="isOrderProposed" hidden="true" colSpan="3"/>
+                </panel>
+                <panel name="chatPanel" colSpan="3">
+                    <field name="$customFrame" showTitle="false" readonly="true" colSpan="12">
+                        <viewer depends="chatUrl">
+                            <![CDATA[
+                          <>
+                              <Box as="iframe" title="My iframe" width="400" height="550" border="0" src="pbp-todo/indexChat.html"></Box>
+                          </>
+                        ]]>
+                        </viewer>
+                    </field>
                 </panel>
                 <panel name="actionPanel" colSpan="4">
                     <button if="__config__.app.isApp('business-support')" if-module="axelor-business-support"
@@ -164,7 +186,8 @@
 
 
                 <field name="spentTime" colSpan="2" onChange="action-readable-time-convert"/>
-                <field name="readableSpentTime" readonly="true" title="Readable time" colSpan="2" widget="String" x-dirty="false"/>
+                <field name="readableSpentTime" readonly="true" title="Readable time" colSpan="2" widget="String"
+                       x-dirty="false"/>
 
 
                 <spacer showIf="project.isShowProgress &amp;&amp; !$readonly()" colSpan="8"/>
@@ -433,7 +456,8 @@
         </node>
     </tree>
     <!--Канбан, где тикеты работают с Date-Time, показывают также время начала-->
-    <kanban name="pbp.project-task-kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask" columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
+    <kanban name="pbp.project-task-kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
+            columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
         <field name="name"/>
         <field name="project"/>
         <field name="assignedTo"/>
@@ -557,7 +581,7 @@
     <action-group name="pbp.action-project-task-group-timer-process">
         <action name="action-project-task-attrs-project-filter-status" if="project?.isShowStatus"/>
         <action name="action-project-task-method-manage-timer-buttons"/>
-<!--        <action name="action-project-task-method-compute-total-timer-duration"/> &lt;!&ndash; вот баг &ndash;&gt;-->
+        <!--        <action name="action-project-task-method-compute-total-timer-duration"/> &lt;!&ndash; вот баг &ndash;&gt;-->
         <action name="action-project-task-attrs-scale-and-precision"
                 if="__config__.app.isApp('business-project')"/>
         <action name="action-project-task-business-support-provider"

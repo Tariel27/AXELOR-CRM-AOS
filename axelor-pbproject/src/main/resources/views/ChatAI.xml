@@ -3,11 +3,11 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
 
-    <menuitem name="pbp.dailyTask.m-i" title="Daily task" action="pbp.dailyTask.a-v" order="7" icon="fa-list"
+    <menuitem name="pbp.chat.m-i" title="Chat AI" action="pbp.chat.a-v" order="10" icon="fa-commenting"
     icon-background="#3f6bb9"/>
 
-    <action-view name="pbp.dailyTask.a-v" title="Daily task">
-        <view type="html" name="pbp-todo/index.html"/>
+    <action-view name="pbp.chat.a-v" title="Chat AI">
+        <view type="html" name="pbp-todo/indexChat.html"/>
     </action-view>
 
 </object-views>

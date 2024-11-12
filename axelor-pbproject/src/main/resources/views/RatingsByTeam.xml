@@ -21,7 +21,8 @@
         <dashlet colSpan="3" height="250px" action="custom:report-table-leaders-users"/>
         <dashlet colSpan="3" height="250px" action="custom:report-table-administration-users"/>
         <dashlet colSpan="6" height="1000" action="chart:chart-team-members-distribution"/>
-        <dashlet colSpan="6" height="1000" action="chart:chart-tasks-completed-by-team-project"/>
+        <dashlet colSpan="12" height="1000" action="chart:chart-tasks-completed-by-team-project"/>
+        <dashlet colSpan="12" height="1000" action="chart:chart-tasks-completed-by-team-project-v2"/>
         <dashlet colSpan="12" height="1000" action="chart:chart-best-team-completed-tasks"/>
         <dashlet colSpan="12" height="1000" action="chart:chart-best-team-spent-hours"/>
     </dashboard>
@@ -36,11 +37,12 @@
         <dataset type="sql">
             <![CDATA[
         SELECT t.name AS team_name, COUNT(pt.id) AS total_completed_tasks
-        FROM team_team t
-        JOIN team_team_members m ON t.id = m.team_set
-        JOIN auth_user u ON m.members = u.id
-        JOIN project_project_task pt ON pt.assigned_to = u.id
-        WHERE pt.status = 3
+        FROM ProjectTask pt
+        JOIN pt.assignedTo u
+        JOIN u.teamSet t
+        WHERE pt.taskEndDate > :fromDateTime
+        AND pt.taskEndDate < :toDateTime
+        AND pt.status.id = 3
         GROUP BY t.name
         ORDER BY total_completed_tasks DESC
     ]]>
@@ -57,17 +59,16 @@
             <field name="fromDateTime" title="From Date" type="datetime"/>
             <field name="toDateTime" title="To Date" type="datetime"/>
         </search-fields>
-        <dataset type="sql">
+        <dataset type="jpql">
             <![CDATA[
-          SELECT t.name AS team_name,
-          SUM(pt.spent_time) AS total_hours
-          FROM team_team t
-          JOIN team_team_members m ON t.id = m.team_set
-          JOIN auth_user u ON m.members = u.id
-          JOIN project_project_task pt ON pt.assigned_to = u.id
-          WHERE pt.task_end_date BETWEEN DATE_TRUNC('month', CURRENT_DATE) AND CURRENT_DATE
-          GROUP BY t.name
-          ORDER BY total_hours DESC;
+        SELECT t.name AS team_name,
+        SUM(pt.spentTime) AS total_hours
+        FROM ProjectTask pt
+        JOIN pt.assignedTo u
+        JOIN u.teamSet t
+        WHERE pt.taskEndDate BETWEEN :fromDateTime AND :toDateTime
+        GROUP BY t.name
+        ORDER BY total_hours DESC
         ]]>
         </dataset>
         <category key="team_name"/>
@@ -98,6 +99,28 @@
         <category key="teamName"/>
         <series key="totalTasks" type="hbar" groupBy="projectName"/>
     </chart>
+
+    <chart name="chart-tasks-completed-by-team-project-v2" title="How many tasks did the team complete in the project?" stacked="true" onInit="pbp.rating-update-date">
+        <search-fields>
+            <field name="fromDateTime" title="From Date" type="datetime"/>
+            <field name="toDateTime" title="To Date" type="datetime"/>
+        </search-fields>
+        <dataset type="jpql"><![CDATA[
+
+SELECT t.name AS teamName, COUNT(pt.id) AS totalTasks
+FROM ProjectTask pt
+JOIN pt.assignedTo u
+JOIN u.teamSet t
+WHERE pt.taskEndDate BETWEEN :fromDateTime AND :toDateTime
+AND pt.status.id = 3
+GROUP BY t.name
+ORDER BY totalTasks DESC
+
+      ]]></dataset>
+        <category key="teamName"/>
+        <series key="totalTasks"  type="hbar"/>
+    </chart>
+
 
     <!-- диаграмма показывающая общее количество команд-->
     <chart name="chart-team-members-distribution" title="Team members distribution" stacked="false">
