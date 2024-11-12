@@ -10,6 +10,7 @@
         <dashlet height="150px" colSpan="2" action="custom:report-total-projects"/>
         <dashlet height="350px" colSpan="12" action="custom:report-table-users"/>
         <dashlet height="400px" colSpan="12" action="chart:chart-best-person-completed-tasks"/>
+        <dashlet height="400px" colSpan="12" action="chart:chart-best-person-completed-tasks-v2"/>
         <dashlet height="400px" colSpan="12" action="chart:chart-best-person-spent-hours"/>
         <dashlet height="400px" colSpan="12" action="chart:chart-tasks-completed-by-person-project"/>
     </dashboard>
@@ -37,9 +38,31 @@
         <category key="userName"/>
         <series key="taskCount" type="hbar" groupBy="priority" aggregate="average"/>
     </chart>
+
+    <chart name="chart-best-person-completed-tasks-v2" title="The best person who completed more tasks" stacked="true" onInit="pbp.rating-update-date">
+        <search-fields>
+            <field name="fromDateTime" title="From Date" type="datetime"/>
+            <field name="toDateTime" title="To Date" type="datetime"/>
+        </search-fields>
+        <dataset type="jpql">
+            <![CDATA[
+    SELECT u.fullName AS userName, COUNT(t.id) AS taskCount
+    FROM ProjectTask t
+    JOIN t.assignedTo u
+    WHERE t.taskEndDate > :fromDateTime
+    AND t.taskEndDate < :toDateTime
+    AND t.status.id = 3
+    GROUP BY u.fullName
+    ORDER BY taskCount DESC
+    ]]>
+        </dataset>
+        <category key="userName"/>
+        <series key="taskCount" type="hbar" aggregate="count"/>
+    </chart>
+
     <!-- диаграмма показывающая кто потратил больше часов-->
     <chart name="chart-best-person-spent-hours" title="The best employee who spent the most hours"
-           onInit="pbp.rating-update-date">
+           onInit="pbp.rating-update-date" stacked="true">
         <search-fields>
             <field type="datetime" name="fromDateTime" title="From Date"/>
             <field type="datetime" name="toDateTime" title="To Date"/>

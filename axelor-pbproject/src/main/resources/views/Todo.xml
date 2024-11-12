@@ -4,7 +4,7 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
 
     <menuitem name="pbp.dailyTask.m-i" title="Daily task" action="pbp.dailyTask.a-v" order="7" icon="fa-list"
-    icon-background="#15a4fa"/>
+    icon-background="#3f6bb9"/>
 
     <action-view name="pbp.dailyTask.a-v" title="Daily task">
         <view type="html" name="pbp-todo/index.html"/>

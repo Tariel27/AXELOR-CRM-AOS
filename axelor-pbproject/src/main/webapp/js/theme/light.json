@@ -10,11 +10,11 @@
     "white": "#FFFFFF",
     "black": "#000000",
 
-    "body_color": "#333333",
+    "body_color": "#4D4D4D",
     "emphasis_color": "#003B5C"
   },
   "border": {
-    "color": "#364760"
+    "color": "#D0D0D0"
   },
   "typography": {
     "body": {
@@ -24,16 +24,15 @@
   "components": {
     "Shell": {
       "sidebar": {
-        "bg": "#364760",
-        "color": "#FFFFFF"
+        "bg": "#EAF3F7"
       }
     },
     "Panel": {
       "header": {
-        "bg": "#d6dce8",
+        "bg": "#EAF3F7",
         "border": {
           "width": 1,
-          "color": "#FFFFFF"
+          "color": "#D0D0D0"
         }
       },
       "title": {
@@ -46,27 +45,27 @@
         "color": "#D0D0D0"
       },
       "item_hover": {
-        "bg": "#eef1f7"
+        "bg": "#EAF3F7"
       },
       "item_active": {
-        "bg": "#d6dce8",
+        "bg": "#0033A0",
         "color": "#FFFFFF"
       },
       "divider": {
-        "bg": "#2a394f"
+        "bg": "#D0D0D0"
       }
     },
     "NavMenu": {
       "item": {
         "border": {
-          "radius": "1.5rem"
+          "radius": "0.5rem"
         }
       },
       "item_hover": {
         "bg": "#EAF3F7"
       },
       "item_active": {
-        "bg": "#2a394f",
+        "bg": "#0033A0",
         "color": "#FFFFFF"
       },
       "icon": {
@@ -76,7 +75,7 @@
         "bg": "transparent"
       },
       "icon_active": {
-        "color": "#76fa02"
+        "color": "#FFFFFF"
       }
     },
     "NavTabs": {
@@ -113,19 +112,19 @@
         "color": "#D0D0D0"
       },
       "header": {
-        "bg": "#d6dce8"
+        "bg": "#EAF3F7"
       },
       "row_odd": {
-        "bg": "#eef1f7"
+        "bg": "#F9F9F9"
       },
       "row_hover": {
-        "bg": "#d6dce8"
+        "bg": "#EAF3F7"
       },
       "row_active": {
-        "bg": "#d6dce8"
+        "bg": "#EAF3F7"
       },
       "cell_active": {
-        "bg": "#76fa02"
+        "bg": "#E0F5F2"
       },
       "cell": {
         "padding": "0.375rem 0.5rem"
@@ -146,7 +145,6 @@
       "gap": "0.5rem 1rem"
     },
     "Input": {
-      "bg": "#eff2f9",
       "padding": "0.5rem",
       "focus": {
         "shadow": "0 0 0 2px rgba(0, 155, 119, 0.2)",

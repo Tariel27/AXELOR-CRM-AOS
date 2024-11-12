@@ -5,7 +5,7 @@
 
     <!--  Меню которое открывает все таски  -->
     <menuitem name="pbp.project-task-all.m-i" title="Tasks" action="pbp.project-all.a-v" icon="fa-briefcase"
-              icon-background="#15a4fa" order="3" tag-count="true"/>
+              icon-background="#3f6bb9" order="3" tag-count="true"/>
 
     <action-view name="pbp.project-all.a-v"  title="Tasks" model="com.axelor.apps.project.db.ProjectTask">
         <view type="kanban" name="pbp.project-task-kanban"/>
@@ -19,7 +19,7 @@
 
     <!--  Меню которое открывает все "мои" задачи  -->
     <menuitem name="pbp.my-connected-all-projects-tasks" tag-count="true" title="My tasks"
-              action="pbp.project-all-my-tasks" order="4" icon="fa-user-circle-o" icon-background="#15a4fa"/>
+              action="pbp.project-all-my-tasks" order="4" icon="fa-user-circle-o" icon-background="#3f6bb9"/>
 
     <action-view name="pbp.project-all-my-tasks" title="My tasks" model="com.axelor.apps.project.db.ProjectTask">
         <view type="kanban" name="pbp.project-task-kanban"/>
@@ -33,7 +33,7 @@
 
     <!--  Меню которое открывает часовой менеджер  -->
     <menuitem name="pbp-employee-working-hours" title="Workers hours" action="pbp.project-working-hours-action"
-              order="16" icon="fa-clock-o" icon-background="#15a4fa"/>
+              order="16" icon="fa-clock-o" icon-background="#3f6bb9"/>
 
     <action-view name="pbp.project-working-hours-action" title="Employee hours"
                  model="com.axelor.apps.pbproject.db.UserHoursManagement">
@@ -41,7 +41,7 @@
     </action-view>
 
     <!--  Меню которое открывает ивент календарь  -->
-    <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#15a4fa"
+    <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#3f6bb9"
               action="pbp.peta-calendar-open-action" order="11"/>
 
     <action-view name="pbp.peta-calendar-open-action" title="Event calendar"
@@ -51,7 +51,7 @@
 
 
     <!--  Меню который открывает главный дашборд  -->
-    <menuitem name="pbp.peta-dashboard-m-i" title="Main" icon="fa-users" icon-background="#15a4fa"
+    <menuitem name="pbp.peta-dashboard-m-i" title="Main" icon="fa-users" icon-background="#3f6bb9"
               action="pbp.duty-users-action-view" order="1"/>
 
     <action-view name="pbp.duty-users-action-view" title="Main">
@@ -59,7 +59,7 @@
     </action-view>
 
     <!-- Меню который открывает список проектов -->
-    <menuitem name="pbp.project.m-i" title="Projects" icon="fa-outdent" icon-background="#15a4fa"
+    <menuitem name="pbp.project.m-i" title="Projects" icon="fa-outdent" icon-background="#3f6bb9"
               action="pbp.projects-action-view" order="2"/>
 
     <action-view name="pbp.projects-action-view" title="All projects" model="com.axelor.apps.project.db.Project">
@@ -69,7 +69,7 @@
 
     <!-- Меню которое отображает форум -->
     <menuitem name="pbp-menu-forum" title="Forum" tag-count="true" action="pbp.project-forum-action" order="5" icon="fa-commenting-o"
-              icon-background="#15a4fa"/>
+              icon-background="#3f6bb9"/>
 
     <action-view name="pbp.project-forum-action" title="Forum" model="com.axelor.apps.pbproject.db.ForumTopic">
         <view type="cards" name="pbp.forum-topic-cards"/>
@@ -77,7 +77,7 @@
     </action-view>
 
     <!-- Меню которое открывает всех пользователей для администрирования -->
-    <menuitem name="pbp.all-users-m.i" title="Users" icon="fa-blind" icon-background="#15a4fa" order="15"
+    <menuitem name="pbp.all-users-m.i" title="Users" icon="fa-blind" icon-background="#3f6bb9" order="15"
               action="pbp.action-auth-users"/>
 
     <action-view name="pbp.action-auth-users" title="Users"
@@ -89,7 +89,7 @@
     </action-view>
 
     <!--  Меню которой открывает список юзеров для фейс айди   -->
-    <menuitem name="pbp.open-face-id-user-create.m-i" title="Face id" icon="fa-id-card-o" icon-background="#15a4fa" order="14"/>
+    <menuitem name="pbp.open-face-id-user-create.m-i" title="Face id" icon="fa-id-card-o" icon-background="#3f6bb9" order="14"/>
     <menuitem name="pbp.open-face-id-connections-users.m-i" title="Users" parent="pbp.open-face-id-user-create.m-i"
               action="pbp.user-info-face-id-view"/>
 
@@ -109,7 +109,7 @@
     <!-- Меню которое отображает Person info -->
     <menuitem name="pbp.menu-partner-form" title="Person info" action="pbp.partner-form-for-self-user-action"
               order="17"
-              icon="fa-info-circle" icon-background="#15a4fa"/>
+              icon="fa-info-circle" icon-background="#3f6bb9"/>
 
     <action-view name="pbp.partner-form-for-self-user-action" title="Person info"
                  model="com.axelor.apps.base.db.Partner">
@@ -122,7 +122,7 @@
 
     <!-- Меню которое отображает Новости -->
     <menuitem name="pbp-news-root" title="Manager news" order="12" icon="fa-newspaper-o"
-              icon-background="#15a4fa"/>
+              icon-background="#3f6bb9"/>
     <menuitem name="pbp-menu-manager-news" title="All news"
               action="pbp.manager-news-action,pbp.manager-news-action-isNotPublish"
               parent="pbp-news-root"/>
@@ -146,7 +146,7 @@
 
     <!-- Меню которое отображает Рейтинги -->
     <menuitem name="pbp.menu-ratings-root" title="Ratings"
-              icon=" fa-star-o" icon-background="#15a4fa" order="8"/>
+              icon=" fa-star-o" icon-background="#3f6bb9" order="8"/>
     <menuitem name="pbp.menu-ratings-by-person" title="Ratings by person" action="pbp.ratings-by-person-action"
               parent="pbp.menu-ratings-root"/>
     <menuitem name="pbp.menu-ratings-by-team" title="Ratings by team" action="pbp.ratings-by-team-action"
@@ -166,7 +166,7 @@
 
 
     <!-- Меню которое для отпросится -->
-    <menuitem name="pbp.ask-for-leave-from-job-m.i" title="Ask for off" icon="fa-sign-out" icon-background="#15a4fa"
+    <menuitem name="pbp.ask-for-leave-from-job-m.i" title="Ask for off" icon="fa-sign-out" icon-background="#3f6bb9"
               action="pbp.ask-for-leave-from-action.view" order="13"/>
     <action-view name="pbp.ask-for-leave-from-action.view" title="Leave ask"
                  model="com.axelor.apps.pbproject.db.WorkLeave">
@@ -177,14 +177,14 @@
     </action-view>
 
     <!-- Меню для управления отчетами с дежурными -->
-    <menuitem name="pbp.report-duty-users-m.i" title="Duty control" icon="fa-user-md" icon-background="#15a4fa"
+    <menuitem name="pbp.report-duty-users-m.i" title="Duty control" icon="fa-user-md" icon-background="#3f6bb9"
               action="pbp.duty-control-action.view" order="13"/>
     <action-view name="pbp.duty-control-action.view" title="Duty control" model="com.axelor.apps.pbproject.db.Duty">
         <view type="form" name="pbp.duty-control-form"/>
     </action-view>
 
     <!--Меню для заполнения блюд для обеда партнеров (видно только администрации)-->
-    <menuitem name="pbp.menu-lunch-for-admin" title="Dish menu" icon="fa-coffee" icon-background="#15a4fa"
+    <menuitem name="pbp.menu-lunch-for-admin" title="Dish menu" icon="fa-coffee" icon-background="#3f6bb9"
               action="pbp.lunch-for-admin-action" order="18"/>
 
     <action-view name="pbp.lunch-for-admin-action" title="Menu making" model="com.axelor.apps.pbproject.db.DishMenu">
@@ -194,7 +194,7 @@
     </action-view>
 
     <!--Меню для заказа обеда(партнеры)-->
-    <menuitem name="pbp.menu-lunch-for-users" title="Lunch" icon="fa-coffee" icon-background="#15a4fa"
+    <menuitem name="pbp.menu-lunch-for-users" title="Lunch" icon="fa-coffee" icon-background="#3f6bb9"
               action="pbp.lunch-for-users-action" tag-get="com.axelor.apps.pbproject.web.LunchController:showO()"
               tag-style="success" order="6"/>
     <action-view name="pbp.lunch-for-users-action" title="Lunch" model="com.axelor.apps.pbproject.db.Lunch">
@@ -207,7 +207,7 @@
     </action-method>
 
     <!-- Меню для статистики -->
-    <menuitem name="pbp.user-statistick-m.i" title="Statistic" icon="fa-bar-chart" icon-background="#15a4fa" order="9"/>
+    <menuitem name="pbp.user-statistick-m.i" title="Statistic" icon="fa-bar-chart" icon-background="#3f6bb9" order="9"/>
 
     <menuitem name="pbp.my-statistick-m.i" title="My Statistic" parent="pbp.user-statistick-m.i" action="pbp-my-statistic-action-view"/>
     <action-view name="pbp-my-statistic-action-view" title="My statistic">

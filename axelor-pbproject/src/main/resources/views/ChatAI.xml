@@ -4,7 +4,7 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
 
     <menuitem name="pbp.chat.m-i" title="Chat AI" action="pbp.chat.a-v" order="10" icon="fa-commenting"
-    icon-background="#15a4fa"/>
+    icon-background="#3f6bb9"/>
 
     <action-view name="pbp.chat.a-v" title="Chat AI">
         <view type="html" name="pbp-todo/indexChat.html"/>
