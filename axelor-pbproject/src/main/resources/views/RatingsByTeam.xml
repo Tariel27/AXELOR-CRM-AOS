@@ -20,7 +20,7 @@
         <dashlet colSpan="3" height="250px" action="custom:report-table-csharp-users"/>
         <dashlet colSpan="3" height="250px" action="custom:report-table-leaders-users"/>
         <dashlet colSpan="3" height="250px" action="custom:report-table-administration-users"/>
-        <dashlet colSpan="6" height="1000" action="chart:chart-team-members-distribution"/>
+        <dashlet colSpan="6" height="500" action="chart:chart-team-members-distribution"/>
         <dashlet colSpan="12" height="1000" action="chart:chart-tasks-completed-by-team-project"/>
         <dashlet colSpan="12" height="1000" action="chart:chart-tasks-completed-by-team-project-v2"/>
         <dashlet colSpan="12" height="1000" action="chart:chart-best-team-completed-tasks"/>
@@ -34,7 +34,7 @@
             <field type="datetime" name="fromDateTime" title="From Date"/>
             <field type="datetime" name="toDateTime" title="To Date"/>
         </search-fields>
-        <dataset type="sql">
+        <dataset type="jpql">
             <![CDATA[
         SELECT t.name AS team_name, COUNT(pt.id) AS total_completed_tasks
         FROM ProjectTask pt
