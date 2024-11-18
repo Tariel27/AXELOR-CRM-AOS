@@ -175,5 +175,7 @@ Orders are accepted until 19:00!
         <attribute name="value" expr="eval: __time__" for="dateCreate"/>
     </action-attrs>
 
-
+    <action-method name="pbp.searchDishOnDuckDuckGo">
+        <call class="com.axelor.apps.pbproject.web.LunchController" method="searchDishOnDuckDuckGo"/>
+    </action-method>
 </object-views>
