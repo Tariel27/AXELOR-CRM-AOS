@@ -4,16 +4,17 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <dashboard name="pbp.ratings-by-person-dashboard" title="Ratings by person!">
-        <dashlet height="150px" colSpan="3" action="custom:report-total-users"/>
-        <dashlet height="150px" colSpan="3" action="custom:report-total-teams"/>
-        <dashlet height="150px" colSpan="4" action="custom:report-total-tasks"/>
-        <dashlet height="150px" colSpan="2" action="custom:report-total-projects"/>
-        <dashlet height="350px" colSpan="12" action="custom:report-table-users"/>
-        <dashlet height="400px" colSpan="12" action="chart:chart-best-person-completed-tasks"/>
-        <dashlet height="400px" colSpan="12" action="chart:chart-best-person-completed-tasks-v2"/>
-        <dashlet height="400px" colSpan="12" action="chart:chart-best-person-spent-hours"/>
-        <dashlet height="400px" colSpan="12" action="chart:chart-tasks-completed-by-person-project"/>
+        <dashlet colSpan="3" height="150px" action="custom:report-total-users"/>
+        <dashlet colSpan="3" height="150px" action="custom:report-total-teams"/>
+        <dashlet colSpan="4" height="150px" action="custom:report-total-tasks"/>
+        <dashlet colSpan="2" height="150px" action="custom:report-total-projects"/>
+        <dashlet colSpan="12" height="350px" action="custom:report-table-users"/>
+        <dashlet colSpan="12" height="700px" action="chart:chart-best-person-completed-tasks"/>
+        <dashlet colSpan="12" height="700px" action="chart:chart-best-person-completed-tasks-v2"/>
+        <dashlet colSpan="12" height="700px" action="chart:chart-best-person-spent-hours"/>
+        <dashlet colSpan="12" height="700px" action="chart:chart-tasks-completed-by-person-project"/>
     </dashboard>
+
 
     <!-- диаграмма показывающая кто больше выполнил задач-->
     <chart name="chart-best-person-completed-tasks" title="The best person who completed more tasks" stacked="true"
