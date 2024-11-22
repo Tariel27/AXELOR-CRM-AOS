@@ -40,7 +40,7 @@
       const inputText = document.getElementById('inputText').value;
 
       try {
-        const response = await fetch('http://localhost:8001/generate', {
+        const response = await fetch('http://localhost:8080/crm/ws/api/generate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
