@@ -41,30 +41,6 @@
         </panel>
     </form>
 
-    <!--  form для новостей -->
-    <form name="pbp.news-form-readable" title="News" model="com.axelor.apps.pbproject.db.News" width="large">
-        <panel itemSpan="12" readonly="true">
-            <field name="title"/>
-            <field name="isUrl" hidden="true"/>
-            <panel showIf="!isUrl" itemSpan="12">
-                <field name="text" showIf="!isUrl" widget="html"/>
-            </panel>
-            <panel showIf="isUrl" itemSpan="12">
-                <field name="addUrl" showIf="isUrl" widget="url" colSpan="10"/>
-                <field name="$customFrame" showTitle="false" readonly="true">
-                    <viewer depends="addUrl">
-                        <![CDATA[
-                          <>
-                              <Box as="iframe" title="My iframe" width="500" height="1500" border="0" src={addUrl}></Box>
-                          </>
-                        ]]>
-                    </viewer>
-                </field>
-            </panel>
-            <field name="dateCreate" hidden="true"/>
-            <field name="author" hidden="true"/>
-        </panel>
-    </form>
 
     <!-- card для новостей -->
     <cards name="pbp.news-cards-view" title="Manager news" model="com.axelor.apps.pbproject.db.News" width="33%"
@@ -128,17 +104,26 @@
         <attribute name="value" expr="eval: __time__" for="dateCreate"/>
     </action-attrs>
 
-    <!-- action для новостей all_news-->
+    <!-- action для новостей main-->
     <action-view name="pbp.manager-news-action-for-main" title="Manager news" model="com.axelor.apps.pbproject.db.News">
         <view type="cards" name="pbp.news-cards-view-for-main"/>
-        <view type="form" name="pbp.news-form-readable"/>
         <domain>self.isPublish = true</domain>
     </action-view>
 
-    <!-- action для новостей my_news-->
-    <action-view name="pbp.news-cards-view" title="News"
-                 model="com.axelor.apps.pbproject.db.News">
-        <view type="cards" name="pbp.news-users-cards"/>
+
+
+    <action-view name="pbp.manager-news-action" title="Manager news" model="com.axelor.apps.pbproject.db.News">
+        <view type="cards" name="pbp.news-cards-view"/>
+        <view type="form" name="pbp.news-form-view"/>
+        <domain>self.isPublish = true</domain>
+
     </action-view>
 
+    <action-view name="pbp.manager-news-action-isNotPublish" title="Manager news"
+                 model="com.axelor.apps.pbproject.db.News">
+        <view type="cards" name="pbp.news-cards-view"/>
+        <view type="form" name="pbp.news-form-view"/>
+        <domain>self.createdBy = : __user__</domain>
+        <context name="_user" expr="eval: __user__"/>
+    </action-view>
 </object-views>
