@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Radio Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+
+    .radio-container {
+      background-color: #2a2a40;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+
+    .radio-title {
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .stations {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .station {
+      background-color: #444;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .station:hover {
+      background-color: #555;
+    }
+
+    .station.active {
+      background-color: #00bcd4;
+      color: #fff;
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .controls button {
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .controls button:hover {
+      background-color: #555;
+    }
+
+    .volume-slider {
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+<div class="radio-container">
+  <div class="radio-title">Online Radio</div>
+  <div class="stations">
+    <div class="station" data-stream="http://ic7.101.ru:8000/v4_1">Авторадио</div>
+    <div class="station" data-stream="http://ep256.hostingradio.ru:8052/europaplus256.mp3">Европа Плюс</div>
+    <div class="station" data-stream="https://streams.ilovemusic.de/iloveradio1.mp3">I Love Radio</div>
+    <div class="station" data-stream="http://stream.srg-ssr.ch/m/drs3/mp3_128">Swiss Pop</div>
+    <div class="station" data-stream="http://stream.whus.org:8000/whusfm">WHUS FM</div>
+    <div class="station" data-stream="http://streaming.radionomy.com/abc-lounge">ABC Lounge</div>
+    <div class="station" data-stream="http://icecast.vgtrk.cdnvideo.ru/vestifm_aac_64kbps">Вести FM</div>
+
+
+  </div>
+
+  <div class="controls">
+    <button id="playPause">Play</button>
+    <input type="range" id="volume" class="volume-slider" min="0" max="1" step="0.1" value="0.5" title="Volume">
+  </div>
+</div>
+
+<audio id="audioPlayer"></audio>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const stations = document.querySelectorAll('.station');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playPauseButton = document.getElementById('playPause');
+    const volumeSlider = document.getElementById('volume');
+
+    let currentStation = null;
+
+    stations.forEach(station => {
+      station.addEventListener('click', () => {
+        const stream = station.getAttribute('data-stream');
+        if (currentStation) {
+          currentStation.classList.remove('active');
+        }
+
+        station.classList.add('active');
+        currentStation = station;
+
+        audioPlayer.src = stream;
+        audioPlayer.play();
+        playPauseButton.textContent = 'Pause';
+      });
+    });
+
+    playPauseButton.addEventListener('click', () => {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+        playPauseButton.textContent = 'Pause';
+      } else {
+        audioPlayer.pause();
+        playPauseButton.textContent = 'Play';
+      }
+    });
+
+    // Управление громкостью
+    volumeSlider.addEventListener('input', () => {
+      audioPlayer.volume = volumeSlider.value;
+    });
+  });
+</script>
+</body>
+</html>

@@ -14,6 +14,10 @@
         <dashlet height="250" width="300" action="pbp.method-for-open-custom-duty"/>
         <dashlet height="250" width="300" action="pbp.list-activity-custom"/>
         <dashlet height="250" width="300" action="pbp.manager-news-action-for-main"/>
+        <dashlet height="250" width="300" action="pbp.player-form.a-v"/>
+        <dashlet height="500" width="300" action="pbp.player.a-v"/>
+        <dashlet height="500" width="300" action="pbp.radio.a-v"/>
+
     </dashboard>
 
     <!-- Экшены для дашборда -->
