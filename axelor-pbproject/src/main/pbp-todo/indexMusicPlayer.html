@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music player</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .player-container {
+      background-color: #2a2a40;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .controls button {
+      width: 60px;
+      height: 60px;
+      border: none;
+      border-radius: 50%;
+      background-color: #444;
+      color: white;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .controls button:hover {
+      background-color: #555;
+      transform: scale(1.1);
+    }
+    .controls button:disabled {
+      background-color: #333;
+      cursor: not-allowed;
+    }
+    .playlist {
+      max-height: 200px; /* Ограничение высоты */
+      overflow-y: auto; /* Прокрутка */
+      margin-top: 20px;
+      border-radius: 15px;
+    }
+    .playlist::-webkit-scrollbar {
+      width: 6px; /* Ширина скроллбара */
+    }
+    .playlist::-webkit-scrollbar-thumb {
+      background-color: #555; /* Цвет скроллбара */
+      border-radius: 5px; /* Скругление */
+    }
+    .playlist::-webkit-scrollbar-thumb:hover {
+      background-color: #777; /* Цвет при наведении */
+    }
+    .active-track {
+      background-color: #807e7e; /* Цвет выделенного трека */
+      color: #fff;
+      font-weight: bold;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="player-container">
+  <h1 class="text-light mb-3">Music Player</h1>
+  <audio id="audioPlayer" controls class="w-100"></audio>
+
+  <div class="controls">
+    <!-- Кнопка "Предыдущий трек" -->
+    <button id="prevTrack" title="Previous Track" disabled>
+      <i class="bi bi-skip-backward-fill"></i>
+    </button>
+    <!-- Кнопка "Плей/Пауза" -->
+    <button id="playPause" title="Play/Pause">
+      <i class="bi bi-play-fill" id="playPauseIcon"></i>
+    </button>
+    <!-- Кнопка "Следующий трек" -->
+    <button id="nextTrack" title="Next Track" disabled>
+      <i class="bi bi-skip-forward-fill"></i>
+    </button>
+  </div>
+
+  <!-- Плейлист -->
+  <ul id="playlist" class="list-group playlist"></ul>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const apiUrl = 'https://pytest2.brisklyminds.com/axelor-erp/ws/dms/files';
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playlist = document.getElementById('playlist');
+    const prevTrackButton = document.getElementById('prevTrack');
+    const nextTrackButton = document.getElementById('nextTrack');
+    const playPauseButton = document.getElementById('playPause');
+    const playPauseIcon = document.getElementById('playPauseIcon');
+
+    let files = [];
+    let currentIndex = -1;
+
+    function renderPlaylist(fileList) {
+      files = fileList;
+      currentIndex = 0;
+      updateControls();
+
+      playlist.innerHTML = '';
+      files.forEach((file, index) => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item list-group-item-action bg-dark text-light';
+        li.textContent = file.fileName;
+        li.addEventListener('click', () => {
+          playFile(index);
+        });
+        playlist.appendChild(li);
+      });
+
+      if (files.length > 0) {
+        currentIndex = 0;
+        audioPlayer.src = `https://pytest2.brisklyminds.com/axelor-erp/ws/dms/download/${files[currentIndex].id}`;
+        highlightCurrentTrack();
+        updateControls();
+        updatePlayPauseButton();
+      }
+    }
+
+    function highlightCurrentTrack() {
+      const listItems = playlist.querySelectorAll('li');
+      listItems.forEach((item, index) => {
+        if (index === currentIndex) {
+          item.classList.add('active-track');
+        } else {
+          item.classList.remove('active-track');
+        }
+      });
+    }
+
+    function playFile(index) {
+      if (index < 0 || index >= files.length) return;
+      currentIndex = index;
+      audioPlayer.src = `http://localhost:8080/axelor-erp/ws/dms/download/${files[currentIndex].id}`;
+      audioPlayer.play();
+      highlightCurrentTrack();
+      updateControls();
+      updatePlayPauseButton();
+    }
+
+    function playNext() {
+      if (currentIndex < files.length - 1) {
+        playFile(currentIndex + 1);
+      }
+      updatePlayPauseButton();
+    }
+
+    function playPrevious() {
+      if (currentIndex > 0) {
+        playFile(currentIndex - 1);
+      }
+      updatePlayPauseButton();
+    }
+
+    function togglePlayPause() {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+      } else {
+        audioPlayer.pause();
+      }
+      updatePlayPauseButton();
+    }
+
+    function updatePlayPauseButton() {
+      if (audioPlayer.paused) {
+        playPauseIcon.className = 'bi bi-play-fill';
+      } else {
+        playPauseIcon.className = 'bi bi-pause-fill';
+      }
+    }
+
+    function updateControls() {
+      prevTrackButton.disabled = currentIndex <= 0;
+      nextTrackButton.disabled = currentIndex >= files.length - 1;
+    }
+
+    function loadFiles() {
+      fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'X-CSRF-Token': getCsrfToken(),
+          'Content-Type': 'application/json'
+        }
+      })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`Ошибка: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then(data => {
+                if (data.status === 0 && data.data) {
+                  renderPlaylist(data.data);
+                } else {
+                  console.error('Нет данных для отображения');
+                }
+              })
+              .catch(error => {
+                console.error('Ошибка загрузки файлов:', error);
+              });
+    }
+
+    function getCsrfToken() {
+      const cookies = document.cookie.split('; ').reduce((acc, cur) => {
+        const [key, value] = cur.split('=');
+        acc[key] = value;
+        return acc;
+      }, {});
+      return cookies['CSRF-TOKEN'] || '';
+    }
+
+    // Обработчики для кнопок
+    prevTrackButton.addEventListener('click', playPrevious);
+    nextTrackButton.addEventListener('click', playNext);
+    playPauseButton.addEventListener('click', togglePlayPause);
+
+    // Обработчик для нажатий клавиш
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') {
+        playPrevious();
+      } else if (event.key === 'ArrowRight') {
+        playNext();
+      }
+    });
+
+    loadFiles();
+  });
+</script>
+</body>
+</html>

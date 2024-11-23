@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
+
+
+    <form title="Player" name="pbp.player.form" model="com.axelor.apps.pbproject.db.Tag">
+        <panel>
+            <button title="Upload mp3" name="Upload"
+                    onClick="dms.my" colSpan="12"/>
+        </panel>
+    </form>
+
+    <action-view name="pbp.player.a-v" title="Music player" model="com.axelor.apps.pbproject.db.Tag">
+        <view type="html" name="pbp-todo/indexMusicPlayer.html"/>
+    </action-view>
+
+    <action-view name="pbp.radio.a-v" title="Online radio" model="com.axelor.apps.pbproject.db.Tag">
+        <view type="html" name="pbp-todo/indexRadio.html"/>
+    </action-view>
+
+    <action-view name="pbp.player-form.a-v" title="Music player" model="com.axelor.apps.pbproject.db.Tag">
+        <view type="form" name="pbp.player.form"/>
+    </action-view>
+
+</object-views>
