@@ -155,7 +155,7 @@
     function playFile(index) {
       if (index < 0 || index >= files.length) return;
       currentIndex = index;
-      audioPlayer.src = `http://localhost:8080/axelor-erp/ws/dms/download/${files[currentIndex].id}`;
+      audioPlayer.src = `https://pytest2.brisklyminds.com/axelor-erp/ws/dms/download/${files[currentIndex].id}`;
       audioPlayer.play();
       highlightCurrentTrack();
       updateControls();
