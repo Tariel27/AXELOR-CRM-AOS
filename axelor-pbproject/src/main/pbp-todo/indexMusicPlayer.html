@@ -105,7 +105,11 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    let baseUrl = window.location.protocol + "//" + window.location.hostname + "/crm";
+    let baseUrl = window.location.protocol + "//" + window.location.hostname;
+    if (window.location.port) {
+        baseUrl += ":" + window.location.port;
+    }
+    baseUrl += "/crm"
     const apiUrl = baseUrl + '/ws/dms/files';
     const audioPlayer = document.getElementById('audioPlayer');
     const playlist = document.getElementById('playlist');

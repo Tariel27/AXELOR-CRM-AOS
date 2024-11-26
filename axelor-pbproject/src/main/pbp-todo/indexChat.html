@@ -29,7 +29,11 @@
   </div>
 
   <script>
-    let baseUrl = window.location.protocol + "//" + window.location.hostname + "/crm";
+    let baseUrl = window.location.protocol + "//" + window.location.hostname;
+    if (window.location.port) {
+        baseUrl += ":" + window.location.port;
+    }
+    baseUrl += "/crm"
 
     function getCookies() {
         return decodeURIComponent(document.cookie)
