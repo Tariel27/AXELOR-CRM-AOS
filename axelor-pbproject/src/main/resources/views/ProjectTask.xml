@@ -593,4 +593,24 @@
         <attribute for="complexity" name="value" expr="eval: 'medium'"/>
     </action-attrs>
 
+    <gantt name="pbp.project-task-gantt" title="Task Planning" model="com.axelor.apps.project.db.ProjectTask"
+           mode="year"
+           taskStart="startDateTime"
+           taskDuration="planHours"
+           taskParent="parentTask"
+           taskSequence="sequence"
+           taskProgress="plannedProgress">
+        <field name="name"/>
+        <field name="complexity"/>
+        <field name="user"/>
+    </gantt>
+
+    <action-view name="pbp.project-task-gantt.a-v" title="Task Planning" model="com.axelor.apps.project.db.ProjectTask">
+        <view name="pbp.project-task-gantt" type="gantt"/>
+        <view-param name="limit" value="10000"/>
+    </action-view>
+
+    <menuitem name="pbp.project-task-gantt.m-i" title="Task Planning" icon="handshake"
+              icon-background="#84429f" action="pbp.project-task-gantt.a-v"/>
+
 </object-views>
