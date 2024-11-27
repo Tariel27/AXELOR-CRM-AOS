@@ -4,7 +4,7 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
 
     <!--  grid для обеда партнеров -->
-    <grid title="Partner lunch" name="pbp.lunch-grid-view" model="com.axelor.apps.pbproject.db.Lunch">
+    <grid title="Partner lunch" name="pbp.lunch-grid-view" model="com.axelor.apps.pbproject.db.Lunch" canEdit="true" canDelete="true" canSave="true">
         <field name="partnerName" title="Partner name"/>
         <field name="dishName" title="Lunch"/>
         <field name="portion" title="Portion size"/>
@@ -49,6 +49,7 @@ Orders are accepted until 19:00!
         <dashlet height="300px" colSpan="3" action="custom:report-dish-count-half-stats"/>
         <dashlet height="350px" colSpan="12" action="custom:report-table-lunch-for-users"/>
         <dashlet height="800px" colSpan="12" action="form:pbp.lunch-form-view"/>
+
     </dashboard>
 
     <!-- таблица показывающая всех партнеров сделавших заказ-->
@@ -62,14 +63,15 @@ Orders are accepted until 19:00!
         <dataset type="jpql">
             <![CDATA[
         SELECT u.fullName AS fullName,
-               d.name AS dishName,
-               l.portion AS portion,
-               l.dateCreate AS dateCreate,
-               l.partnerComment AS partnerComment
+            d.name AS dishName,
+            l.portion AS portion,
+            l.dateCreate AS dateCreate,
+            l.partnerComment AS partnerComment
         FROM User u
         LEFT JOIN Lunch l ON u.id = l.partnerName.id
         LEFT JOIN l.dishName d
-        WHERE l.dateCreate >= CURRENT_DATE OR l.dateCreate IS NULL
+        WHERE (l.dateCreate >= CURRENT_DATE OR l.dateCreate IS NULL)
+        AND u.blocked = false
         ORDER BY u.fullName
         ]]>
         </dataset>
