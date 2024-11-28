@@ -105,7 +105,12 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const apiUrl = 'https://pytest2.brisklyminds.com/axelor-erp/ws/dms/files';
+    let baseUrl = window.location.protocol + "//" + window.location.hostname;
+    if (window.location.port) {
+        baseUrl += ":" + window.location.port;
+    }
+    baseUrl += "/crm"
+    const apiUrl = baseUrl + '/ws/dms/files';
     const audioPlayer = document.getElementById('audioPlayer');
     const playlist = document.getElementById('playlist');
     const prevTrackButton = document.getElementById('prevTrack');
@@ -155,7 +160,7 @@
     function playFile(index) {
       if (index < 0 || index >= files.length) return;
       currentIndex = index;
-      audioPlayer.src = `https://pytest2.brisklyminds.com/axelor-erp/ws/dms/download/${files[currentIndex].id}`;
+      audioPlayer.src = baseUrl + `/ws/dms/download/${files[currentIndex].id}`;
       audioPlayer.play();
       highlightCurrentTrack();
       updateControls();

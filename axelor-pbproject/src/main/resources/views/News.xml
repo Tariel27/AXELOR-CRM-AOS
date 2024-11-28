@@ -44,7 +44,7 @@
 
     <!-- card для новостей -->
     <cards name="pbp.news-cards-view" title="Manager news" model="com.axelor.apps.pbproject.db.News" width="33%"
-           orderBy="dateCreate">
+           >
         <field name="title" colSpan="12"/>
         <field name="text"/>
         <field name="isPublish"/>
@@ -75,7 +75,7 @@
 
     <!-- card для новостей Main-->
     <cards name="pbp.news-cards-view-for-main" title="Manager news" model="com.axelor.apps.pbproject.db.News"
-           width="100%" orderBy="dateCreate" canEdit="false" canDelete="false">
+           width="100%"  canEdit="false" canDelete="false">
         <field name="title" colSpan="12"/>
         <field name="text"/>
         <field name="dateCreate"/>

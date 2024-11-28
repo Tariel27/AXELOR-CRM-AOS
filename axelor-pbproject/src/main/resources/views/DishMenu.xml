@@ -12,7 +12,7 @@
 
     <!--  form для меню обедов -->
     <form name="pbp.dish-form-view" title="Dish menu" model="com.axelor.apps.pbproject.db.DishMenu" width="large"
-    onNew="pbp.update-user-and-date-on-partnerName" >
+    onNew="pbp.update-user-and-date-on-partnerName">
         <panel title="Dish menu" itemSpan="12" >
             <field name="partnerName" title="Partner name" hidden="true"/>
             <field name="dateCreateMenu" title="Date create"/>

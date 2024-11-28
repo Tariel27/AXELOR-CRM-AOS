@@ -29,6 +29,12 @@
   </div>
 
   <script>
+    let baseUrl = window.location.protocol + "//" + window.location.hostname;
+    if (window.location.port) {
+        baseUrl += ":" + window.location.port;
+    }
+    baseUrl += "/crm"
+
     function getCookies() {
         return decodeURIComponent(document.cookie)
             .split('; ')
@@ -51,7 +57,7 @@
       const inputText = document.getElementById('inputText').value;
 
       try {
-        const response = await fetch('https://pytest2.brisklyminds.com/crm/ws/api/generate', {
+        const response = await fetch(baseUrl + '/ws/api/generate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
