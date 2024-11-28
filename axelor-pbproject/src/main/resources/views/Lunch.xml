@@ -49,6 +49,8 @@ Orders are accepted until 19:00!
         <dashlet height="300px" colSpan="3" action="custom:report-dish-count-half-stats"/>
         <dashlet height="350px" colSpan="12" action="custom:report-table-lunch-for-users"/>
         <dashlet height="800px" colSpan="12" action="form:pbp.lunch-form-view"/>
+        <dashlet height="800px" colSpan="12" action="grid:pbp.lunch-grid-view"/>
+
 
     </dashboard>
 
