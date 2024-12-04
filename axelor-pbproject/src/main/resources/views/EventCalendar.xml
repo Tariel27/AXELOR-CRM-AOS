@@ -3,9 +3,12 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
+    <action-view name="pbp.events.view" title="Events" model="com.axelor.apps.base.db.ICalendarEvent">
+        <view type="calendar" name="pbp.events.calendar"/>
+    </action-view>
 
-    <calendar name="pbp.calendar-event-all" model="com.axelor.apps.base.db.ICalendarEvent"
-              title="Calendar" eventStart="startDateTime" eventStop="endDateTime" colorBy="calendar">
+    <calendar name="pbp.events.calendar" model="com.axelor.apps.base.db.ICalendarEvent" title="Events" colorBy="calendar"
+              eventStart="startDateTime" eventStop="endDateTime">
         <field name="subject"/>
     </calendar>
 

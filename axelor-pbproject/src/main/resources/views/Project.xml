@@ -3,7 +3,12 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
-    <form name="pbp.project-form" title="Project" model="com.axelor.apps.project.db.Project"
+    <action-view name="pbp.projects" title="All projects" model="com.axelor.apps.project.db.Project">
+        <view type="grid" name="pbp.project.grid"/>
+        <view type="form" name="pbp.project.form"/>
+    </action-view>
+
+    <form name="pbp.project.form" title="Project" model="com.axelor.apps.project.db.Project"
           onLoad="action-project-on-load-group" onNew="action-project-group-on-new-project,pbp.project.o-n.set-default-value.a-a"
           onSave="action-project-method-check-resource-availibility">
         <menubar>
@@ -547,7 +552,7 @@
         </panel-mail>
     </form>
 
-    <grid name="pbp.project-grid" title="Projects" model="com.axelor.apps.project.db.Project"
+    <grid name="pbp.project.grid" title="Projects" model="com.axelor.apps.project.db.Project"
           orderBy="projectStatus, name">
         <menubar>
             <menu name="projectToolsMenu" title="Tools" icon="fa-wrench" showTitle="true">
@@ -568,7 +573,6 @@
                 onClick="action-project-open-gantt"/>
         <field name="projectStatus"/>
     </grid>
-
 
     <action-attrs name="pbp.project.o-n.set-default-value.a-a">
         <attribute for="completedTaskStatus" name="value" expr="eval: __repo__(TaskStatus).find(3)" />

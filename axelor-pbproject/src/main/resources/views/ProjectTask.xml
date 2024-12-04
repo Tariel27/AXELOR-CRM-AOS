@@ -3,7 +3,27 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
-    <form name="pbp.project-task-form" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large"
+    <action-view name="pbp.tasks.all" title="All Tasks" model="com.axelor.apps.project.db.ProjectTask">
+        <view type="kanban" name="pbp.project-task.kanban"/>
+        <view type="grid" name="pbp.project-task.grid"/>
+        <view type="form" name="pbp.project-task.form"/>
+        <view-param name="search-filters" value="project-task-filters"/>
+        <view-param name="auto-reload" value="20"/>
+        <domain>self.typeSelect = :_typeSelect</domain>
+        <context name="_typeSelect" expr="eval: 'task'"/>
+    </action-view>
+
+    <action-view name="pbp.tasks.byUser" title="My Tasks" model="com.axelor.apps.project.db.ProjectTask">
+        <view type="kanban" name="pbp.project-task.kanban"/>
+        <view type="form" name="pbp.project-task.form"/>
+        <view type="grid" name="pbp.project-task.grid"/>
+        <view-param name="search-filters" value="project-task-filters"/>
+        <view-param name="auto-reload" value="20"/>
+        <domain>self.assignedTo = :__user__ AND self.typeSelect = :_typeSelect</domain>
+        <context name="_typeSelect" expr="eval: 'task'"/>
+    </action-view>
+
+    <form name="pbp.project-task.form" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large"
           onLoad="pbp.action-business-project-project-task-group-on-load,action-readable-time-convert,save"
           onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method,pbp.validate.dateStart.dateEnd,pbp.auto-set-complexity"
           onSave="pbp.validate.dateStart.dateEnd">
@@ -455,8 +475,9 @@
                     onClick="action-project-task-open-task"/>
         </node>
     </tree>
+
     <!--Канбан, где тикеты работают с Date-Time, показывают также время начала-->
-    <kanban name="pbp.project-task-kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
+    <kanban name="pbp.project-task.kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
             columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
         <field name="name"/>
         <field name="project"/>
@@ -509,7 +530,8 @@
 </>
  ]]></template>
     </kanban>
-    <grid name="pbp.project-task-grid" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
+
+    <grid name="pbp.project-task.grid" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
           edit-icon="true" orderBy="-priority.technicalTypeSelect">
         <hilite if="$get('status.id') == $get('project.completedTaskStatus.id')" color="success"/>
         <hilite if="$moment(taskEndDate).diff(todayDate,'days') &lt; 0" color="danger"/>
