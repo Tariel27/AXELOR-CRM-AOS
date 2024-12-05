@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,13 +46,31 @@ public class BirthdayServiceImpl implements BirthdayService {
                     .fetchOne() != null;
 
             if (!eventExists) {
-                ICalendarEvent calendarEvent = new ICalendarEvent();
-                calendarEvent.setSubject("День рождения: " + partner.getSimpleFullName());
-                calendarEvent.setStartDateTime(birthday.atStartOfDay());
-                calendarEvent.setEndDateTime(birthday.atStartOfDay().plusDays(1));
+                ICalendarEvent calendarEvent = getCalendarEvent(partner, birthday);
 
                 calendarEventRepository.save(calendarEvent);
             }
         }
+    }
+
+    private static ICalendarEvent getCalendarEvent(Partner partner, LocalDate birthday) {
+        ICalendarEvent calendarEvent = new ICalendarEvent();
+        calendarEvent.setSubject("День рождения: " + partner.getSimpleFullName());
+
+        calendarEvent.setStartDateTime(
+                LocalDateTime.of(
+                        birthday.getYear(),
+                        birthday.getMonth(),
+                        birthday.getDayOfMonth(), 0,0
+                )
+        );
+
+        LocalDate plussedDay = birthday.plusDays(1);
+        calendarEvent.setEndDateTime(LocalDateTime.of(
+                plussedDay.getYear(),
+                plussedDay.getMonth(),
+                plussedDay.getDayOfMonth(), 0,0
+        ));
+        return calendarEvent;
     }
 }
