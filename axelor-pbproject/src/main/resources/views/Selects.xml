@@ -10,11 +10,19 @@
     </selection>
 
     <selection name="pbp.forum.color.select">
-        <option value="red" color="red">Red</option>
-        <option value="blue" color="blue">Blue</option>
-        <option value="green" color="green">Green</option>
-        <option value="yellow" color="yellow">Yellow</option>
-        <option value="grey" color="grey">Grey</option>
+        <option value="#E0E0E0">General Forum</option>
+        <option value="#FFC107">Niche Forum</option>
+        <option value="#2196F3">Technical Forum</option>
+        <option value="#4CAF50">Support Forum</option>
+        <option value="#FF9800">Social Forum</option>
+        <option value="#03A9F4">Educational Forum</option>
+        <option value="#8BC34A">Q&amp;A Forum</option>
+        <option value="#3F51B5">Review Forum</option>
+        <option value="#F44336">News Forum</option>
+        <option value="#9C27B0">Hobby and Interest Forum</option>
+        <option value="#616161">Product/Service Forum</option>
+        <option value="#2196F3">Career Forum</option>
+        <option value="#4CAF50">Health &amp; Fitness Forum</option>
     </selection>
 
     <!-- Статусы ожидания заявок на отпрос от работы -->
