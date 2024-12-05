@@ -2,96 +2,45 @@
 <object-views xmlns="http://axelor.com/xml/ns/object-views"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
+
     <grid title="Leave requests" name="pbp.ask-for-leave-grid" model="com.axelor.apps.pbproject.db.WorkLeave">
         <field name="leaveRequestStatus" widget="SingleSelect"/>
         <field name="requester"/>
-        <field name="reason"/>
+        <field name="approver"/>
         <field name="createdDateTime"/>
         <field name="startDateTime"/>
         <field name="endDateTime"/>
     </grid>
 
-    <form title="Leave request" name="pbp.ask-for-leave-form" model="com.axelor.apps.pbproject.db.WorkLeave" width="large">
-        <toolbar>
-            <button name="sendRequest" title="Send request"
-                    icon="fa-paper-plane-o"
-                    onClick="pbp.attr.approve.ask.for.leave,pbp.auto.set.request.user,save,pbp.action-method-for-send-email-to-user,pbp.ask-for-leave-from-action.view,close"
-                    hideIf="requester != null || reason == null || startDateTime == null || endDateTime == null || approver == null"
-                    />
-            <button name="approveAsk" title="Approve"
-                    icon="fa-thumbs-o-up"
-                    onClick="pbp.attr.approve.ask.for.leave,save,pbp.action-method-for-send-email-to-user,pbp.ask-for-leave-from-action.view,close"
-                    showIf="leaveRequestStatus == 'waiting' &amp;&amp; $readonly() &amp;&amp; _user.id == approver.id"
-                    prompt="Are you sure for approve?" />
-            <button name="denieAsk" title="Denie"
-                    icon=" fa-times-circle"
-                    onClick="pbp.attr.denie.ask.for.leave,save,pbp.action-method-for-send-email-to-user,pbp.ask-for-leave-from-action.view,close"
-                    showIf="leaveRequestStatus == 'waiting' &amp;&amp; $readonly() &amp;&amp; _user.id == approver.id"
-                    prompt="Are you sure for denie?"/>
-        </toolbar>
-
-        <panel name="infoPanel" hideIf="!$readonly()" colSpan="12" itemSpan="1">
-            <field name="leaveRequestStatus" showTitle="false">
-                <viewer depends="leaveRequestStatus"><![CDATA[
-            <>
-                {leaveRequestStatus == 'waiting' && <h3><Badge style={{ backgroundColor: "#0E05FC" }}>Статус: {_t('Waiting')}</Badge></h3>}
-                {leaveRequestStatus == 'approved' && <h3><Badge style={{ backgroundColor: "#7DDA58" }}>Статус: {_t('Approved')}</Badge></h3>}
-                {leaveRequestStatus == 'denied' && <h3><Badge style={{ backgroundColor: "#E4080A" }}>Статус: {_t('Denied')}</Badge></h3>}
-            </>
-
-        ]]></viewer>
-            </field>
-            <field name="$requester" showTitle="false">
-                <viewer depends="requester.name">
-                    <![CDATA[
-    				<>
-                        <h3>
-                             <Badge style={{ backgroundColor: "#0D6EFD" }}>Заявитель: {requester.name}</Badge>
-                        </h3>
-                    </>
-                    ]]>
-                </viewer>
-            </field>
-
-            <field name="startDateTime" showTitle="false" showIf="startDateTime != null">
-                <viewer depends="startDateTime">
-                    <![CDATA[
-                    <>
-                      <h3>
-                        <Badge style={{ backgroundColor: "#6c757d" }}>Начало: {new Date(startDateTime).toLocaleDateString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'})}
-                    </Badge>
-
-                      </h3>
-                    </>
-                    ]]>
-                </viewer>
-            </field>
-            <field name="endDateTime" showTitle="false" showIf="endDateTime != null">
-                <viewer depends="endDateTime">
-                    <![CDATA[
-                    <>
-                      <h3>
-                        <Badge style={{ backgroundColor: "#6c757d" }}>Завершение: {new Date(endDateTime).toLocaleDateString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'})}
-                    </Badge>
-                      </h3>
-                    </>
-                    ]]>
-                </viewer>
-            </field>
-
-
+    <form title="Leave request" name="pbp.ask-for-leave-form" model="com.axelor.apps.pbproject.db.WorkLeave"
+          width="large" onNew="pbp.auto.set.request.user">
+        <panel itemSpan="4" readonlyIf="_user.id == approver.id">
+            <field name="reason" widget="html" colSpan="12" required="true"/>
+            <field name="startDateTime" required="true"/>
+            <field name="endDateTime" required="true"/>
+            <field name="approver" required="true" readonlyIf="leaveRequestStatus == 'waiting'"/>
         </panel>
 
-        <panel name="root-panel" colSpan="12">
-            <field name="reason" widget="html" colSpan="12" required="true"/>
-            <field name="startDateTime" colSpan="4" required="true"/>
-            <field name="endDateTime" colSpan="4" required="true"/>
-            <field name="approver" colSpan="4" required="true"/>
-
-            <field name="leaveRequestStatus" widget="SingleSelect" hidden="true"/>
-            <field name="requester" hidden="true"/>
-            <field name="createdDateTime" hidden="true"/>
+        <panel showIf="_user.id == approver.id">
             <field name="approverComment" widget="html" colSpan="12" showIf="_user.id == approver.id"/>
+        </panel>
+
+        <panel itemSpan="12" sidebar="true" readonly="true">
+            <field name="leaveRequestStatus"/>
+            <field name="requester"/>
+            <field name="createdDateTime"/>
+        </panel>
+
+        <panel itemSpan="12" sidebar="true">
+            <button name="sendRequest" title="Send request" icon="fa-paper-plane-o"
+                    showIf="_user.id == requester.id &amp;&amp; leaveRequestStatus == null"
+                    onClick="validate,pbp.attr.waiting.ask.for.leave,save,pbp.ask-for-leave-from-action.view,close"/>
+            <button name="approveAsk" title="Approve" icon="fa-thumbs-o-up" prompt="Are you sure for approve?"
+                    onClick="pbp.attr.approve.ask.for.leave,save,pbp.ask-for-leave-from-action.view,close"
+                    showIf="leaveRequestStatus == 'waiting' &amp;&amp; _user.id == approver.id"/>
+            <button name="denieAsk" title="Denie" icon="fa-times-circle" prompt="Are you sure for denie?"
+                    onClick="pbp.attr.denie.ask.for.leave,save,pbp.ask-for-leave-from-action.view,close"
+                    showIf="leaveRequestStatus == 'waiting' &amp;&amp; _user.id == approver.id"/>
         </panel>
     </form>
 
@@ -99,25 +48,28 @@
     <!-- Автоподставление значений при создании нового запроса -->
     <action-attrs name="pbp.auto.set.request.user">
         <attribute for="requester" name="value" expr="eval: _user"/>
-        <attribute for="leaveRequestStatus" name="value" expr="eval: 'waiting'"/>
         <attribute for="createdDateTime" name="value" expr="eval: __datetime__"/>
     </action-attrs>
 
-    <!-- Дейвсвите которе меняет статус при приеме -->
+    <!-- меняет статус при приеме -->
+    <action-attrs name="pbp.attr.waiting.ask.for.leave">
+        <attribute for="leaveRequestStatus" name="value" expr="eval: 'waiting'"/>
+    </action-attrs>
+
+    <!-- меняет статус при приеме -->
     <action-attrs name="pbp.attr.approve.ask.for.leave">
         <attribute for="leaveRequestStatus" name="value" expr="eval: 'approved'"/>
     </action-attrs>
 
-    <!-- Дейвсвите которе меняет статус при отказе -->
+    <!-- меняет статус при отказе -->
     <action-attrs name="pbp.attr.denie.ask.for.leave">
         <attribute for="leaveRequestStatus" name="value" expr="eval: 'denied'"/>
     </action-attrs>
 
-    <!-- Метод который будет отправлять данный по эл почте -->
-    <action-method name="pbp.action-method-for-send-email-to-user">
-        <call class="com.axelor.apps.pbproject.web.WorkLeaveController" method="sendEmail"/>
-    </action-method>
-
+    <!-- отправляет данный по эл почте -->
+    <!--    <action-method name="pbp.action-method-for-send-email-to-user">-->
+    <!--        <call class="com.axelor.apps.pbproject.web.WorkLeaveController" method="sendEmail"/>-->
+    <!--    </action-method>-->
 
 
 </object-views>
