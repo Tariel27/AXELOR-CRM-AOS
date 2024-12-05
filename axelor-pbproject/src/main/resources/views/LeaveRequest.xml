@@ -31,7 +31,7 @@
             <field name="createdDateTime"/>
         </panel>
 
-        <panel itemSpan="12" sidebar="true">
+        <panel itemSpan="12" sidebar="true" hideIf="leaveRequestStatus == 'approved' || leaveRequestStatus == 'denied'">
             <button name="sendRequest" title="Send request" icon="fa-paper-plane-o"
                     showIf="_user.id == requester.id &amp;&amp; leaveRequestStatus == null"
                     onClick="validate,pbp.attr.waiting.ask.for.leave,save,pbp.ask-for-leave-from-action.view,close"/>
