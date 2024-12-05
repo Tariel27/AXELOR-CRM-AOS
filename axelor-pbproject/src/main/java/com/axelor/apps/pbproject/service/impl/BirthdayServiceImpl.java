@@ -9,8 +9,8 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 
 import java.time.LocalDate;
-import java.time.MonthDay;
 import java.util.List;
+import java.util.Objects;
 
 public class BirthdayServiceImpl implements BirthdayService {
 
@@ -34,20 +34,21 @@ public class BirthdayServiceImpl implements BirthdayService {
                 .fetch();
 
         for (Partner partner : partnersWithBirthdays) {
+            if (Objects.isNull(partner.getDateOfBirth())) continue;
             LocalDate birthday = partner.getDateOfBirth().withYear(LocalDate.now().getYear());
 
             // Проверяем, существует ли уже событие на тот же день для того же партнера
             boolean eventExists = calendarEventRepository.all()
-                    .filter("self.subject = :subject AND DATE(self.startDateTime) = :birthday")
-                    .bind("subject", "День рождения: " + partner.getFullName())
+                    .filter("self.subject like :subject AND DATE(self.startDateTime) = :birthday")
+                    .bind("subject", "%День рождения%")
                     .bind("birthday", birthday)
                     .fetchOne() != null;
 
             if (!eventExists) {
                 ICalendarEvent calendarEvent = new ICalendarEvent();
-                calendarEvent.setSubject("День рождения: " + partner.getFullName());
+                calendarEvent.setSubject("День рождения: " + partner.getSimpleFullName());
                 calendarEvent.setStartDateTime(birthday.atStartOfDay());
-                calendarEvent.setEndDateTime(birthday.atStartOfDay().plusHours(24));
+                calendarEvent.setEndDateTime(birthday.atStartOfDay().plusDays(1));
 
                 calendarEventRepository.save(calendarEvent);
             }
