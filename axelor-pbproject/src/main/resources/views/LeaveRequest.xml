@@ -14,15 +14,15 @@
 
     <form title="Leave request" name="pbp.ask-for-leave-form" model="com.axelor.apps.pbproject.db.WorkLeave"
           width="large" onNew="pbp.auto.set.request.user">
-        <panel itemSpan="4" readonlyIf="_user.id == approver.id">
+        <panel itemSpan="4" readonlyIf="_user.id != requester.id">
             <field name="reason" widget="html" colSpan="12" required="true"/>
             <field name="startDateTime" required="true"/>
             <field name="endDateTime" required="true"/>
             <field name="approver" required="true" readonlyIf="leaveRequestStatus == 'waiting'"/>
         </panel>
 
-        <panel showIf="_user.id == approver.id">
-            <field name="approverComment" widget="html" colSpan="12" showIf="_user.id == approver.id"/>
+        <panel showIf="_user.id == approver.id || leaveRequestStatus == 'approved' || leaveRequestStatus == 'denied'" readonlyIf="leaveRequestStatus == 'approved' || leaveRequestStatus == 'denied'">
+            <field name="approverComment" widget="html" colSpan="12"/>
         </panel>
 
         <panel itemSpan="12" sidebar="true" readonly="true">
