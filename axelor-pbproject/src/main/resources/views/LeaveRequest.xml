@@ -34,7 +34,7 @@
         <panel itemSpan="12" sidebar="true" hideIf="leaveRequestStatus == 'approved' || leaveRequestStatus == 'denied'">
             <button name="sendRequest" title="Send request" icon="fa-paper-plane-o"
                     showIf="_user.id == requester.id &amp;&amp; leaveRequestStatus == null"
-                    onClick="validate,pbp.attr.waiting.ask.for.leave,save,pbp.ask-for-leave-from-action.view,close"/>
+                    onClick="pbp.ask-leave.validate,pbp.attr.waiting.ask.for.leave,save,pbp.ask-for-leave-from-action.view,close"/>
             <button name="approveAsk" title="Approve" icon="fa-thumbs-o-up" prompt="Are you sure for approve?"
                     onClick="pbp.attr.approve.ask.for.leave,save,pbp.ask-for-leave-from-action.view,close"
                     showIf="leaveRequestStatus == 'waiting' &amp;&amp; _user.id == approver.id"/>
@@ -44,6 +44,12 @@
         </panel>
     </form>
 
+    <action-condition name="pbp.ask-leave.validate">
+        <check field="reason"/>
+        <check field="startDateTime"/>
+        <check field="endDateTime"/>
+        <check field="approver"/>
+    </action-condition>
 
     <!-- Автоподставление значений при создании нового запроса -->
     <action-attrs name="pbp.auto.set.request.user">
