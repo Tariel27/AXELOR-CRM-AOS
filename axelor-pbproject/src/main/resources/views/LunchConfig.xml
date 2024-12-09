@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
+
+    <action-view name="pbp.lunch-config" title="Lunch config" model="com.axelor.apps.pbproject.db.LunchConfig">
+        <view type="form" name="pbp.lunch-config.form"/>
+        <view-param name="forceEdit" value="true"/>
+        <view-param name="show-toolbar" value="false"/>
+        <view-param name="show-confirm" value="false"/>
+        <context name="_showSingle" expr="true"/>
+        <context name="_showRecord" expr="eval: __repo__(LunchConfig).all().fetchOne()"/>
+    </action-view>
+
+    <form title="Lunch config" name="pbp.lunch-config.form" model="com.axelor.apps.pbproject.db.LunchConfig">
+        <panel title="Auto order" itemSpan="4">
+            <field name="autoOrderUser" colSpan="12" widget="TagSelect"/>
+            <field name="autoFirst"/>
+            <field name="autoSecond"/>
+            <field name="autoThird"/>
+        </panel>
+        <panel sidebar="true">
+            <button name="saveBtn" onClick="save" title="Save"/>
+        </panel>
+    </form>
+
+</object-views>

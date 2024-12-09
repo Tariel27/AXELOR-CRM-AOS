@@ -5,14 +5,17 @@
 
     <module name="pbproject" package="com.axelor.apps.pbproject.db"/>
 
-    <entity name="Lunch">
-        <many-to-one name="dish" ref="com.axelor.apps.pbproject.db.Dish"/>
-        <string name="portion" selection="pbp.portion.dish.select"/>
-        <string name="userComment" large="true"/>
+    <entity name="LunchConfig">
+        <many-to-many name="autoOrderUser" ref="com.axelor.auth.db.User"/>
+        <boolean name="autoFirst"/>
+        <boolean name="autoSecond"/>
+        <boolean name="autoThird"/>
 
         <track replace="true">
-            <field name="dish"/>
-            <field name="portion"/>
+            <field name="autoOrderUser"/>
+            <field name="autoFirst"/>
+            <field name="autoSecond"/>
+            <field name="autoThird"/>
         </track>
     </entity>
 

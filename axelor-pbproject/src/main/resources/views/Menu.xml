@@ -225,9 +225,8 @@
 
     <!-- ===================================================================================================== -->
 
-    <menuitem name="pbp.menu-lunch-for-users" title="Lunch" icon="fa-coffee" icon-background="#3f6bb9"
-              action="pbp.lunch-for-users-action" tag-get="com.axelor.apps.pbproject.web.LunchController:showO()"
-              tag-style="success" order="2400"/>
+    <menuitem name="pbp.lunch.user" title="Lunch" icon="fa-coffee" icon-background="#3f6bb9"
+              action="pbp.lunch.today-orders" order="2400" if="__repo__(DishMenu).getTodayDishMenu() != null"/>
 
     <menuitem name="pbp.forum" title="Forum" order="2500" icon="fa-commenting-o"
               icon-background="#3f6bb9" action="pbp.forum"/>
@@ -270,9 +269,13 @@
     <menuitem name="pbp.settings.lunch" title="Settings lunch" icon="fa-cogs" icon-background="#ab9518"
               order="7000"/>
 
-    <menuitem name="pbp.lunch.menu-list" title="Menu list"
-              action="pbp.lunch-for-admin-action" parent="pbp.settings.lunch"/>
+    <menuitem name="pbp.dish" title="Dishes" action="pbp.dish" parent="pbp.settings.lunch" order="7100"/>
 
+    <menuitem name="pbp.dish-menu" title="Menu list" order="7200" action="pbp.dish-menu" parent="pbp.settings.lunch"/>
+
+    <menuitem name="pbp.lunch-config" title="Lunch config" order="7300" action="pbp.lunch-config" parent="pbp.settings.lunch"/>
+
+    <menuitem name="pbp.lunch" title="Lunch orders" order="7400" action="pbp.lunch" parent="pbp.settings.lunch"/>
     <!-- ===================================================================================================== -->
 
     <menuitem name="pbp.settings.general" title="Settings general" icon="fa-cogs" icon-background="#ab9518"

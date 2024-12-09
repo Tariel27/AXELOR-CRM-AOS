@@ -6,8 +6,13 @@
     <module name="pbproject" package="com.axelor.apps.pbproject.db"/>
 
     <entity name="DishMenu">
-        <many-to-one name="partnerName" title="Partner name" ref="com.axelor.auth.db.User"/>
-        <date name="dateCreateMenu" title="Date create" required="true"/>
-        <many-to-many name="dishName" title="Dish name" ref="com.axelor.apps.pbproject.db.Dish" required="true"/>
+        <many-to-one name="firstDish" ref="com.axelor.apps.pbproject.db.Dish"/>
+        <many-to-one name="secondDish" ref="com.axelor.apps.pbproject.db.Dish"/>
+        <many-to-one name="thirdDish" ref="com.axelor.apps.pbproject.db.Dish"/>
+        <date name="menuDate"/>
+        <unique-constraint columns="menuDate"/>
+
+        <finder-method name="getTodayDishMenu" using="" filter="DATE(self.menuDate) = DATE(NOW())"/>
     </entity>
+
 </domain-models>
