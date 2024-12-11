@@ -23,7 +23,7 @@
         <panel sidebar="true" itemSpan="12">
             <field name="copyLinks" readonly="true" x-dirty="false"/>
             <field name="copyLunch" readonly="true" x-dirty="false"/>
-            <button name="refreshBtn" onClick="pbp.refresh-page"/>
+            <button name="refreshBtn" title="Refresh" onClick="pbp.refresh-page"/>
         </panel>
         <panel sidebar="true">
             <button name="saveBtn" onClick="save" title="Save"/>
