@@ -221,7 +221,7 @@
               order="2200" action="pbp.todo.view"/>
 
     <menuitem name="pbp.daily-records" title="Daily records" icon="fa-book" icon-background="#389665"
-              order="2300"/>
+              order="2300" action="pbp.daily-records"/>
 
     <!-- ===================================================================================================== -->
 
