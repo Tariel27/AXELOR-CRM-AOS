@@ -11,4 +11,6 @@ public interface LunchService {
     String getLunch();
 
     void orderLunch(Long lunch, String portion);
+
+    void autoOrder();
 }

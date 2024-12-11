@@ -4,10 +4,15 @@ import com.axelor.apps.base.service.exception.TraceBackService;
 import com.axelor.apps.pbproject.db.Dish;
 import com.axelor.apps.pbproject.db.DishMenu;
 import com.axelor.apps.pbproject.db.Lunch;
+import com.axelor.apps.pbproject.db.LunchConfig;
+import com.axelor.apps.pbproject.db.repo.DishMenuRepository;
 import com.axelor.apps.pbproject.db.repo.DishRepository;
+import com.axelor.apps.pbproject.db.repo.LunchConfigRepository;
 import com.axelor.apps.pbproject.db.repo.LunchRepository;
 import com.axelor.apps.pbproject.service.LunchService;
+import com.axelor.auth.db.User;
 import com.axelor.db.JPA;
+import com.axelor.inject.Beans;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 
@@ -109,5 +114,31 @@ public class LunchServiceImpl implements LunchService {
         lunch.setPortion(portion);
 
         lunchRepository.save(lunch);
+    }
+
+    @Override
+    @Transactional
+    public void autoOrder() {
+        LunchConfig lunchConfig = Beans.get(LunchConfigRepository.class).all().fetchOne();
+        if (Objects.isNull(lunchConfig)) return;
+        DishMenu todayDishMenu = Beans.get(DishMenuRepository.class).getTodayDishMenu();
+        if (Objects.isNull(todayDishMenu)) return;
+
+        String defaultPortion = "1.5";
+        for (User user : lunchConfig.getAutoOrderUser()) {
+            addLunchForDish(user, todayDishMenu.getFirstDish(), defaultPortion, lunchConfig.getAutoFirst());
+            addLunchForDish(user, todayDishMenu.getSecondDish(), defaultPortion, lunchConfig.getAutoSecond());
+            addLunchForDish(user, todayDishMenu.getThirdDish(), defaultPortion, lunchConfig.getAutoThird());
+        }
+    }
+
+    private void addLunchForDish(User user, Dish dish, String portion, boolean shouldAdd) {
+        if (shouldAdd) {
+            Lunch lunch = new Lunch();
+            lunch.setDish(dish);
+            lunch.setPortion(portion);
+            lunch.setUserComment(Objects.nonNull(user.getName()) || user.getName().isEmpty() ? user.getCode() : user.getName());
+            lunchRepository.save(lunch);
+        }
     }
 }
