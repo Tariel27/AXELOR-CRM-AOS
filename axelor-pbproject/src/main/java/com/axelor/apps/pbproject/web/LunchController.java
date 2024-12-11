@@ -1,6 +1,8 @@
 package com.axelor.apps.pbproject.web;
 
+import com.axelor.apps.pbproject.db.DishMenu;
 import com.axelor.apps.pbproject.db.repo.LunchRepository;
+import com.axelor.apps.pbproject.service.LunchService;
 import com.axelor.auth.db.repo.UserRepository;
 import com.axelor.db.JpaSupport;
 import com.axelor.rpc.ActionRequest;
@@ -12,6 +14,7 @@ import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Objects;
 
 import com.axelor.apps.pbproject.db.repo.DishMenuRepository;
 import com.axelor.meta.CallMethod;
@@ -28,6 +31,22 @@ public class LunchController extends JpaSupport {
     @Inject
     private DishMenuRepository dishMenuRepository;
 
+    @Inject
+    private LunchService lunchService;
+
+    public void setLinks(ActionRequest request, ActionResponse response) {
+        DishMenu todayDishMenu = dishMenuRepository.getTodayDishMenu();
+        if (Objects.isNull(todayDishMenu)) {
+            response.setInfo("Today menu is null");
+            return;
+        }
+
+        response.setValue("copyLinks", lunchService.getLinks(todayDishMenu));
+    }
+
+    public void setLunch(ActionRequest request, ActionResponse response) {
+        response.setValue("copyLunch", lunchService.getLunch());
+    }
 
     public void reportLunch(ActionRequest request, ActionResponse response) {
         long totalUsers = userRepository.all().count();
