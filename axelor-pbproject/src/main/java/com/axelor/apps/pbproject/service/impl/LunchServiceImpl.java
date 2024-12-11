@@ -11,6 +11,7 @@ import com.axelor.apps.pbproject.db.repo.LunchConfigRepository;
 import com.axelor.apps.pbproject.db.repo.LunchRepository;
 import com.axelor.apps.pbproject.service.LunchService;
 import com.axelor.auth.db.User;
+import com.axelor.auth.db.repo.UserRepository;
 import com.axelor.db.JPA;
 import com.axelor.inject.Beans;
 import com.google.inject.Inject;
@@ -126,18 +127,22 @@ public class LunchServiceImpl implements LunchService {
 
         String defaultPortion = "1.5";
         for (User user : lunchConfig.getAutoOrderUser()) {
-            addLunchForDish(user, todayDishMenu.getFirstDish(), defaultPortion, lunchConfig.getAutoFirst());
-            addLunchForDish(user, todayDishMenu.getSecondDish(), defaultPortion, lunchConfig.getAutoSecond());
-            addLunchForDish(user, todayDishMenu.getThirdDish(), defaultPortion, lunchConfig.getAutoThird());
+            String userName = Objects.nonNull(user.getName()) || user.getName().isEmpty() ? user.getCode() : user.getName();
+            addLunchForDish(userName, todayDishMenu.getFirstDish(), defaultPortion, lunchConfig.getAutoFirst());
+            addLunchForDish(userName, todayDishMenu.getSecondDish(), defaultPortion, lunchConfig.getAutoSecond());
+            addLunchForDish(userName, todayDishMenu.getThirdDish(), defaultPortion, lunchConfig.getAutoThird());
         }
+
+        // auto order
+        addLunchForDish("Салат для руководство", todayDishMenu.getThirdDish(), "1", true);
     }
 
-    private void addLunchForDish(User user, Dish dish, String portion, boolean shouldAdd) {
+    private void addLunchForDish(String comment, Dish dish, String portion, boolean shouldAdd) {
         if (shouldAdd) {
             Lunch lunch = new Lunch();
             lunch.setDish(dish);
             lunch.setPortion(portion);
-            lunch.setUserComment(Objects.nonNull(user.getName()) || user.getName().isEmpty() ? user.getCode() : user.getName());
+            lunch.setUserComment(comment);
             lunchRepository.save(lunch);
         }
     }
