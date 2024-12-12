@@ -10,7 +10,7 @@ public interface LunchService {
     String getLinks(DishMenu dishMenu);
     String getLunch();
 
-    void orderLunch(Long lunch, String portion);
+    void orderLunch(Integer dishPosition, String portion);
 
     void autoOrder();
 }

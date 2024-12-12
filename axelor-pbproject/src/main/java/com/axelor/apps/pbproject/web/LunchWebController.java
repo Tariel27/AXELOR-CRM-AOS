@@ -22,11 +22,11 @@ public class LunchWebController {
 
     @GET
     @Path("order")
-    public Response checkExpenseLine(@QueryParam("l") Long lunch, @QueryParam("p") String portion) {
-        if (Objects.isNull(lunch) || Objects.isNull(portion)) {
+    public Response checkExpenseLine(@QueryParam("d") Integer dishPosition, @QueryParam("p") String portion) {
+        if (Objects.isNull(dishPosition) || Objects.isNull(portion)) {
             return Response.status(400).build();
         }
-        lunchService.orderLunch(lunch, portion);
+        lunchService.orderLunch(dishPosition, portion);
         return Response.accepted().build();
     }
 }

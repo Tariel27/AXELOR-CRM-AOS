@@ -6,12 +6,10 @@ import com.axelor.apps.pbproject.db.DishMenu;
 import com.axelor.apps.pbproject.db.Lunch;
 import com.axelor.apps.pbproject.db.LunchConfig;
 import com.axelor.apps.pbproject.db.repo.DishMenuRepository;
-import com.axelor.apps.pbproject.db.repo.DishRepository;
 import com.axelor.apps.pbproject.db.repo.LunchConfigRepository;
 import com.axelor.apps.pbproject.db.repo.LunchRepository;
 import com.axelor.apps.pbproject.service.LunchService;
 import com.axelor.auth.db.User;
-import com.axelor.auth.db.repo.UserRepository;
 import com.axelor.db.JPA;
 import com.axelor.inject.Beans;
 import com.google.inject.Inject;
@@ -25,12 +23,12 @@ import java.util.Objects;
 
 public class LunchServiceImpl implements LunchService {
     private final LunchRepository lunchRepository;
-    private final DishRepository dishRepository;
+    private final DishMenuRepository dishMenuRepository;
 
     @Inject
-    public LunchServiceImpl(LunchRepository lunchRepository, DishRepository dishRepository) {
+    public LunchServiceImpl(LunchRepository lunchRepository, DishMenuRepository dishMenuRepository) {
         this.lunchRepository = lunchRepository;
-        this.dishRepository = dishRepository;
+        this.dishMenuRepository = dishMenuRepository;
     }
 
     @Override
@@ -48,18 +46,13 @@ public class LunchServiceImpl implements LunchService {
     public String getLinks(DishMenu dishMenu) {
         StringBuilder links = new StringBuilder();
 
-        Dish[] dishes = {dishMenu.getFirstDish(), dishMenu.getSecondDish(), dishMenu.getThirdDish()};
         String[] portions = {"1", "1.5"};
 
         for (String portion : portions) {
-            for (Dish dish : dishes) {
-                if (dish != null) {
-                    links
-                            .append("https://pytest2.brisklyminds.com/crm/ws/lunch/order?l=")
-                            .append(dish.getId()).append("&p=").append(portion)
-                            .append("\t").append(portion)
-                            .append(" ").append(dish.getName()).append("\t");
-                }
+            for (int i = 0; i < 3; i++) {
+                int position = i + 1;
+                links.append("https://pytest2.brisklyminds.com/crm/ws/lunch/order?d=")
+                        .append(position).append("&p=").append(portion);
             }
         }
 
@@ -100,12 +93,13 @@ public class LunchServiceImpl implements LunchService {
 
     @Override
     @Transactional(rollbackOn = {RuntimeException.class, NullPointerException.class, IllegalArgumentException.class})
-    public void orderLunch(Long dishId, String portion) {
-        if (Objects.isNull(dishId) || Objects.isNull(portion))
+    public void orderLunch(Integer dishPosition, String portion) {
+        if (Objects.isNull(dishPosition) || Objects.isNull(portion))
             throw new IllegalArgumentException("Query params cannot be null");
 
-        Dish dish = dishRepository.find(dishId);
-        if (Objects.isNull(dish)) throw new IllegalArgumentException("Dish not found for ID: " + dishId);
+        DishMenu todayDishMenu = dishMenuRepository.getTodayDishMenu();
+        if (Objects.isNull(todayDishMenu)) return;
+        Dish dish = getDish(dishPosition, todayDishMenu);
 
         if (!portion.matches("\\d+(\\.\\d+)?"))
             throw new IllegalArgumentException("Invalid portion format. Portion must be a number.");
@@ -117,12 +111,25 @@ public class LunchServiceImpl implements LunchService {
         lunchRepository.save(lunch);
     }
 
+    private Dish getDish(Integer position, DishMenu dishMenu) {
+        switch (position) {
+            case 1:
+                return dishMenu.getFirstDish();
+            case 2:
+                return dishMenu.getSecondDish();
+            case 3:
+                return dishMenu.getThirdDish();
+            default:
+                throw new IllegalArgumentException("Dish not found for position: " + position);
+        }
+    }
+
     @Override
     @Transactional
     public void autoOrder() {
         LunchConfig lunchConfig = Beans.get(LunchConfigRepository.class).all().fetchOne();
         if (Objects.isNull(lunchConfig)) return;
-        DishMenu todayDishMenu = Beans.get(DishMenuRepository.class).getTodayDishMenu();
+        DishMenu todayDishMenu = dishMenuRepository.getTodayDishMenu();
         if (Objects.isNull(todayDishMenu)) return;
 
         String defaultPortion = "1.5";
