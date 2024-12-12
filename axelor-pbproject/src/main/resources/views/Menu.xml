@@ -53,7 +53,7 @@
               icon="fa-clock-o" icon-background="#0e4d63" parent="pbp.reports" order="4100"/>
 
     <menuitem name="pbp.appraisal" title="Appraisal" icon="fa-pie-chart" icon-background="#ab9518"
-              order="4200"/>
+              order="4200" parent="pbp.reports"/>
 
     <!-- ===================================================================================================== -->
 
