@@ -10,9 +10,10 @@
         <field name="isPublish"/>
     </grid>
 
-    <grid title="News" name="pbp.news-dashboard.grid" model="com.axelor.apps.pbproject.db.News">
+    <grid title="News" name="pbp.news-dashboard.grid" model="com.axelor.apps.pbproject.db.News" x-selector="none"
+          edit-icon="false">
         <field name="createdOn"/>
-        <field name="title"/>
+        <field name="title" width="500"/>
     </grid>
 
     <form name="pbp.news.form" title="News" model="com.axelor.apps.pbproject.db.News">
@@ -39,6 +40,11 @@
     <!-- action для новостей main-->
     <action-view name="pbp.news-manager" title="Manager news" model="com.axelor.apps.pbproject.db.News">
         <view type="grid" name="pbp.news.grid"/>
+        <view type="form" name="pbp.news.form"/>
+    </action-view>
+
+    <action-view name="pbp.news-dashboard" title="News" model="com.axelor.apps.pbproject.db.News">
+        <view type="grid" name="pbp.news-dashboard.grid"/>
         <view type="form" name="pbp.news.form"/>
     </action-view>
 

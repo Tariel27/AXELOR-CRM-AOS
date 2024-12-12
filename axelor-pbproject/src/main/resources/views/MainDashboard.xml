@@ -21,7 +21,7 @@
         <dashlet height="250" width="300" action="pbp.player-form.a-v"/>
         <dashlet height="500" width="300" action="pbp.player.a-v"/>
         <dashlet height="500" width="300" action="pbp.radio.a-v"/>
-        <dashlet width="300" action="grid:pbp.news-dashboard.grid"/>
+        <dashlet width="300" action="pbp.news-dashboard"/>
     </dashboard>
 
     <!-- Экшены для дашборда -->
