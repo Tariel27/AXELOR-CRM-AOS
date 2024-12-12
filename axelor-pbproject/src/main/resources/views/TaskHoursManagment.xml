@@ -3,6 +3,11 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
+    <action-view name="pbp.project-working-hours-action" title="Employee hours"
+                 model="com.axelor.apps.pbproject.db.UserHoursManagement">
+        <view type="form" name="pbp-employee-hours-management-form"/>
+    </action-view>
+
     <action-method name="pbp.action-method-for-work-time-controller">
         <call class="com.axelor.apps.pbproject.web.WorkTimeController" method="calculateWorkHours"/>
     </action-method>

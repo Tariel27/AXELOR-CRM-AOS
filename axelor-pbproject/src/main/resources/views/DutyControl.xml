@@ -3,6 +3,9 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
+    <action-view name="pbp.duty-control-action.view" title="Duty control" model="com.axelor.apps.pbproject.db.Duty">
+        <view type="form" name="pbp.duty-control-form"/>
+    </action-view>
 
     <!-- Форма для работы с дежурными -->
     <form name="pbp.duty-control-form" title="Duty control" model="com.axelor.apps.pbproject.db.Duty" width="large" editable="true" >

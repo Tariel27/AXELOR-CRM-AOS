@@ -3,6 +3,14 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
+    <action-view name="pbp.ask-leave.view" title="Leave ask"
+                 model="com.axelor.apps.pbproject.db.WorkLeave">
+        <view type="grid" name="pbp.ask-for-leave-grid"/>
+        <view type="form" name="pbp.ask-for-leave-form"/>
+        <view-param name="auto-reload" value="15"/>
+        <context name="_user" expr="eval: __user__"/>
+    </action-view>
+
     <grid title="Leave requests" name="pbp.ask-for-leave-grid" model="com.axelor.apps.pbproject.db.WorkLeave">
         <field name="leaveRequestStatus" widget="SingleSelect"/>
         <field name="requester"/>
@@ -34,12 +42,12 @@
         <panel itemSpan="12" sidebar="true" hideIf="leaveRequestStatus == 'approved' || leaveRequestStatus == 'denied'">
             <button name="sendRequest" title="Send request" icon="fa-paper-plane-o"
                     showIf="_user.id == requester.id &amp;&amp; leaveRequestStatus == null"
-                    onClick="pbp.ask-leave.validate,pbp.attr.waiting.ask.for.leave,save,pbp.ask-for-leave-from-action.view,close"/>
+                    onClick="pbp.ask-leave.validate,pbp.attr.waiting.ask.for.leave,save,pbp.ask-leave.view,close"/>
             <button name="approveAsk" title="Approve" icon="fa-thumbs-o-up" prompt="Are you sure for approve?"
-                    onClick="pbp.attr.approve.ask.for.leave,save,pbp.ask-for-leave-from-action.view,close"
+                    onClick="pbp.attr.approve.ask.for.leave,save,pbp.ask-leave.view,close"
                     showIf="leaveRequestStatus == 'waiting' &amp;&amp; _user.id == approver.id"/>
             <button name="denieAsk" title="Denie" icon="fa-times-circle" prompt="Are you sure for denie?"
-                    onClick="pbp.attr.denie.ask.for.leave,save,pbp.ask-for-leave-from-action.view,close"
+                    onClick="pbp.attr.denie.ask.for.leave,save,pbp.ask-leave.view,close"
                     showIf="leaveRequestStatus == 'waiting' &amp;&amp; _user.id == approver.id"/>
         </panel>
     </form>

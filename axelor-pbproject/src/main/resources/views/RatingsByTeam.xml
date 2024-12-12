@@ -3,6 +3,10 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
+    <action-view name="pbp.ratings-by-team-action" title="Ratings by team!">
+        <view type="dashboard" name="pbp.ratings-by-team-dashboard"/>
+    </action-view>
+
     <dashboard name="pbp.ratings-by-team-dashboard" title="Ratings by team!">
         <dashlet colSpan="3" height="150px" action="custom:report-team-analytics"/>
         <dashlet colSpan="3" height="150px" action="custom:report-team-devops"/>

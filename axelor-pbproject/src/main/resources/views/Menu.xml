@@ -3,164 +3,6 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
-    <!--  Меню которое открывает все таски  -->
-    <menuitem name="pbp.project-task-all.m-i" title="Tasks" action="pbp.project-all.a-v" icon="fa-briefcase"
-              icon-background="#3f6bb9" order="3" tag-count="true"/>
-
-    <action-view name="pbp.project-all.a-v" title="Tasks" model="com.axelor.apps.project.db.ProjectTask">
-        <view type="kanban" name="pbp.project-task-kanban"/>
-        <view type="grid" name="pbp.project-task-grid"/>
-        <view type="form" name="pbp.project-task-form"/>
-        <view-param name="search-filters" value="project-task-filters"/>
-        <view-param name="auto-reload" value="20"/>
-        <domain>self.typeSelect = :_typeSelect</domain>
-        <context name="_typeSelect" expr="eval: 'task'"/>
-    </action-view>
-
-    <!--  Меню которое открывает все "мои" задачи  -->
-    <menuitem name="pbp.my-connected-all-projects-tasks" tag-count="true" title="My tasks"
-              action="pbp.project-all-my-tasks" order="4" icon="fa-user-circle-o" icon-background="#3f6bb9"/>
-
-    <action-view name="pbp.project-all-my-tasks" title="My tasks" model="com.axelor.apps.project.db.ProjectTask">
-        <view type="kanban" name="pbp.project-task-kanban"/>
-        <view type="form" name="pbp.project-task-form"/>
-        <view type="grid" name="pbp.project-task-grid"/>
-        <view-param name="search-filters" value="project-task-filters"/>
-        <view-param name="auto-reload" value="20"/>
-        <domain>self.assignedTo = :__user__ AND self.typeSelect = :_typeSelect</domain>
-        <context name="_typeSelect" expr="eval: 'task'"/>
-    </action-view>
-
-    <!--  Меню которое открывает часовой менеджер  -->
-    <menuitem name="pbp-employee-working-hours" title="Workers hours" action="pbp.project-working-hours-action"
-              order="16" icon="fa-clock-o" icon-background="#3f6bb9"/>
-
-    <action-view name="pbp.project-working-hours-action" title="Employee hours"
-                 model="com.axelor.apps.pbproject.db.UserHoursManagement">
-        <view type="form" name="pbp-employee-hours-management-form"/>
-    </action-view>
-
-    <!--  Меню которое открывает ивент календарь  -->
-    <menuitem name="pbp.event-calendar-for-peta-m-i" title="Event calendar" icon="fa-calendar" icon-background="#3f6bb9"
-              action="pbp.peta-calendar-open-action" order="11"/>
-
-    <action-view name="pbp.peta-calendar-open-action" title="Event calendar"
-                 model="com.axelor.apps.base.db.ICalendarEvent">
-        <view type="calendar" name="pbp.calendar-event-all"/>
-    </action-view>
-
-    <!-- Меню который открывает список проектов -->
-    <menuitem name="pbp.project.m-i" title="Projects" icon="fa-outdent" icon-background="#3f6bb9"
-              action="pbp.projects-action-view" order="2"/>
-
-    <action-view name="pbp.projects-action-view" title="All projects" model="com.axelor.apps.project.db.Project">
-        <view type="grid" name="pbp.project-grid"/>
-        <view type="form" name="pbp.project-form"/>
-    </action-view>
-
-    <!-- Меню которое отображает форум -->
-    <menuitem name="pbp-menu-forum" title="Forum" tag-count="true" action="pbp.project-forum-action" order="5"
-              icon="fa-commenting-o"
-              icon-background="#3f6bb9"/>
-
-    <action-view name="pbp.project-forum-action" title="Forum" model="com.axelor.apps.pbproject.db.ForumTopic">
-        <view type="cards" name="pbp.forum-topic-cards"/>
-        <view type="form" name="pbp.forum-topic-form"/>
-    </action-view>
-
-    <!-- Меню которое открывает всех пользователей для администрирования -->
-    <menuitem name="pbp.all-users-m.i" title="Users" icon="fa-blind" icon-background="#3f6bb9" order="15"
-              action="pbp.action-auth-users"/>
-
-    <action-view name="pbp.action-auth-users" title="Users"
-                 model="com.axelor.auth.db.User">
-        <view type="grid" name="pbp.user-grid"/>
-        <view type="form" name="pbp.user-form"/>
-        <view-param name="search-filters" value="user-filters"/>
-        <context name="_today" expr="eval: __config__.date"/>
-    </action-view>
-
-    <!--  Меню которой открывает список юзеров для фейс айди   -->
-    <menuitem name="pbp.open-face-id-user-create.m-i" title="Face id" icon="fa-id-card-o" icon-background="#3f6bb9"
-              order="14"/>
-    <menuitem name="pbp.open-face-id-connections-users.m-i" title="Users" parent="pbp.open-face-id-user-create.m-i"
-              action="pbp.user-info-face-id-view"/>
-
-    <menuitem name="pbp.open-report-users-comming-leaving.m-i" title="Report face id"
-              parent="pbp.open-face-id-user-create.m-i" action="pbp.user-report-face-id.action-view"/>
-
-    <action-view name="pbp.user-info-face-id-view" title="Face id" model="com.axelor.auth.db.User">
-        <view type="grid" name="pbp.user-face-id-grid"/>
-        <view type="form" name="pbp.user-face-id-form"/>
-    </action-view>
-
-    <action-view name="pbp.user-report-face-id.action-view" title="Report comming leaving"
-                 model="com.axelor.auth.db.User">
-        <view type="form" name="user-report-comming-leaving-form"/>
-    </action-view>
-
-    <action-view name="pbp.partner-form-for-self-user-action" title="Person info"
-                 model="com.axelor.apps.base.db.Partner">
-        <view type="form" name="pbp.partner-form-for-self-user"/>
-        <view-param name="forceEdit" value="true"/>
-        <view-param name="show-toolbar" value="false"/>
-        <context name="_showRecord" expr="eval: __user__.partner?.id"/>
-        <context name="_showSingle" expr="true"/>
-    </action-view>
-
-    <!-- Меню которое отображает Новости -->
-    <menuitem name="pbp-news-root" title="Manager news" order="12" icon="fa-newspaper-o"
-              icon-background="#3f6bb9"/>
-    <menuitem name="pbp-menu-manager-news" title="All news"
-              action="pbp.manager-news-action"
-              parent="pbp-news-root"/>
-    <menuitem name="pbp-menu-manager-news-for-user" title="My news" action="pbp.manager-news-action-isNotPublish"
-              parent="pbp-news-root"/>
-
-
-    <!-- Меню которое отображает Рейтинги -->
-    <menuitem name="pbp.menu-ratings-root" title="Ratings"
-              icon="fa-star-o" icon-background="#3f6bb9" order="8"/>
-    <menuitem name="pbp.menu-ratings-by-person" title="Ratings by person" action="pbp.ratings-by-person-action"
-              parent="pbp.menu-ratings-root"/>
-    <menuitem name="pbp.menu-ratings-by-team" title="Ratings by team" action="pbp.ratings-by-team-action"
-              parent="pbp.menu-ratings-root"/>
-    <menuitem name="pbp.menu-ratings-by-project" title="Ratings by project" action="pbp.ratings-by-project-action"
-              parent="pbp.menu-ratings-root"/>
-
-    <action-view name="pbp.ratings-by-person-action" title="Ratings by person!">
-        <view type="dashboard" name="pbp.ratings-by-person-dashboard"/>
-    </action-view>
-    <action-view name="pbp.ratings-by-team-action" title="Ratings by team!">
-        <view type="dashboard" name="pbp.ratings-by-team-dashboard"/>
-    </action-view>
-    <action-view name="pbp.ratings-by-project-action" title="Ratings by project!">
-        <view type="dashboard" name="pbp.ratings-by-project-dashboard"/>
-    </action-view>
-
-
-    <!-- Меню которое для отпросится -->
-    <menuitem name="pbp.ask-for-leave-from-job-m.i" title="Ask for off" icon="fa-sign-out" icon-background="#3f6bb9"
-              action="pbp.ask-for-leave-from-action.view" order="13"/>
-    <action-view name="pbp.ask-for-leave-from-action.view" title="Leave ask"
-                 model="com.axelor.apps.pbproject.db.WorkLeave">
-        <view type="grid" name="pbp.ask-for-leave-grid"/>
-        <view type="form" name="pbp.ask-for-leave-form"/>
-        <view-param name="auto-reload" value="15"/>
-        <context name="_user" expr="eval: __user__"/>
-    </action-view>
-
-    <!-- Меню для управления отчетами с дежурными -->
-    <menuitem name="pbp.report-duty-users-m.i" title="Duty control" icon="fa-user-md" icon-background="#3f6bb9"
-              action="pbp.duty-control-action.view" order="13"/>
-    <action-view name="pbp.duty-control-action.view" title="Duty control" model="com.axelor.apps.pbproject.db.Duty">
-        <view type="form" name="pbp.duty-control-form"/>
-    </action-view>
-
-    <!--Меню для заполнения блюд для обеда партнеров (видно только администрации)-->
-    <menuitem name="pbp.menu-dish-root" title="Dish menu"
-              icon="fa-coffee" icon-background="#3f6bb9" order="18"/>
-
     <action-view name="pbp.lunch-for-admin-action" title="Menu making" model="com.axelor.apps.pbproject.db.DishMenu">
         <view type="grid" name="pbp.dish-grid-view"/>
         <view type="form" name="pbp.dish-form-view"/>
@@ -171,28 +13,15 @@
         <view type="form" name="pbp.lunch-form-view"/>
     </action-view>
 
-    <!--Меню для заказа обеда(партнеры)-->
-    <menuitem name="pbp.menu-lunch-for-users" title="Lunch" icon="fa-coffee" icon-background="#3f6bb9"
-              action="pbp.lunch-for-users-action" tag-get="com.axelor.apps.pbproject.web.LunchController:showO()"
-              tag-style="success" order="6"/>
     <action-view name="pbp.lunch-for-users-action" title="Lunch" model="com.axelor.apps.pbproject.db.Lunch">
         <view type="dashboard" name="pbp.lunch-for-partners-dashboard"/>
         <context name="_user" expr="eval: __user__"/>
     </action-view>
-
-    <!-- Меню для статистики -->
-    <menuitem name="pbp.user-statistick-m.i" title="Statistic" icon="fa-bar-chart" icon-background="#3f6bb9" order="9"/>
-
-    <menuitem name="pbp.my-statistick-m.i" title="My Statistic" parent="pbp.user-statistick-m.i"
-              action="pbp-my-statistic-action-view"/>
     <action-view name="pbp-my-statistic-action-view" title="My statistic">
         <view type="dashboard" name="pbp.my-statistic-dashboard"/>
         <context name="_user" expr="eval: __user__"/>
     </action-view>
 
-    <!--  Менюшка с достижениями для добавления -->
-    <menuitem name="pbp.open-award-settings" title="Awards config" action="pbp.award-action-view"
-              parent="pbp.user-statistick-m.i" if="eval:__user__.group?.name == 'Admins'"/>
     <action-view name="pbp.award-action-view" title="Awards" model="com.axelor.apps.pbproject.db.Award">
         <view type="grid" name="pbp.award-grid"/>
         <view type="form" name="pbp.award-form"/>
@@ -236,8 +65,8 @@
 
     <!-- ===================================================================================================== -->
 
-    <menuitem name="pbp.user.excused" title="Ask for off" icon="fa-sign-out" icon-background="#653896"
-              order="3000" action="pbp.ask-for-leave-from-action.view"/>
+    <menuitem name="pbp.user.ask-leave" title="Ask for off" icon="fa-sign-out" icon-background="#653896"
+              order="3000" action="pbp.ask-leave.view"/>
 
     <!-- ===================================================================================================== -->
 
@@ -247,10 +76,8 @@
     <menuitem name="pbp.employee-hours" title="Workers hours" action="pbp.project-working-hours-action"
               icon="fa-clock-o" icon-background="#0e4d63" parent="pbp.reports" order="4100"/>
 
-    <!-- ===================================================================================================== -->
-
     <menuitem name="pbp.appraisal" title="Appraisal" icon="fa-pie-chart" icon-background="#ab9518"
-              order="5000"/>
+              order="4200"/>
 
     <!-- ===================================================================================================== -->
 
@@ -258,7 +85,7 @@
               order="6000"/>
 
     <!-- Меню которое отображает Person info -->
-    <menuitem name="pbp.menu-partner-form" title="Person info" action="pbp.partner-form-for-self-user-action"
+    <menuitem name="pbp.menu-partner-form" title="Person info" action="pbp.partner.general.setting"
               icon="fa-address-card" icon-background="#61b54a" order="6100" parent="pbp.user.data"/>
 
     <menuitem name="pbp.user-change-password.menu-item" title="Change password" icon-background="#61b54a" order="6200"

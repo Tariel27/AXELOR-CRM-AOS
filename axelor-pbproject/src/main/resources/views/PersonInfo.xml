@@ -3,7 +3,16 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
-    <form name="pbp.partner-form-for-self-user" title="Person info" model="com.axelor.apps.base.db.Partner"
+    <action-view name="pbp.partner.general.setting" title="Person info"
+                 model="com.axelor.apps.base.db.Partner">
+        <view type="form" name="pbp.partner.general.setting.form"/>
+        <view-param name="forceEdit" value="true"/>
+        <view-param name="show-toolbar" value="false"/>
+        <context name="_showRecord" expr="eval: __user__.partner?.id"/>
+        <context name="_showSingle" expr="true"/>
+    </action-view>
+
+    <form name="pbp.partner.general.setting.form" title="Person info" model="com.axelor.apps.base.db.Partner"
           width="large" onNew="pbp.update-user-on-linkedUser">
         <panel name="imagePanel" colSpan="12" sidebar="false" canCollapse="true" collapseIf="true">
             <field name="picture" showTitle="false" colSpan="12" widget="Image">
