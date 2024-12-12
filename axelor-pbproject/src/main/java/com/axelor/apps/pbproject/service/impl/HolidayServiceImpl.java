@@ -119,4 +119,12 @@ public class HolidayServiceImpl implements HolidayService {
         ));
         return calendarEvent;
     }
+
+    @Override
+    public String getEventSizeByMonth(){
+        return String.valueOf(calendarEventRepository.all()
+                .filter("(DATE(self.startDateTime) <= DATE(NOW()) AND DATE(self.endDateTime) >= DATE(NOW())) OR " +
+                        "DATE(self.startDateTime) <= DATE(NOW()) OR DATE(self.endDateTime) >= DATE(NOW())")
+                .count());
+    }
 }

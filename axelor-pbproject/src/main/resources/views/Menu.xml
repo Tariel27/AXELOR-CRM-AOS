@@ -9,10 +9,10 @@
               order="1000" action="pbp.main-dashboard.view"/>
 
     <menuitem name="pbp.events" title="Events" icon="fa-calendar" icon-background="#aec23c"
-              order="1100" action="pbp.events.view"/>
+              order="1100" action="pbp.events.view" tag-get="com.axelor.apps.pbproject.web.EventController:getEventSizeByMonth"/>
 
     <menuitem name="pbp.project" title="Projects" icon="fa-book" icon-background="#aec23c"
-              order="1200" action="pbp.projects"/>
+              order="1200" action="pbp.projects" tag-count="true"/>
 
     <!-- ===================================================================================================== -->
 
