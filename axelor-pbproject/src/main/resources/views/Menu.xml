@@ -11,7 +11,7 @@
     <menuitem name="pbp.events" title="Events" icon="fa-calendar" icon-background="#aec23c"
               order="1100" action="pbp.events.view"/>
 
-    <menuitem name="pbp.projects" title="Projects" icon="fa-book" icon-background="#aec23c"
+    <menuitem name="pbp.project" title="Projects" icon="fa-book" icon-background="#aec23c"
               order="1200" action="pbp.projects"/>
 
     <!-- ===================================================================================================== -->
