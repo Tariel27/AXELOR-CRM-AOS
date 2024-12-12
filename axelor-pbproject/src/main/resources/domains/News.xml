@@ -8,14 +8,11 @@
     <entity name="News">
         <string name="title" title="Title news"/>
         <string name="text" title="Text" large="true"/>
-        <boolean name="isPublish" title="isPublish" default="false"/>
         <boolean name="isUrl" title="isUrl" default="false"/>
         <string name="addUrl" title="Add url"/>
         <track replace="true">
             <field name="title"/>
             <field name="text"/>
-            <field name="isPublish"/>
-            <field name="isPublish"/>
             <field name="isUrl"/>
             <field name="addUrl"/>
         </track>

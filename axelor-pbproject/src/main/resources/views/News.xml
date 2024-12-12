@@ -13,19 +13,18 @@
     <grid title="News" name="pbp.news-dashboard.grid" model="com.axelor.apps.pbproject.db.News" x-selector="none"
           edit-icon="false">
         <field name="createdOn"/>
-        <field name="title" width="500"/>
+        <field name="title" width="450"/>
     </grid>
 
     <form name="pbp.news.form" title="News" model="com.axelor.apps.pbproject.db.News">
-        <panel>
+        <panel readonlyIf="$popup()">
             <field name="title"/>
-            <field name="isPublish" widget="boolean-switch" colSpan="3"/>
-            <field name="isUrl" widget="boolean-switch" colSpan="3"/>
+            <field name="isUrl" widget="boolean-switch" colSpan="3" hideIf="$popup()"/>
 
             <field name="text" showIf="!isUrl" widget="html" colSpan="12"/>
-            <field name="addUrl" widget="url" showIf="isUrl"/>
+            <field name="addUrl" widget="url" showIf="isUrl" colSpan="12"/>
 
-            <field name="$customFrame" showTitle="false" readonly="true" showIf="isUrl">
+            <field name="$customFrame" showTitle="false" readonly="true" showIf="isUrl" colSpan="12">
                 <viewer depends="addUrl">
                     <![CDATA[
                       <>
@@ -46,6 +45,9 @@
     <action-view name="pbp.news-dashboard" title="News" model="com.axelor.apps.pbproject.db.News">
         <view type="grid" name="pbp.news-dashboard.grid"/>
         <view type="form" name="pbp.news.form"/>
+        <view-param name="popup" value="true"/>
+        <view-param name="show-toolbar" value="false"/>
+        <view-param name="show-confirm" value="false"/>
     </action-view>
 
 </object-views>
