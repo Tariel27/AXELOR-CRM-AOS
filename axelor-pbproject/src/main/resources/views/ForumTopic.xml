@@ -3,7 +3,7 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
-    <action-view name="pbp.forum" title="Forum" model="com.axelor.apps.pbproject.db.ForumTopic">
+    <action-view name="pbp.forum.view" title="Forum" model="com.axelor.apps.pbproject.db.ForumTopic">
         <view type="cards" name="pbp.forum-topic-cards"/>
         <view type="form" name="pbp.forum-topic-form"/>
     </action-view>

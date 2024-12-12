@@ -3,7 +3,7 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
 
-    <action-view name="pbp.lunch" title="Lunch orders" model="com.axelor.apps.pbproject.db.Lunch">
+    <action-view name="pbp.lunch.view" title="Lunch orders" model="com.axelor.apps.pbproject.db.Lunch">
         <view type="grid" name="pbp.lunch.grid"/>
         <view type="form" name="pbp.lunch.form"/>
     </action-view>

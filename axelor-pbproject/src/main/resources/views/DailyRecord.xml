@@ -3,7 +3,7 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
 
-    <action-view name="pbp.daily-records" title="Daily records" model="com.axelor.apps.pbproject.db.DailyRecord">
+    <action-view name="pbp.daily-records.view" title="Daily records" model="com.axelor.apps.pbproject.db.DailyRecord">
         <view type="grid" name="pbp.daily-records.grid"/>
         <view type="form" name="pbp.daily-records.form"/>
         <view-param name="details-view" value="true"/>

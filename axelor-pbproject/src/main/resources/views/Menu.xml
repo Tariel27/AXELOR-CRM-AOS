@@ -16,7 +16,7 @@
 
     <!-- ===================================================================================================== -->
 
-    <menuitem name="pbp.tasks.all" title="All Tasks" icon="fa-list" icon-background="#389665"
+    <menuitem name="pbp.tasks" title="All Tasks" icon="fa-list" icon-background="#389665"
               order="2000" action="pbp.tasks.all" tag-count="true"/>
 
     <menuitem name="pbp.tasks.user" title="My Tasks" icon="fa-th-list" icon-background="#389665"
@@ -26,7 +26,7 @@
               order="2200" action="pbp.todo.view"/>
 
     <menuitem name="pbp.daily-records" title="Daily records" icon="fa-book" icon-background="#389665"
-              order="2300" action="pbp.daily-records"/>
+              order="2300" action="pbp.daily-records.view"/>
 
     <!-- ===================================================================================================== -->
 
@@ -34,7 +34,7 @@
               action="pbp.lunch.today-orders" order="2400" if="__repo__(DishMenu).getTodayDishMenu() != null"/>
 
     <menuitem name="pbp.forum" title="Forum" order="2500" icon="fa-commenting-o"
-              icon-background="#3f6bb9" action="pbp.forum"/>
+              icon-background="#3f6bb9" action="pbp.forum.view"/>
 
     <menuitem name="pbp.chat.m-i" title="Chat AI" action="pbp.chat.a-v" order="2600" icon="fa-commenting"
               icon-background="#3f6bb9"/>
@@ -78,7 +78,7 @@
 
     <menuitem name="pbp.lunch-config" title="Lunch config" order="7300" action="pbp.lunch-config" parent="pbp.settings.lunch"/>
 
-    <menuitem name="pbp.lunch" title="Lunch orders" order="7400" action="pbp.lunch" parent="pbp.settings.lunch"/>
+    <menuitem name="pbp.lunch" title="Lunch orders" order="7400" action="pbp.lunch.view" parent="pbp.settings.lunch"/>
     <!-- ===================================================================================================== -->
 
     <menuitem name="pbp.settings.general" title="Settings general" icon="fa-cogs" icon-background="#ab9518"
