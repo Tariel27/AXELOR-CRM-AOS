@@ -3,30 +3,6 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
-    <action-view name="pbp.lunch-for-admin-action" title="Menu making" model="com.axelor.apps.pbproject.db.DishMenu">
-        <view type="grid" name="pbp.dish-grid-view"/>
-        <view type="form" name="pbp.dish-form-view"/>
-        <context name="_user" expr="eval: __user__"/>
-    </action-view>
-    <action-view name="pbp.lunch-for-admin-action-grid" title="Menu making" model="com.axelor.apps.pbproject.db.Lunch">
-        <view type="grid" name="pbp.lunch-grid-view"/>
-        <view type="form" name="pbp.lunch-form-view"/>
-    </action-view>
-
-    <action-view name="pbp.lunch-for-users-action" title="Lunch" model="com.axelor.apps.pbproject.db.Lunch">
-        <view type="dashboard" name="pbp.lunch-for-partners-dashboard"/>
-        <context name="_user" expr="eval: __user__"/>
-    </action-view>
-    <action-view name="pbp-my-statistic-action-view" title="My statistic">
-        <view type="dashboard" name="pbp.my-statistic-dashboard"/>
-        <context name="_user" expr="eval: __user__"/>
-    </action-view>
-
-    <action-view name="pbp.award-action-view" title="Awards" model="com.axelor.apps.pbproject.db.Award">
-        <view type="grid" name="pbp.award-grid"/>
-        <view type="form" name="pbp.award-form"/>
-    </action-view>
-
     <!-- ===================================================================================================== -->
 
     <menuitem name="pbp.main-dashboard" title="Main page" icon="fa-th-large" icon-background="#aec23c"
@@ -108,6 +84,5 @@
     <menuitem name="pbp.settings.general" title="Settings general" icon="fa-cogs" icon-background="#ab9518"
               order="8000"/>
 
-    <menuitem name="pbp.appraisal" title="Appraisal" icon="fa-pie-chart" icon-background="#ab9518"
-              order="8000"/>
+    <menuitem name="pbp.news-manager" title="Manager news" action="pbp.news-manager" parent="pbp.settings.general"/>
 </object-views>

@@ -3,127 +3,43 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.0.xsd">
 
-    <!--  grid для новостей -->
-    <grid title="News" name="pbp.news-grid-view" model="com.axelor.apps.pbproject.db.News">
+    <grid title="Manager news" name="pbp.news.grid" model="com.axelor.apps.pbproject.db.News">
         <field name="title"/>
-        <field name="text"/>
-        <field name="dateCreate"/>
-        <field name="author"/>
+        <field name="createdOn"/>
+        <field name="createdBy"/>
         <field name="isPublish"/>
     </grid>
 
-    <!--  form для новостей -->
-    <form name="pbp.news-form-view" title="News" model="com.axelor.apps.pbproject.db.News" width="large"
-          onNew="pbp.update-author-and-date-for-news">
-        <panel title="General" colSpan="11" itemSpan="12">
-            <field name="title" colSpan="12"/>
-            <panel colSpan="12">
-                <field name="isPublish" widget="boolean-switch" colSpan="1"/>
-                <field name="isUrl" widget="boolean-switch" colSpan="1"/>
-            </panel>
-            <panel showIf="!isUrl">
-                <field name="text" showIf="!isUrl" widget="html"/>
-            </panel>
-            <panel showIf="isUrl">
-                <field name="addUrl" showIf="isUrl" widget="url" colSpan="10"/>
-                <field name="$customFrame" showTitle="false" readonly="true">
-                    <viewer depends="addUrl">
-                        <![CDATA[
-                          <>
-                              <Box as="iframe" title="My iframe" width="500" height="1500" border="0" src={addUrl}></Box>
-                          </>
-                        ]]>
-                    </viewer>
-                </field>
-            </panel>
-            <field name="dateCreate" hidden="true"/>
-            <field name="author" hidden="true"/>
+    <grid title="News" name="pbp.news-dashboard.grid" model="com.axelor.apps.pbproject.db.News">
+        <field name="createdOn"/>
+        <field name="title"/>
+    </grid>
+
+    <form name="pbp.news.form" title="News" model="com.axelor.apps.pbproject.db.News">
+        <panel>
+            <field name="title"/>
+            <field name="isPublish" widget="boolean-switch" colSpan="3"/>
+            <field name="isUrl" widget="boolean-switch" colSpan="3"/>
+
+            <field name="text" showIf="!isUrl" widget="html" colSpan="12"/>
+            <field name="addUrl" widget="url" showIf="isUrl"/>
+
+            <field name="$customFrame" showTitle="false" readonly="true" showIf="isUrl">
+                <viewer depends="addUrl">
+                    <![CDATA[
+                      <>
+                          <Box as="iframe" title="My iframe" width="500" height="1500" border="0" src={addUrl}></Box>
+                      </>
+                    ]]>
+                </viewer>
+            </field>
         </panel>
     </form>
 
-
-    <!-- card для новостей -->
-    <cards name="pbp.news-cards-view" title="Manager news" model="com.axelor.apps.pbproject.db.News" width="33%"
-           >
-        <field name="title" colSpan="12"/>
-        <field name="text"/>
-        <field name="isPublish"/>
-        <field name="dateCreate"/>
-        <field name="author"/>
-        <template>
-            <![CDATA[
-                <div class="card-header" style="background: #ebfcec;
-                   padding: 1.5em; border-radius: 1em; color: #333333;
-                   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.15), inset 0 0 50px rgba(108, 149, 203, 0.3);">
-                  <strong style="font-size: 2.6em; font-weight: bold;">{{title}}</strong>
-                  <p style="font-size: 1.4em; margin-top: 1em; opacity: 0.9;">
-                      {{$raw('text').length > 100 ? $raw('text').substring(0, 100) + '...' : $raw('text')}}
-                  </p>
-                  <p style="font-size: 1.1em; margin-top: 1em; color: #555;">
-                      <strong>Published:</strong>
-                      <span style="color: {{isPublish ? 'green' : 'red'}};">
-                          {{isPublish ? '✔' : '✘'}}
-                      </span>
-                      <br>
-                      <strong>Date:</strong> {{$fmt('dateCreate')}}<br>
-                      <strong>Author:</strong> {{author.fullName}}
-                  </p>
-              </div>
-            ]]>
-        </template>
-    </cards>
-
-    <!-- card для новостей Main-->
-    <cards name="pbp.news-cards-view-for-main" title="Manager news" model="com.axelor.apps.pbproject.db.News"
-           width="100%"  canEdit="false" canDelete="false">
-        <field name="title" colSpan="12"/>
-        <field name="text"/>
-        <field name="dateCreate"/>
-        <field name="author"/>
-        <template>
-            <![CDATA[
-                <div class="card-header" style="background: #f9f9f9;
-                   padding: 1.5em; border-radius: 1em; color: #333333;
-                   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.15), inset 0 0 50px rgba(108, 149, 203, 0.3);">
-                  <strong style="font-size: 2.6em; font-weight: bold;">{{title}}</strong>
-                  <p style="font-size: 1.4em; margin-top: 1em; opacity: 0.9;">
-                      {{$raw('text').length > 100 ? $raw('text').substring(0, 100) + '...' : $raw('text')}}
-                  </p>
-                  <p style="font-size: 1.1em; margin-top: 1em; color: #555;">
-                      <br>
-                      <strong>Date:</strong> {{$fmt('dateCreate')}}<br>
-                      <strong>Author:</strong> {{author.fullName}}
-                  </p>
-              </div>
-            ]]>
-        </template>
-    </cards>
-
-    <action-attrs name="pbp.update-author-and-date-for-news">
-        <attribute name="value" expr="eval: __user__" for="author"/>
-        <attribute name="value" expr="eval: __time__" for="dateCreate"/>
-    </action-attrs>
-
     <!-- action для новостей main-->
-    <action-view name="pbp.manager-news-action-for-main" title="Manager news" model="com.axelor.apps.pbproject.db.News">
-        <view type="cards" name="pbp.news-cards-view-for-main"/>
-        <domain>self.isPublish = true</domain>
+    <action-view name="pbp.news-manager" title="Manager news" model="com.axelor.apps.pbproject.db.News">
+        <view type="grid" name="pbp.news.grid"/>
+        <view type="form" name="pbp.news.form"/>
     </action-view>
 
-
-
-    <action-view name="pbp.manager-news-action" title="Manager news" model="com.axelor.apps.pbproject.db.News">
-        <view type="cards" name="pbp.news-cards-view"/>
-        <view type="form" name="pbp.news-form-view"/>
-        <domain>self.isPublish = true</domain>
-
-    </action-view>
-
-    <action-view name="pbp.manager-news-action-isNotPublish" title="Manager news"
-                 model="com.axelor.apps.pbproject.db.News">
-        <view type="cards" name="pbp.news-cards-view"/>
-        <view type="form" name="pbp.news-form-view"/>
-        <domain>self.createdBy = : __user__</domain>
-        <context name="_user" expr="eval: __user__"/>
-    </action-view>
 </object-views>
