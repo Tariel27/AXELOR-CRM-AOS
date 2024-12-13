@@ -85,4 +85,9 @@
               order="8000"/>
 
     <menuitem name="pbp.news-manager" title="Manager news" action="pbp.news-manager" parent="pbp.settings.general"/>
+
+    <menuitem name="pbp.duty-control" title="Duty control" parent="pbp.settings.general"/>
+
+    <menuitem name="pbp.duty-control.page" title="Duty control page" action="pbp.duty-control-action.view" parent="pbp.duty-control"/>
+    <menuitem name="pbp.duty-control.users" title="Users" action="pbp.users-for-managment" parent="pbp.duty-control"/>
 </object-views>

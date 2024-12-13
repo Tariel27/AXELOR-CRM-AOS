@@ -12,11 +12,9 @@
         <date name="dateEnd" title="Date end" />
         <!-- Связь с пользователями -->
         <many-to-many name="users" ref="com.axelor.auth.db.User" title="Users"/>
+        <boolean name="currentWeek"/>
 
-
-        <one-to-many name="lines" ref="com.axelor.auth.db.User" title="Users" transient="true"/>
-        <boolean name="editAlreadyDuty" title="Already in duty" transient="true"/>
-        <boolean name="editActiveForDuty" title="Active for duty" transient="true"/>
+        <finder-method name="getRecordByCurrentWeek" using="" filter="self.currentWeek = true"/>
     </entity>
 
 </domain-models>

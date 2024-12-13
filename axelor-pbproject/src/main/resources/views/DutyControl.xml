@@ -5,44 +5,42 @@
 
     <action-view name="pbp.duty-control-action.view" title="Duty control" model="com.axelor.apps.pbproject.db.Duty">
         <view type="form" name="pbp.duty-control-form"/>
+        <view-param name="forceEdit" value="true"/>
+        <view-param name="show-confirm" value="false"/>
+        <context name="_showRecord" expr="eval: __repo__(Duty).getRecordByCurrentWeek()?.id"/>
+        <context name="_showSingle" expr="true"/>
     </action-view>
 
-    <!-- Форма для работы с дежурными -->
-    <form name="pbp.duty-control-form" title="Duty control" model="com.axelor.apps.pbproject.db.Duty" width="large" editable="true" >
-        <panel  canCollapse="true" collapseIf="true" name="report-panel" colSpan="12" title="Report">
-            <field name="dateStart" colSpan="4" required="true"/>
-            <field name="dateEnd" colSpan="4" required="true"/>
-
-            <button name="dutyReportXlsx" title="Export excel" colSpan="2" onClick="pbp.export-excel-duty-users-action.method"/>
-            <button name="customBtn" title="Duty update" colSpan="2" icon="fa-search" prompt="Are you sure to change the duty?" onClick="pbp.action-method-for-update-duty-users" x-dirty="false"/>
+    <form name="pbp.duty-control-form" title="Duty control" model="com.axelor.apps.pbproject.db.Duty" width="large">
+        <panel title="Current duty record" collapseIf="true" readonlyIf="id == null" itemSpan="4">
+            <field name="dateStart"/>
+            <field name="dateEnd"/>
+            <field name="users" widget="TagSelect"/>
+            <button name="saveBtn" title="Duty update" colSpan="12" onClick="save"
+                    prompt="Are you sure to change the duty?"/>
         </panel>
-
-        <panel  name="panel" title="User duty management" canCollapse="true" collapseIf="true">
-            <panel>
-                <field name="lines" colSpan="6" widget="TagSelect"/>
-                <field name="editAlreadyDuty" colSpan="2" widget="boolean-switch"/>
-                <field name="editActiveForDuty" colSpan="2" widget="boolean-switch"/>
-                <button name="update-duty-flags" onClick="pbp.update-duty-flags-action.method" title="Update"/>
-            </panel>
-            <panel-dashlet name="panel-users-grid" readonly="true"  showTitle="false" colSpan="12" action="pbp.users-for-managment"/>
+        <panel title="Report" collapseIf="true">
+            <field name="_dateStart" colSpan="4"/>
+            <field name="_dateEnd" colSpan="4"/>
+            <button name="dutyReportXlsx" title="Export excel" colSpan="4" onClick="pbp.export-excel-duty-users-action.method"/>
         </panel>
-
     </form>
 
-
-    <!-- Грид для просмотра в форме -->
-    <action-view name="pbp.users-for-managment" title="Users" model="com.axelor.auth.db.User" >
-        <view type="grid" name="user-grid" />
-    </action-view>
-
-    <!-- Экшн который скачивает эксель файл с отчетами дежурных -->
     <action-method name="pbp.export-excel-duty-users-action.method">
         <call class="com.axelor.apps.pbproject.web.DutyUserController" method="exportExcelDutyUsers"/>
     </action-method>
 
-    <!-- Экше который обновляет данные флаги дежурных -->
-    <action-method name="pbp.update-duty-flags-action.method">
-        <call class="com.axelor.apps.pbproject.web.DutyUserController" method="updateFlags"/>
-    </action-method>
 
+    <!-- Грид для просмотра в форме -->
+    <action-view name="pbp.users-for-managment" title="Users" model="com.axelor.auth.db.User" >
+        <view type="grid" name="pbp.users.duty-control"/>
+    </action-view>
+
+    <grid title="Users" name="pbp.users.duty-control" model="com.axelor.auth.db.User"
+          editable="true" edit-icon="false" canNew="false" canArchive="false" canDelete="false">
+        <field name="code" readonly="true"/>
+        <field name="isActiveDuty"/>
+        <field name="alreadyInDuty"/>
+    </grid>
+    
 </object-views>

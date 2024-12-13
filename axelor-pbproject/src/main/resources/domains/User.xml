@@ -7,9 +7,9 @@
 
     <entity name="User">
         <!--   Активен ли юзера для дежурств   -->
-        <boolean name="isActiveDuty" title="Active for duty" default="true" massUpdate="true"/>
+        <boolean name="isActiveDuty" title="Active for duty" massUpdate="true"/>
         <!-- Дежурил ли человек в последнем цикле -->
-        <boolean name="alreadyInDuty" title="Already duty" default="false" massUpdate="true"/>
+        <boolean name="alreadyInDuty" title="Already duty" massUpdate="true"/>
         <!-- Последняя активность -->
         <datetime name="lastActiveDateTime" title="Last active date time" transient="true"/>
         <!--    UUID для face-id    -->
@@ -18,6 +18,13 @@
         <boolean name="inOffice" title="In office"/>
         <!--    Достижения человека    -->
         <many-to-many name="awards" title="Awards" ref="com.axelor.apps.pbproject.db.Award"/>
+
+        <finder-method name="getUserByActiveDuty" using="" all="true"
+                       filter="self.isActiveDuty = true and (self.blocked = false or self.blocked is null) and (self.archived = false or self.archived is null)"/>
+        <finder-method name="getUserByActiveDutyAndAlreadyInDutyDesk" using="" orderBy="-id"
+                       filter="self.isActiveDuty = true and (self.blocked = false or self.blocked is null) and (self.archived = false or self.archived is null) and self.alreadyInDuty = false"/>
+        <finder-method name="getUserByActiveDutyAndAlreadyInDutyAsk" using="" orderBy="id"
+                       filter="self.isActiveDuty = true and (self.blocked = false or self.blocked is null) and (self.archived = false or self.archived is null) and self.alreadyInDuty = false"/>
     </entity>
 
 </domain-models>

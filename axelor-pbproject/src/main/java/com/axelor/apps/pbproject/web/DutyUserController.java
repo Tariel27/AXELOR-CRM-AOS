@@ -27,10 +27,6 @@ public class DutyUserController {
         this.exportExcelService = exportExcelService;
     }
 
-    public void updateDutyUsers(ActionRequest actionRequest, ActionResponse actionResponse){
-        dutyService.updateDutyUsers();
-    }
-
     public void exportExcelDutyUsers(ActionRequest actionRequest, ActionResponse actionResponse){
         LocalDate dateStart = (LocalDate) actionRequest.getContext().get("dateStart");
         LocalDate dateEnd = (LocalDate) actionRequest.getContext().get("dateEnd");
@@ -47,17 +43,4 @@ public class DutyUserController {
         }
     }
 
-    public void updateFlags(ActionRequest actionRequest, ActionResponse actionResponse){
-        List<User> usersForUpdate = (ArrayList<User>) actionRequest.getContext().get("lines");
-        if (Objects.isNull(usersForUpdate)){
-            actionResponse.setError(I18n.get("Please select user for update!"));
-            return;
-        }
-        Boolean alreadyDutyFlagForUsers = (boolean) actionRequest.getContext().get("editAlreadyDuty");
-        Boolean activeForDutyFlagForUsers = (boolean) actionRequest.getContext().get("editAlreadyDuty");
-
-        dutyService.updateDutyUsersFlags(usersForUpdate, activeForDutyFlagForUsers, alreadyDutyFlagForUsers);
-        actionResponse.setAlert(I18n.get("Updated successfully!"));
-        actionResponse.setAttr("panel-users-grid", "refresh", true);
-    }
 }
