@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 public class HolidayServiceImpl implements HolidayService {
@@ -122,9 +123,13 @@ public class HolidayServiceImpl implements HolidayService {
 
     @Override
     public String getEventSizeByMonth(){
+        LocalDate startOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+
         return String.valueOf(calendarEventRepository.all()
-                .filter("(DATE(self.startDateTime) <= DATE(NOW()) AND DATE(self.endDateTime) >= DATE(NOW())) OR " +
-                        "DATE(self.startDateTime) <= DATE(NOW()) OR DATE(self.endDateTime) >= DATE(NOW())")
+                .filter("DATE(self.startDateTime) <= :endOfMonth AND DATE(self.endDateTime) >= :startOfMonth")
+                .bind("startOfMonth", startOfMonth)
+                .bind("endOfMonth", endOfMonth)
                 .count());
     }
 }
