@@ -55,6 +55,13 @@
     <menuitem name="pbp.appraisal" title="Appraisal" icon="fa-pie-chart" icon-background="#ab9518"
               order="4200" parent="pbp.reports"/>
 
+    <menuitem name="pbp.rating-by-person" title="Rating by person" action="pbp.ratings-by-person-action"
+              order="4300" parent="pbp.reports"/>
+    <menuitem name="pbp.rating-by-project" title="Rating by project" action="pbp.ratings-by-project-action"
+              order="4400" parent="pbp.reports"/>
+    <menuitem name="pbp.rating-by-team" title="Rating by team" action="pbp.ratings-by-team-action"
+              order="4500" parent="pbp.reports"/>
+
     <!-- ===================================================================================================== -->
 
     <menuitem name="pbp.user.data" title="Personal data" icon="fa-address-card-o" icon-background="#61b54a"
