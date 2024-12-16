@@ -4,24 +4,29 @@
               xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_7.1.xsd">
 
     <action-view name="pbp.duty-control-action.view" title="Duty control" model="com.axelor.apps.pbproject.db.Duty">
-        <view type="form" name="pbp.duty-control-form"/>
-        <view-param name="forceEdit" value="true"/>
-        <view-param name="show-confirm" value="false"/>
-        <context name="_showRecord" expr="eval: __repo__(Duty).getRecordByCurrentWeek()?.id"/>
-        <context name="_showSingle" expr="true"/>
+        <view type="grid" name="pbp.duty.grid"/>
+        <view type="form" name="pbp.duty.form"/>
     </action-view>
 
-    <form name="pbp.duty-control-form" title="Duty control" model="com.axelor.apps.pbproject.db.Duty" width="large">
-        <panel title="Current duty record" collapseIf="true" readonlyIf="id == null" itemSpan="4">
+
+    <grid title="Duty" name="pbp.duty.grid" model="com.axelor.apps.pbproject.db.Duty">
+        <field name="dateStart"/>
+        <field name="dateEnd"/>
+        <field name="users"/>
+        <field name="currentWeek"/>
+    </grid>
+
+    <form name="pbp.duty.form" title="Duty" model="com.axelor.apps.pbproject.db.Duty">
+        <panel title="Current duty record" itemSpan="12">
             <field name="dateStart"/>
             <field name="dateEnd"/>
             <field name="users" widget="TagSelect"/>
             <button name="saveBtn" title="Duty update" colSpan="12" onClick="save"
                     prompt="Are you sure to change the duty?"/>
         </panel>
-        <panel title="Report" collapseIf="true">
-            <field name="_dateStart" colSpan="4"/>
-            <field name="_dateEnd" colSpan="4"/>
+        <panel title="Report" collapseIf="true" itemSpan="12">
+            <field name="_dateStart"/>
+            <field name="_dateEnd"/>
             <button name="dutyReportXlsx" title="Export excel" colSpan="4" onClick="pbp.export-excel-duty-users-action.method"/>
         </panel>
     </form>
@@ -30,8 +35,6 @@
         <call class="com.axelor.apps.pbproject.web.DutyUserController" method="exportExcelDutyUsers"/>
     </action-method>
 
-
-    <!-- Грид для просмотра в форме -->
     <action-view name="pbp.users-for-managment" title="Users" model="com.axelor.auth.db.User" >
         <view type="grid" name="pbp.users.duty-control"/>
     </action-view>
