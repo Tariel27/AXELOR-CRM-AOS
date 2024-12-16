@@ -31,20 +31,16 @@ public class PetaProjectTaskProjectRepository extends ProjectTaskBusinessSupport
         if (Objects.isNull(statusName) || statusName.isEmpty()) return;
 
         if (ProjectTaskRepository.DONE.equals(statusName)) {
-            if (Objects.nonNull(projectTask.getEndDateTime())) return;
+            if (Objects.nonNull(projectTask.getTaskEndDate())) return;
             projectTask.setEndDateTime(LocalTime.now());
             projectTask.setTaskEndDate(LocalDate.now());
         }
 
         if (ProjectTaskRepository.IN_PROGRESS.equals(statusName)) {
-            if (Objects.nonNull(projectTask.getStartDateTime())) return;
+            if (Objects.nonNull(projectTask.getTaskDate())) return;
             projectTask.setStartDateTime(LocalTime.now());
             projectTask.setTaskDate(LocalDate.now());
         }
 
-        if (ProjectTaskRepository.NEW.equals(statusName)) {
-            projectTask.setEndDateTime(null);
-            projectTask.setTaskEndDate(null);
-        }
     }
 }
