@@ -6,12 +6,12 @@
   <module name="project" package="com.axelor.apps.project.db"/>
 
   <entity name="ProjectTask">
-    <datetime name="startDateTime" title="Start date-time"/>
-    <datetime name="endDateTime" title="End date-time"/>
-    <datetime name="deadlineDateTime" title="Deadline date-time"/>
+    <time name="startDateTime" title="Start date-time"/>
+    <time name="endDateTime" title="End date-time"/>
+    <time name="deadlineDateTime" title="Deadline date-time"/>
     <many-to-one name="assignedBy" title="Assigned by" ref="com.axelor.auth.db.User" />
     <string title="Complexity" name="complexity" selection="pbp.complexity.of.task.select"/>
-    <decimal name="planHours" title="Plan hours"/>
+    <time name="planHours" title="Plan hours"/>
     <string name="descriptionOfChange" title="Description of change"/>
     <extra-code>
       <![CDATA[
@@ -19,7 +19,7 @@
 	   			public static final String IN_PROGRESS = "In progress";
 	   			public static final String DONE = "Done";
 	   			public static final String CANCELED = "Сanceled";
-
+	   			public static final String TEST = "Test";
 	   		]]>
     </extra-code>
 

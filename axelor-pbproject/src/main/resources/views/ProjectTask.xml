@@ -23,7 +23,7 @@
         <context name="_typeSelect" expr="eval: 'task'"/>
     </action-view>
 
-    <form name="pbp.project-task.form" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large"
+    <form name="pbp.project-task.form1" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large"
           onLoad="pbp.action-business-project-project-task-group-on-load,action-readable-time-convert,save"
           onNew="action-business-project-project-task-group-on-new,pbp.auto-set-assigned-by-action.method,pbp.validate.dateStart.dateEnd,pbp.auto-set-complexity"
           onSave="pbp.validate.dateStart.dateEnd">
@@ -418,7 +418,82 @@
         </panel-mail>
     </form>
 
-    <!--добавил action-->
+    <kanban name="pbp.project-task.kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
+            columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
+        <field name="name"/>
+        <field name="project"/>
+        <field name="assignedTo"/>
+        <field name="priority.name"/>
+        <field name="priority.technicalTypeSelect"/>
+        <field name="progress"/>
+        <field name="project.isShowProgress"/>
+        <field name="startDateTime"/>
+        <field name="deadlineDateTime"/>
+        <field name="complexity"/>
+        <template>
+            <![CDATA[
+                <>
+                    <strong>{name}</strong>
+                        <Box style={{ fontWeight: "bold", fontSize: "1.1rem", color: "#1890ff", marginTop: "5px" }}>
+                            {project.fullName}
+                        </Box>
+                    <Box d="flex" justifyContent="space-between">
+                        <Box>
+                            <Icon icon="calendar" fontSize="15px"/>
+                            {!deadlineDateTime && <span> {_t('Not specified')} </span>}
+                            {deadlineDateTime && <span>{_t('Deadline')}: {$moment(deadlineDateTime).format('YYYY-MM-DD HH:mm')}</span>}
+                        </Box>
+                    </Box>
+                    <Box d="flex" justifyContent="flex-start">
+                        {priority.technicalTypeSelect == 1 && <Badge bg="success" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
+                        {priority.technicalTypeSelect == 2 && <Badge bg="info" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
+                        {priority.technicalTypeSelect == 3 && <Badge bg="warning" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
+                        {priority.technicalTypeSelect == 4 && <Badge bg="danger" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
+                        {complexity == 'medium' && <Badge style={{ backgroundColor: "#0a40f2" }}>Сложность: {_t('Medium')}</Badge>}
+                        {complexity == 'easy' && <Badge style={{ backgroundColor: "#4CF907" }}>Сложность: {_t('Easy')}</Badge>}
+                        {complexity == 'hard' && <Badge style={{ backgroundColor: "#f01000" }}>Сложность: {_t('Hard')}</Badge>}
+                    </Box>
+                    {project.isShowProgress &&
+                        <Box mt={1}>
+                            {progress == 0 ? <span>{progress}%</span> : <LinearProgress value={progress} striped animated/>}
+                        </Box>
+                    }
+                    <Box d="grid" gridTemplateColumns="auto auto" style={{ fontSize: "0.85rem", color: "grey" }} mt={2}>
+                        <Box d="flex" g={2}>
+                            <Icon icon="clock" fontSize="15px"/>
+                             {startDateTime ? <span>{_t('Task start')}: {$moment(startDateTime).format('YYYY-MM-DD HH:mm')}</span> : <span>{_t('Not started')}</span>}
+                        </Box>
+                        <Box d="flex" justifyContent="flex-end">
+                            {assignedTo && <Image src={$image('assignedTo', 'image')} style={{ width: "1.5rem", height: "1.5rem", borderRadius: "100%" }}></Image>}
+                        </Box>
+                    </Box>
+                </>
+            ]]>
+        </template>
+    </kanban>
+
+    <grid name="pbp.project-task.grid" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
+          edit-icon="true" orderBy="-priority.technicalTypeSelect">
+        <hilite if="$get('status.id') == $get('project.completedTaskStatus.id')" color="success"/>
+        <hilite if="$moment(taskEndDate).diff(todayDate,'days') &lt; 0" color="danger"/>
+        <hilite if="$get('priority.technicalTypeSelect') == 4" color="warning"/>
+        <field name="name"/>
+        <field name="project"/>
+        <field name="taskDate"/>
+        <field name="taskEndDate" title="Task end date"/>
+        <field name="taskDeadline" title="Task deadline"/>
+        <field name="spentTime"/>
+        <field name="planHours"/>
+        <field name="status"/>
+        <field name="complexity" widget="SingleSelect"/>
+        <field name="descriptionOfChange" title="Subject of change"/>
+        <field name="targetVersion" if-module="axelor-business-support"
+               if="__config__.app.isApp('business-support')"/>
+        <field name="taskEndDate" hidden="true"/>
+        <field name="priority.technicalTypeSelect" hidden="true"/>
+        <field name="project.completedTaskStatus.id" hidden="true"/>
+    </grid>
+
     <action-view name="action-view-show-project-task-tree2" title="Project Task Tree"
                  model="com.axelor.apps.project.db.ProjectTask">
         <view type="tree" name="project-project-task-tree2"/>
@@ -427,7 +502,6 @@
         <context name="_id" expr="eval: id"/>
     </action-view>
 
-    <!--    добавил view-->
     <tree id="project-project-task-tree2" name="project-project-task-tree2" title="Task">
         <column name="name" type="string"/>
         <column name="taskDate" type="date"/>
@@ -476,143 +550,44 @@
         </node>
     </tree>
 
-    <!--Канбан, где тикеты работают с Date-Time, показывают также время начала-->
-    <kanban name="pbp.project-task.kanban" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
-            columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
-        <field name="name"/>
-        <field name="project"/>
-        <field name="assignedTo"/>
-        <field name="priority.name"/>
-        <field name="priority.technicalTypeSelect"/>
-        <field name="progress"/>
-        <field name="project.isShowProgress"/>
-        <field name="startDateTime"/>
-        <field name="deadlineDateTime"/>
-        <field name="complexity"/>
-
-        <template><![CDATA[
-<>
-	<strong>{name}</strong>
-        <Box style={{ fontWeight: "bold", fontSize: "1.1rem", color: "#1890ff", marginTop: "5px" }}>
-    		{project.fullName}
-		</Box>
-	<Box d="flex" justifyContent="space-between">
-		<Box>
-			<Icon icon="calendar" fontSize="15px"/>
-		        {!deadlineDateTime && <span> {_t('Not specified')} </span>}
-		        {deadlineDateTime && <span>{_t('Deadline')}: {$moment(deadlineDateTime).format('YYYY-MM-DD HH:mm')}</span>}
-		</Box>
-	</Box>
-	<Box d="flex" justifyContent="flex-start">
-        {priority.technicalTypeSelect == 1 && <Badge bg="success" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
-    {priority.technicalTypeSelect == 2 && <Badge bg="info" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
-    {priority.technicalTypeSelect == 3 && <Badge bg="warning" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
-    {priority.technicalTypeSelect == 4 && <Badge bg="danger" style={{ marginRight: "5px" }}>Приоритет: {priority.name}</Badge>}
-
-        {complexity == 'medium' && <Badge style={{ backgroundColor: "#0a40f2" }}>Сложность: {_t('Medium')}</Badge>}
-        {complexity == 'easy' && <Badge style={{ backgroundColor: "#4CF907" }}>Сложность: {_t('Easy')}</Badge>}
-        {complexity == 'hard' && <Badge style={{ backgroundColor: "#f01000" }}>Сложность: {_t('Hard')}</Badge>}
-    </Box>
-	{project.isShowProgress &&
-		<Box mt={1}>
-			{progress == 0 ? <span>{progress}%</span> : <LinearProgress value={progress} striped animated/>}
-		</Box>
-	}
-    <Box d="grid" gridTemplateColumns="auto auto" style={{ fontSize: "0.85rem", color: "grey" }} mt={2}>
-        <Box d="flex" g={2}>
-        	<Icon icon="clock" fontSize="15px"/>
-             {startDateTime ? <span>{_t('Task start')}: {$moment(startDateTime).format('YYYY-MM-DD HH:mm')}</span> : <span>{_t('Not started')}</span>}
-        </Box>
-        <Box d="flex" justifyContent="flex-end">
-        	{assignedTo && <Image src={$image('assignedTo', 'image')} style={{ width: "1.5rem", height: "1.5rem", borderRadius: "100%" }}></Image>}
-        </Box>
-    </Box>
-</>
- ]]></template>
-    </kanban>
-
-    <grid name="pbp.project-task.grid" title="Tasks" model="com.axelor.apps.project.db.ProjectTask"
-          edit-icon="true" orderBy="-priority.technicalTypeSelect">
-        <hilite if="$get('status.id') == $get('project.completedTaskStatus.id')" color="success"/>
-        <hilite if="$moment(taskEndDate).diff(todayDate,'days') &lt; 0" color="danger"/>
-        <hilite if="$get('priority.technicalTypeSelect') == 4" color="warning"/>
-        <field name="name"/>
-        <field name="project"/>
-        <field name="taskDate"/>
-        <field name="taskEndDate" title="Task end date"/>
-        <field name="taskDeadline" title="Task deadline"/>
-        <field name="spentTime"/>
-        <field name="planHours"/>
-        <field name="status"/>
-        <field name="complexity" widget="SingleSelect"/>
-        <field name="descriptionOfChange" title="Subject of change"/>
-        <field name="targetVersion" if-module="axelor-business-support"
-               if="__config__.app.isApp('business-support')"/>
-        <field name="taskEndDate" hidden="true"/>
-        <field name="priority.technicalTypeSelect" hidden="true"/>
-        <field name="project.completedTaskStatus.id" hidden="true"/>
-    </grid>
-
-    <!-- При нажатии в тулбаре меняет прогрес -->
-    <action-attrs name="progress-finish-if-done-button-click">
-        <attribute for="progress" name="value" expr="100"/>
-    </action-attrs>
-
-    <!--Экшн который автоподставляет даты для системы xelor, hidden=true-->
-    <action-attrs name="update-date-fields">
-        <attribute for="taskDate" name="value"
-                   expr="eval: __this__.startDateTime != null ? __this__.startDateTime.toLocalDate() : null"/>
-        <attribute for="taskEndDate" name="value"
-                   expr="eval: __this__.endDateTime != null ? __this__.endDateTime.toLocalDate() : null"/>
-        <attribute for="taskDeadline" name="value"
-                   expr="eval: __this__.deadlineDateTime != null ? __this__.deadlineDateTime.toLocalDate() : null"/>
-    </action-attrs>
-
-    <!--  Метод который меняет биг децимал на TT:MM  -->
-    <action-method name="action-readable-time-convert">
-        <call class="com.axelor.apps.pbproject.web.ReadableTimeController" method="convertToReadable"/>
-    </action-method>
-
-    <!-- Метод который авто подставляет юзера -->
-    <action-method name="pbp.auto-set-assigned-by-action.method">
-        <call class="com.axelor.apps.pbproject.web.UserController" method="autoSetAssigner"/>
-    </action-method>
-
-    <!--action который меняет progress при сменен статуса задачи-->
-    <action-attrs name="update-progress-on-status-change">
-        <attribute for="progress" name="value" expr="0" if="status?.name == 'New'"/>
-        <attribute for="progress" name="value" expr="40" if="status?.name == 'In progress'"/>
-        <attribute for="progress" name="value" expr="70" if="status?.name == 'In testing'"/>
-        <attribute for="progress" name="value" expr="100" if="status?.name == 'Done'"/>
-        <attribute for="progress" name="value" expr="0" if="status?.name == 'Canceled'"/>
-    </action-attrs>
-
-    <action-method name="pbp.validate.dateStart.dateEnd">
-        <call class="com.axelor.apps.pbproject.web.WorkTimeController"
-              method="validateStartEndTimeTask"/>
-    </action-method>
     <action-attrs name="pbp.auto-set-complexity">
-        <attribute for="complexity" name="value" expr="eval: 'medium'"/>
+        <attribute for="complexity" name="value" expr="eval: 'ease'"/>
     </action-attrs>
 
-    <!--  On load экшн группа -->
-    <action-group name="pbp.action-business-project-project-task-group-on-load">
-        <action name="pbp.action-project-task-group-timer-process"/> <!-- тут баг, закоментировал ненужный метод -->
-    </action-group>
-
-    <action-group name="pbp.action-project-task-group-timer-process">
-        <action name="action-project-task-attrs-project-filter-status" if="project?.isShowStatus"/>
-        <action name="action-project-task-method-manage-timer-buttons"/>
-        <!--        <action name="action-project-task-method-compute-total-timer-duration"/> &lt;!&ndash; вот баг &ndash;&gt;-->
-        <action name="action-project-task-attrs-scale-and-precision"
-                if="__config__.app.isApp('business-project')"/>
-        <action name="action-project-task-business-support-provider"
-                if="__config__.app.isApp('business-support')"/>
-        <action name="action-project-task-attrs-hide-time-spent-button"/>
-    </action-group>
-
-    <action-attrs name="pbp.auto-set-complexity">
-        <attribute for="complexity" name="value" expr="eval: 'medium'"/>
-    </action-attrs>
+    <form name="pbp.project-task.form" title="Task" model="com.axelor.apps.project.db.ProjectTask" width="large">
+        <panel>
+            <panel name="statusPanel" colSpan="12" stacked="true">
+                <field name="status" showTitle="false" widget="NavSelect" x-order="sequence"/>
+                <field name="typeSelect" hidden="true"/>
+            </panel>
+            <field name="name" required="true"/>
+            <field name="project" required="true"/>
+            <field name="description" widget="html" colSpan="12"/>
+            <field name="assignedTo"/>
+            <field name="assignedBy"/>
+        </panel>
+        <panel title="Additionally" collapseIf="true">
+            <field name="projectTaskCategory"/>
+            <field name="projectTaskSection"/>
+            <field name="projectTaskTagSet" widget="TagSelect"/>
+            <field name="parentTask"/>
+            <field name="descriptionOfChange" widget="html" colSpan="12"/>
+        </panel>
+        <panel sidebar="true">
+            <field name="complexity" colSpan="6"/>
+            <field name="priority" colSpan="6"/>
+            <field name="planHours"/>
+            <field name="taskDate" colSpan="8"/>
+            <field name="startDateTime" colSpan="4" showTitle="false"/>
+            <field name="taskEndDate" colSpan="8"/>
+            <field name="endDateTime" colSpan="4" showTitle="false"/>
+            <field name="taskDeadline" colSpan="8"/>
+            <field name="deadlineDateTime" colSpan="4" showTitle="false"/>
+        </panel>
+        <panel-mail name="mailPanel">
+            <mail-messages/>
+            <mail-followers/>
+        </panel-mail>
+    </form>
 
 </object-views>

@@ -47,10 +47,6 @@ public class UserController {
         actionResponse.setCanClose(true);
     }
 
-    public void autoSetAssigner(ActionRequest actionRequest, ActionResponse actionResponse){
-        actionResponse.setValue("assignedBy",  AuthUtils.getUser());
-    }
-
     public void uploadUserForFaceId(ActionRequest actionRequest, ActionResponse actionResponse){
         User user = actionRequest.getContext().asType(User.class);
 
