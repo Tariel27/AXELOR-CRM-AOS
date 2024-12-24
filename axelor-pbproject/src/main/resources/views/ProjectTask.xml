@@ -612,7 +612,7 @@
             <field name="startDate" widget="date" x-dirty="false" colSpan="6" title="Start date"/>
             <field name="endDate" widget="date" x-dirty="false" colSpan="6" title="End date"/>
             <separator colSpan="12"/>
-            <button name="generateByPeriodBtn" onClick="pbp.tasks.export.excel.by.period.validate.action-validate,pbp.tasks.export.excel.by.period.action-method,close" title="Generate report by period"/>
+            <button name="generateByPeriodBtn" onClick="pbp.tasks.export.excel.by.period.validate.action-condition,pbp.tasks.export.excel.by.period.action-method,close" title="Generate report by period"/>
             <button name="generateByCurrentMonthBtn" onClick="pbp.tasks.export.excel.for.current.month.action-method,close" title="Generate report for current month"/>
         </panel>
     </form>

@@ -40,7 +40,7 @@ public class PBPProjectTaskServiceImpl implements PBPProjectTaskService {
     public MetaFile generateReportByPeriod(LocalDate startDate, LocalDate endDate) throws Exception {
         List<ProjectTask> tasks = projectTaskRepository.all()
                 .filter("self.assignedTo = :assignedTo AND self.typeSelect = 'task' AND self.status.isCompleted IS TRUE AND " +
-                        "self.endDateTime BETWEEN :startDate AND :endDate")
+                        "self.endDateTime BETWEEN :startDate AND :endDate ORDER BY self.endDateTime ASC")
                 .bind("assignedTo", AuthUtils.getUser())
                 .bind("startDate", startDate)
                 .bind("endDate", endDate)
