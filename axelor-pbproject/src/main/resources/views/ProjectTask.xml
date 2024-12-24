@@ -607,7 +607,7 @@
         <view-param name="show-confirm" value="false"/>
     </action-view>
 
-    <form title="pbp.tasks.export-excel-form" name="Generating report" model="com.axelor.apps.project.db.ProjectTask">
+    <form title="Generating report" name="pbp.tasks.export-excel-form" model="com.axelor.apps.project.db.ProjectTask">
         <panel colSpan="12">
             <field name="startDate" widget="date" x-dirty="false" colSpan="6" title="Start date"/>
             <field name="endDate" widget="date" x-dirty="false" colSpan="6" title="End date"/>
