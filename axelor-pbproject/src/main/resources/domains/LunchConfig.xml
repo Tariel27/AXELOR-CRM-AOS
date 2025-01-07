@@ -6,17 +6,7 @@
     <module name="pbproject" package="com.axelor.apps.pbproject.db"/>
 
     <entity name="LunchConfig">
-        <many-to-many name="autoOrderUser" ref="com.axelor.auth.db.User"/>
-        <boolean name="autoFirst"/>
-        <boolean name="autoSecond"/>
-        <boolean name="autoThird"/>
-
-        <track replace="true">
-            <field name="autoOrderUser"/>
-            <field name="autoFirst"/>
-            <field name="autoSecond"/>
-            <field name="autoThird"/>
-        </track>
+        <many-to-many name="autoOrderUsers" ref="com.axelor.apps.pbproject.db.AutoLunch"/>
     </entity>
 
 </domain-models>

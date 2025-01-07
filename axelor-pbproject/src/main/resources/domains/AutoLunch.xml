@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_7.1.xsd">
+
+    <module name="pbproject" package="com.axelor.apps.pbproject.db"/>
+
+    <entity name="AutoLunch">
+        <many-to-one name="lunchUser" ref="com.axelor.auth.db.User"/>
+        <boolean name="autoFirst"/>
+        <boolean name="autoSecond"/>
+        <boolean name="autoThird"/>
+        <unique-constraint columns="lunchUser"/>
+        <track replace="true">
+            <field name="lunchUser"/>
+            <field name="autoFirst"/>
+            <field name="autoSecond"/>
+            <field name="autoThird"/>
+        </track>
+    </entity>
+</domain-models>
