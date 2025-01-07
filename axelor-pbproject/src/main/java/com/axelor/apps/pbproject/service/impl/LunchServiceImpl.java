@@ -98,7 +98,7 @@ public class LunchServiceImpl implements LunchService {
             throw new IllegalArgumentException("Query params cannot be null");
 
         DishMenu todayDishMenu = dishMenuRepository.getTodayDishMenu();
-        if (Objects.isNull(todayDishMenu)) return;
+        if (Objects.isNull(todayDishMenu)) throw new RuntimeException("На сегодня меню не составлено");
         Dish dish = getDish(dishPosition, todayDishMenu);
 
         if (!portion.matches("\\d+(\\.\\d+)?"))

@@ -24,9 +24,13 @@ public class LunchWebController {
     @Path("order")
     public Response checkExpenseLine(@QueryParam("d") Integer dishPosition, @QueryParam("p") String portion) {
         if (Objects.isNull(dishPosition) || Objects.isNull(portion)) {
-            return Response.status(400).build();
+            return Response.status(400).entity("Ссылка не корректна").build();
         }
-        lunchService.orderLunch(dishPosition, portion);
-        return Response.accepted().build();
+        try {
+            lunchService.orderLunch(dishPosition, portion);
+        } catch (RuntimeException runtimeException) {
+            return Response.ok().entity(runtimeException.getLocalizedMessage()).build();
+        }
+        return Response.accepted().entity("Принято").build();
     }
 }
