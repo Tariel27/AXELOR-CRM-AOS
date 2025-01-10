@@ -64,6 +64,7 @@
             columnBy="status" sequenceBy="sequence" draggable="true" limit="30">
         <toolbar>
             <button name="createTask" title="Create task (easy)" onClick="pbp.project-mini-task"/>
+            <button name="exportBtn" onClick="pbp.tasks.export.excel.action-view" icon="fa-print"/>
         </toolbar>
         <field name="name"/>
         <field name="project"/>
@@ -213,5 +214,37 @@
         <view-param name="popup" value="reload"/>
         <view-param name="show-toolbar" value="false"/>
     </action-view>
+
+
+    <action-view name="pbp.tasks.export.excel.action-view" title="Generating report" model="com.axelor.apps.project.db.ProjectTask">
+        <view type="form" name="pbp.tasks.export-excel-form"/>
+        <view-param name="popup" value="true"/>
+        <view-param name="popup-save" value="false"/>
+        <view-param name="show-toolbar" value="false"/>
+        <view-param name="show-confirm" value="false"/>
+    </action-view>
+
+    <form title="Generating report" name="pbp.tasks.export-excel-form" model="com.axelor.apps.project.db.ProjectTask">
+        <panel colSpan="12">
+            <field name="startDate" widget="date" x-dirty="false" colSpan="6" title="Start date"/>
+            <field name="endDate" widget="date" x-dirty="false" colSpan="6" title="End date"/>
+            <separator colSpan="12"/>
+            <button name="generateByPeriodBtn" onClick="pbp.tasks.export.excel.by.period.validate.action-condition,pbp.tasks.export.excel.by.period.action-method,close" title="Generate report by period"/>
+            <button name="generateByCurrentMonthBtn" onClick="pbp.tasks.export.excel.for.current.month.action-method,close" title="Generate report for current month"/>
+        </panel>
+    </form>
+
+    <action-method name="pbp.tasks.export.excel.by.period.action-method">
+        <call class="com.axelor.apps.pbproject.web.PBPProjectTaskController" method="generateReportByPeriod"/>
+    </action-method>
+
+    <action-method name="pbp.tasks.export.excel.for.current.month.action-method">
+        <call class="com.axelor.apps.pbproject.web.PBPProjectTaskController" method="generateReportForCurrentMonth"/>
+    </action-method>
+
+    <action-condition name="pbp.tasks.export.excel.by.period.validate.action-condition">
+        <check field="startDate" if="startDate == null" error="Start date is required"/>
+        <check field="endDate" if="endDate == null" error="End date is required"/>
+    </action-condition>
 
 </object-views>

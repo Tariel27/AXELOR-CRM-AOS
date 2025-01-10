@@ -44,5 +44,6 @@ public class PbpProjectModule extends AxelorModule {
     bind(StatisticsService.class).to(StatisticsServiceImpl.class);
     bind(AwardsService.class).to(AwardsServiceImpl.class);
     bind(LunchService.class).to(LunchServiceImpl.class);
+    bind(PBPProjectTaskService.class).to(PBPProjectTaskServiceImpl.class);
   }
 }
