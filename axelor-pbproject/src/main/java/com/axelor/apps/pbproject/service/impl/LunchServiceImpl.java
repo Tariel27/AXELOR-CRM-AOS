@@ -52,7 +52,7 @@ public class LunchServiceImpl implements LunchService {
             for (int i = 0; i < 3; i++) {
                 int position = i + 1;
                 links.append("https://pytest2.brisklyminds.com/crm/ws/lunch/order?d=")
-                        .append(position).append("&p=").append(portion);
+                        .append(position).append("&p=").append(portion).append("\n");
             }
         }
 
@@ -131,6 +131,8 @@ public class LunchServiceImpl implements LunchService {
         if (Objects.isNull(lunchConfig)) return;
         DishMenu todayDishMenu = dishMenuRepository.getTodayDishMenu();
         if (Objects.isNull(todayDishMenu)) return;
+
+        if (Objects.isNull(lunchConfig.getAutoOrderUsers()) || lunchConfig.getAutoOrderUsers().isEmpty()) return;
 
         String defaultPortion = "1.5";
         lunchConfig.getAutoOrderUsers().forEach(user -> {
