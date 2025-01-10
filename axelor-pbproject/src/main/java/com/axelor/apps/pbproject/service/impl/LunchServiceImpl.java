@@ -133,15 +133,15 @@ public class LunchServiceImpl implements LunchService {
         if (Objects.isNull(todayDishMenu)) return;
 
         String defaultPortion = "1.5";
-        for (User user : lunchConfig.getAutoOrderUser()) {
-            String userName = Objects.nonNull(user.getName()) || user.getName().isEmpty() ? user.getCode() : user.getName();
-            addLunchForDish(userName, todayDishMenu.getFirstDish(), defaultPortion, lunchConfig.getAutoFirst());
-            addLunchForDish(userName, todayDishMenu.getSecondDish(), defaultPortion, lunchConfig.getAutoSecond());
-            addLunchForDish(userName, todayDishMenu.getThirdDish(), defaultPortion, lunchConfig.getAutoThird());
-        }
-
-        // auto order
-        addLunchForDish("Салат для руководство", todayDishMenu.getThirdDish(), "1", true);
+        lunchConfig.getAutoOrderUsers().forEach(user -> {
+            String username = "Не указано";
+            if (Objects.nonNull(user.getLunchUser()) && Objects.nonNull(user.getLunchUser().getName())) {
+                username = user.getLunchUser().getName();
+            }
+            addLunchForDish(username, todayDishMenu.getFirstDish(), defaultPortion, user.getAutoFirst());
+            addLunchForDish(username, todayDishMenu.getSecondDish(), defaultPortion, user.getAutoSecond());
+            addLunchForDish(username, todayDishMenu.getThirdDish(), defaultPortion, user.getAutoThird());
+        });
     }
 
     private void addLunchForDish(String comment, Dish dish, String portion, boolean shouldAdd) {
