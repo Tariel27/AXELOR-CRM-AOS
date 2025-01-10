@@ -22,6 +22,8 @@
             <field name="copyLunch" readonly="true" x-dirty="false" widget="html"/>
         </panel>
         <panel sidebar="true">
+            <button name="forceAutoOrder" title="Force auto order" prompt="Are you sure you want call this action?"
+                    onClick="com.axelor.apps.pbproject.web.LunchController:forceAutoOrder" css="danger"/>
             <button name="refreshBtn" title="Refresh" onClick="pbp.refresh-page"/>
             <button name="saveBtn" onClick="save" title="Save"/>
         </panel>

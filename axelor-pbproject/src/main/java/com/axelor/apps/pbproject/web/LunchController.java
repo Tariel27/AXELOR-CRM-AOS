@@ -34,6 +34,10 @@ public class LunchController extends JpaSupport {
     @Inject
     private LunchService lunchService;
 
+    public void forceAutoOrder(ActionRequest request, ActionResponse response) {
+        lunchService.autoOrder();
+    }
+
     public void setLinks(ActionRequest request, ActionResponse response) {
         DishMenu todayDishMenu = dishMenuRepository.getTodayDishMenu();
         if (Objects.isNull(todayDishMenu)) {
