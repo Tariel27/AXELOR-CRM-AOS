@@ -17,7 +17,7 @@
         <panel title="Auto order" itemSpan="4">
             <field name="autoOrderUsers" colSpan="12" grid-view="pbp.auto-lunch-user.grid" canView="false"/>
         </panel>
-        <panel collapseIf="true" itemSpan="12">
+        <panel collapseIf="true" itemSpan="12" title="Information">
             <field name="copyLinks" readonly="true" x-dirty="false" widget="html"/>
             <field name="copyLunch" readonly="true" x-dirty="false" widget="html"/>
         </panel>
