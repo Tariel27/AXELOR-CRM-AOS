@@ -26,6 +26,8 @@
             <field name="firstDish" required="true" canNew="true" canEdit="true"/>
             <field name="secondDish" required="true" canNew="true" canEdit="true"/>
             <field name="thirdDish" required="true" canNew="true" canEdit="true"/>
+            <separator/>
+            <field name="menuDate"/>
         </panel>
     </form>
 
