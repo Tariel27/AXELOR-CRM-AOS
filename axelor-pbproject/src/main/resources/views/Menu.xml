@@ -30,6 +30,9 @@
 
     <!-- ===================================================================================================== -->
 
+    <menuitem name="pbp.lunch-yesterday.user" title="Yesterday orders" icon="fa-coffee" icon-background="#3f6bb9"
+              action="pbp.lunch.yesterday-orders" order="2350"/>
+
     <menuitem name="pbp.lunch.user" title="Lunch" icon="fa-coffee" icon-background="#3f6bb9"
               action="pbp.lunch.today-orders" order="2400" if="__repo__(DishMenu).getTodayDishMenu() != null"/>
 

@@ -42,4 +42,9 @@
         <domain>DATE(self.createdOn) = DATE(NOW())</domain>
     </action-view>
 
+    <action-view name="pbp.lunch.yesterday-orders" title="Yesterday lunch orders" model="com.axelor.apps.pbproject.db.Lunch">
+        <view type="grid" name="pbp.lunch.grid"/>
+        <domain>DATE(self.createdOn) = DATE(NOW()) - 1</domain>
+    </action-view>
+
 </object-views>
