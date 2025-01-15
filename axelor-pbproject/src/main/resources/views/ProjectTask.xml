@@ -105,7 +105,7 @@
                     <Box d="grid" gridTemplateColumns="auto auto" style={{ fontSize: "0.85rem", color: "grey" }} mt={2}>
                         <Box d="flex" flexDirection="column">
                              {taskDate ? <span><Icon icon="clock" fontSize="15px"/>{_t('Start date')}: {$moment(taskDate).format('YYYY-MM-DD')} {startDateTime}</span> : <span>{_t('Not started')}</span>}
-                             {taskEndDate ? <span><Icon icon="clock" fontSize="15px"/>{_t('End date')}: {$moment(taskEndDate).format('YYYY-MM-DD')} {endDateTime}</span> : <span>{_t('Not started')}</span>}
+                             {taskEndDate ? <span><Icon icon="clock" fontSize="15px"/>{_t('End date')}: {$moment(taskEndDate).format('YYYY-MM-DD')} {endDateTime}</span> : <span>{_t('Not finished')}</span>}
                         </Box>
                         <Box d="flex" justifyContent="flex-end">
                             {assignedTo && <Image src={$image('assignedTo', 'image')} style={{ width: "1.5rem", height: "1.5rem", borderRadius: "100%" }}></Image>}
