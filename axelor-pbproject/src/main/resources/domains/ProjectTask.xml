@@ -12,6 +12,7 @@
     <many-to-one name="assignedBy" title="Assigned by" ref="com.axelor.auth.db.User" />
     <string title="Complexity" name="complexity" selection="pbp.complexity.of.task.select"/>
     <time name="planHours" title="Plan hours"/>
+    <time name="factHours" title="Fact hours"/>
     <string name="descriptionOfChange" title="Description of change"/>
     <extra-code>
       <![CDATA[
@@ -27,6 +28,8 @@
       <field name="startDateTime"/>
       <field name="endDateTime"/>
       <field name="deadlineDateTime"/>
+      <field name="planHours"/>
+      <field name="factHours"/>
     </track>
   </entity>
 

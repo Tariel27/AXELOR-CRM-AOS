@@ -46,7 +46,8 @@
         <panel sidebar="true">
             <field name="complexity" widget="SingleSelect" colSpan="6" required="true"/>
             <field name="priority" colSpan="6" target-name="name" required="true"/>
-            <field name="planHours" required="true"/>
+            <field name="planHours" required="true" colSpan="6"/>
+            <field name="factHours" colSpan="6"/>
             <field name="taskDate" colSpan="8" hideIf="$popup()"/>
             <field name="startDateTime" colSpan="4" showTitle="false" hideIf="$popup()"/>
             <field name="taskEndDate" colSpan="8" hideIf="$popup()"/>
