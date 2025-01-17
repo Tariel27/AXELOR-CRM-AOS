@@ -32,13 +32,13 @@ public class PetaProjectTaskProjectRepository extends ProjectTaskBusinessSupport
 
         if (ProjectTaskRepository.DONE.equals(statusName)) {
             if (Objects.nonNull(projectTask.getTaskEndDate())) return;
-            projectTask.setEndDateTime(LocalTime.now());
+            projectTask.setEndDateTime(LocalTime.now(ZoneId.of("UTC+6")));
             projectTask.setTaskEndDate(LocalDate.now());
         }
 
         if (ProjectTaskRepository.IN_PROGRESS.equals(statusName)) {
             if (Objects.nonNull(projectTask.getTaskDate())) return;
-            projectTask.setStartDateTime(LocalTime.now());
+            projectTask.setStartDateTime(LocalTime.now(ZoneId.of("UTC+6")));
             projectTask.setTaskDate(LocalDate.now());
         }
 
