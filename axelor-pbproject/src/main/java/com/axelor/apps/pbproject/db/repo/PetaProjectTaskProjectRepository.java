@@ -7,7 +7,6 @@ import com.axelor.apps.project.db.TaskStatus;
 import com.axelor.apps.project.db.repo.ProjectTaskRepository;
 import com.google.inject.Inject;
 
-import java.math.BigDecimal;
 import java.time.*;
 import java.util.Objects;
 
