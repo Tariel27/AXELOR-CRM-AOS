@@ -46,8 +46,8 @@
         <panel sidebar="true">
             <field name="complexity" widget="SingleSelect" colSpan="6" required="true"/>
             <field name="priority" colSpan="6" target-name="name" required="true"/>
-            <field name="planHours" required="true" colSpan="6"/>
-            <field name="factHours" colSpan="6"/>
+            <field name="planHours" required="true" colSpan="6" widget="Duration"/>
+            <field name="factHours" colSpan="6" widget="Duration"/>
             <field name="taskDate" colSpan="8" hideIf="$popup()"/>
             <field name="startDateTime" colSpan="4" showTitle="false" hideIf="$popup()"/>
             <field name="taskEndDate" colSpan="8" hideIf="$popup()"/>
@@ -127,7 +127,7 @@
         <field name="taskEndDate" title="Task end date"/>
         <field name="taskDeadline" title="Task deadline"/>
         <field name="spentTime"/>
-        <field name="planHours"/>
+        <field name="planHours" widget="Duration"/>
         <field name="status"/>
         <field name="complexity" widget="SingleSelect"/>
         <field name="descriptionOfChange" title="Subject of change"/>
@@ -204,7 +204,7 @@
         <field name="assignedBy" expr="eval: __user__"/>
         <field name="complexity" expr="eval: 'easy'"/>
         <field name="priority" expr="eval: __repo__(ProjectPriority).find(1)"/>
-        <field name="planHours" expr="eval: '02:00:00'"/>
+        <field name="planHours" expr="eval: 7200"/>
         <field name="taskDeadline" expr="eval: __date__.plusDays(3)"/>
         <field name="deadlineDateTime" expr="eval: '19:00:00'"/>
     </action-record>
