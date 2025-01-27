@@ -40,7 +40,7 @@ public class PBPProjectTaskServiceImpl implements PBPProjectTaskService {
     public MetaFile generateReportByPeriod(LocalDate startDate, LocalDate endDate) throws Exception {
         List<ProjectTask> tasks = projectTaskRepository.all()
                 .filter("self.assignedTo = :assignedTo AND self.typeSelect = 'task' AND self.status.isCompleted IS TRUE AND " +
-                        "self.endDateTime BETWEEN :startDate AND :endDate ORDER BY self.endDateTime ASC")
+                        "self.taskEndDate BETWEEN :startDate AND :endDate ORDER BY self.taskEndDate ASC")
                 .bind("assignedTo", AuthUtils.getUser())
                 .bind("startDate", startDate)
                 .bind("endDate", endDate)
@@ -71,9 +71,8 @@ public class PBPProjectTaskServiceImpl implements PBPProjectTaskService {
             row.createCell(colNum++).setCellValue(task.getName());
             row.createCell(colNum++).setCellValue(task.getDescription());
             row.createCell(colNum++).setCellValue(getComplexity(task.getComplexity()));
-            row.createCell(colNum++).setCellValue(task.getPlanHours().toString());
-//            row.createCell(colNum++).setCellValue(getHumanHoursFromDecimalHours(task.getPlanHours()));
-            row.createCell(colNum++).setCellValue(getHumanHoursFromDecimalHours(task.getSpentTime()));
+            row.createCell(colNum++).setCellValue(getHumanHoursFromDecimalHours(task.getPlanHours()));
+            row.createCell(colNum++).setCellValue(getHumanHoursFromDecimalHours(task.getFactHours()));
             row.createCell(colNum++).setCellValue(getProjectName(task.getProject()));
         }
 
@@ -124,9 +123,9 @@ public class PBPProjectTaskServiceImpl implements PBPProjectTaskService {
         }
     }
 
-    private String getHumanHoursFromDecimalHours(BigDecimal hours) {
-        if (hours == null) return "";
-        double v = hours.doubleValue();
+    private String getHumanHoursFromDecimalHours(Integer seconds) {
+        if (seconds == null) return "";
+        double v = seconds.doubleValue();
         int minutes = (int) (v * 60.0);
         int humanHours = minutes / 60;
         int humanMinutes = minutes % 60;
