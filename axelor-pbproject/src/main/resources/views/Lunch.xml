@@ -16,8 +16,8 @@
         <field name="createdOn"/>
     </grid>
 
-    <form name="pbp.lunch.form" model="com.axelor.apps.pbproject.db.Lunch"
-          onNew="pbp.lunch.form.on-new" title="Lunch order">
+    <form name="pbp.lunch.form" model="com.axelor.apps.pbproject.db.Lunch" onNew="pbp.lunch.form.on-new"
+          onLoad="pbp.lunch.form.on-new" title="Lunch order">
         <panel itemSpan="12">
             <field name="dish"/>
             <field name="portion" widget="SingleSelect"/>
