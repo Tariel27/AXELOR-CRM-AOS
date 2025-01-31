@@ -13,6 +13,7 @@
     <string title="Complexity" name="complexity" selection="pbp.complexity.of.task.select"/>
     <integer name="planHours" title="Plan hours"/>
     <integer name="factHours" title="Fact hours"/>
+    <string name="factHoursString" title="Fact hours"/>
     <string name="descriptionOfChange" title="Description of change"/>
     <extra-code>
       <![CDATA[
