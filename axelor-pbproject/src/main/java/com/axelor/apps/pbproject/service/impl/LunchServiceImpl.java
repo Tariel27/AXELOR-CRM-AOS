@@ -66,7 +66,7 @@ public class LunchServiceImpl implements LunchService {
                     "SELECT pd.name, lunch.portion, COUNT(lunch.dish) AS dish_count\n" +
                             "FROM pbproject_lunch lunch\n" +
                             "LEFT JOIN pbproject_dish pd ON pd.id = lunch.dish\n" +
-                            "WHERE DATE(lunch.created_on) = DATE(NOW())\n" +
+                            "WHERE DATE(lunch.created_on) = DATE(NOW()) AND TIME(lunch.created_on) > TIME('12:00')\n" +
                             "GROUP BY pd.name, lunch.portion\n" +
                             "ORDER BY pd.name;");
 
