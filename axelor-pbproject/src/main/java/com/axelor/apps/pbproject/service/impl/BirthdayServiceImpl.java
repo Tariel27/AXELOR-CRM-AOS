@@ -65,11 +65,10 @@ public class BirthdayServiceImpl implements BirthdayService {
                 )
         );
 
-        LocalDate plussedDay = birthday.plusDays(1);
         calendarEvent.setEndDateTime(LocalDateTime.of(
-                plussedDay.getYear(),
-                plussedDay.getMonth(),
-                plussedDay.getDayOfMonth(), 0,0
+                birthday.getYear(),
+                birthday.getMonth(),
+                birthday.getDayOfMonth(), 23,59
         ));
         return calendarEvent;
     }
