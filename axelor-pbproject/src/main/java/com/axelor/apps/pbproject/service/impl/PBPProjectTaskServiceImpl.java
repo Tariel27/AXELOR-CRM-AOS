@@ -80,7 +80,7 @@ public class PBPProjectTaskServiceImpl implements PBPProjectTaskService {
             sheet.autoSizeColumn(i);
         }
 
-        ByteArrayOutputStream bos  = new ByteArrayOutputStream();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         excel.write(bos);
         byte[] bytes = bos.toByteArray();
         InputStream is = new ByteArrayInputStream(bytes);
@@ -123,12 +123,18 @@ public class PBPProjectTaskServiceImpl implements PBPProjectTaskService {
         }
     }
 
+    //    private String getHumanHoursFromDecimalHours(Integer seconds) {
+//        if (seconds == null) return "";
+//        double v = seconds.doubleValue();
+//        int minutes = (int) (v * 60.0);
+//        int humanHours = minutes / 60;
+//        int humanMinutes = minutes % 60;
+//        return String.format("%d:%02d", humanHours, humanMinutes);
+//    }
     private String getHumanHoursFromDecimalHours(Integer seconds) {
         if (seconds == null) return "";
-        double v = seconds.doubleValue();
-        int minutes = (int) (v * 60.0);
-        int humanHours = minutes / 60;
-        int humanMinutes = minutes % 60;
+        int humanHours = seconds / 3600;
+        int humanMinutes = (seconds % 3600) / 60;
         return String.format("%d:%02d", humanHours, humanMinutes);
     }
 
