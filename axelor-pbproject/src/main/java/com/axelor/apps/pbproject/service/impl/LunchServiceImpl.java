@@ -63,11 +63,11 @@ public class LunchServiceImpl implements LunchService {
     public String getLunch() {
         try {
             Query query = JPA.em().createNativeQuery(
-                    "SELECT pd.name, lunch.portion, COUNT(lunch.dish) AS dish_count\n" +
-                            "FROM pbproject_lunch lunch\n" +
-                            "LEFT JOIN pbproject_dish pd ON pd.id = lunch.dish\n" +
-                            "WHERE DATE(lunch.created_on) = DATE(NOW()) AND TIME(lunch.created_on) > TIME('12:00')\n" +
-                            "GROUP BY pd.name, lunch.portion\n" +
+                    "SELECT pd.name, lunch.portion, COUNT(lunch.dish) AS dish_count " +
+                            "FROM pbproject_lunch as lunch " +
+                            "LEFT JOIN pbproject_dish pd ON pd.id = lunch.dish " +
+                            "WHERE DATE(lunch.created_on) = DATE(NOW()) AND TIME(lunch.created_on) > TIME('12:00') " +
+                            "GROUP BY pd.name, lunch.portion " +
                             "ORDER BY pd.name;");
 
             List<Object[]> results = (List<Object[]>) query.getResultList();
